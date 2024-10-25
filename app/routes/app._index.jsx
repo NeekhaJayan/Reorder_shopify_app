@@ -297,8 +297,8 @@ export default function Index() {
             <Card>
               
             <fetcher.Form method="post">
-                <input type="hidden" name="shopname" value={shopDetails.data[0].name} />
-                <input type="hidden" name="email" value={shopDetails.data[0].email}/>
+                <input type="hidden" name="shopname" value={shopDetails.data.shop.name} />
+                <input type="hidden" name="email" value={shopDetails.data.shop.email}/>
                 <BlockStack gap="500">
                   <BlockStack gap="500">
                 <InlineStack align="space-between">
