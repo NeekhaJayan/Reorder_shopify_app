@@ -32,16 +32,30 @@ export const loader = async ({ request }) => {
   const response_product = await admin.graphql(
     `#graphql
     query {
-      products(first:5) {
-       edges {
-          cursor
-        }
-        nodes {
-          id
-          title
-          description
+  products(first: 10) {
+    edges {
+      node {
+        id
+        title
+        description
+        handle
+        variants(first: 1) {
+          edges {
+            node {
+              id
+              price
+            }
+          }
         }
       }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
     }`,
   );
 
@@ -55,6 +69,7 @@ export const loader = async ({ request }) => {
     query {
       shop {
         name
+        email
         currencyCode
         checkoutApiSupported
         taxesIncluded
