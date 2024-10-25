@@ -57,7 +57,7 @@ export const loader = async ({ request }) => {
   // // Destructure the response
   const body = await response_product.json();
   
-  const data = body?.data?.products; 
+  const data = body; 
   console.log(data)
   const response_shop = await admin.graphql(
   `#graphql
