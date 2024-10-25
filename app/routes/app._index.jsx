@@ -32,25 +32,14 @@ export const loader = async ({ request }) => {
   const response_product = await admin.graphql(
     `#graphql
     query {
-  products(first: 10) {
-    edges {
-      node {
-        id
-        title
-        description
-        handle
-        variants(first: 1) {
-          edges {
-            node {
-              id
-              price
-            }
+      products(first: 10, query: "product_type:snowboards") {
+        edges {
+          node {
+            title
           }
         }
       }
-    }
-  }
-}`,
+    }`,
   );
 
   // Destructure the response
