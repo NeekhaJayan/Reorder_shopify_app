@@ -41,9 +41,6 @@ export const loader = async ({ request }) => {
           }
           cursor
         }
-        pageInfo {
-          hasNextPage
-        }
       }
     }`,
   );
@@ -51,7 +48,7 @@ export const loader = async ({ request }) => {
   // Destructure the response
   const body = await response_product.json();
   console.log(body)
-  const data = body.data?.product;
+  const data = body.data?.products; 
 
   const response_shop = await admin.graphql(
   `#graphql
