@@ -66,7 +66,7 @@ export const loader = async ({ request }) => {
   // Destructure the response
   const shop_body = await response_shop.json();
   
-  const shop = shop_body?.data?.shop;
+  const shop = shop_body;
   console.log(shop)
 
   const response = await fetch("https://reorderappapi.onrender.com/auth/reorder_details", {
