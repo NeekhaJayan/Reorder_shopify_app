@@ -29,38 +29,49 @@ export const loader = async ({ request }) => {
   //   });
   const {admin} = await authenticate.admin(request);
 
-const response_product = await admin.graphql(
-  `#graphql
-  query {
-    product(id: "gid://shopify/Product/1234") {
-      title
-      description
-    }
-  }`,
-);
-
-// Destructure the response
-const body = await response_product.json();
-const data = body.data?.product;
-
-const response_shop = await admin.graphql(
- `#graphql
-  query {
-    shop {
-      name
-      currencyCode
-      checkoutApiSupported
-      taxesIncluded
-      resourceLimits {
-        maxProductVariants
+  const response_product = await admin.graphql(
+    `#graphql
+    query {
+      products(first: 10) {
+        edges {
+          node {
+            id
+            title
+            handle
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+        }
       }
-    }
-  }`,
-);
+    }`,
+  );
 
-// Destructure the response
-const shop_body = await response_shop.json();
-const shop = shop_body.data?.product;
+  // Destructure the response
+  const body = await response_product.json();
+  console.log(body)
+  const data = body.data?.product;
+
+  const response_shop = await admin.graphql(
+  `#graphql
+    query {
+      shop {
+        name
+        currencyCode
+        checkoutApiSupported
+        taxesIncluded
+        resourceLimits {
+          maxProductVariants
+        }
+      }
+    }`,
+  );
+
+  // Destructure the response
+  const shop_body = await response_shop.json();
+  console.log(shop_body)
+  const shop = shop_body.data?.shop;
 
 
   const response = await fetch("https://reorderappapi.onrender.com/auth/reorder_details", {
