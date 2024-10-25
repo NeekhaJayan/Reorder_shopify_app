@@ -41,6 +41,7 @@ export const loader = async ({ request }) => {
   }
 
   const reorderDetails = await response.json();
+
   return json({ products: data, reorderDetails: reorderDetails,shopDetails:shop });
  
  
@@ -143,7 +144,9 @@ export default function Index() {
    const handleReorderChange = (productId, value) => {
     setUpdatedProducts((prev) =>
       prev.map((product) =>
-        product.productId === productId ? { ...product, reorder_days: value } : product
+        product.productId === productId
+          ? { ...product, reorder_days: value }
+          : product
       )
     );
   };
@@ -153,16 +156,21 @@ export default function Index() {
   };
   // Submit updated reorder interval to the API
   const saveReorderDay = async (product) => {
-    const updatedProduct = productData.find((p) => p.productId === product.productId);
+    // Find the updated product in updatedProducts
+    const updatedProduct = updatedProducts.find(
+      (p) => p.productId === product.productId
+    );
+  
     if (updatedProduct) {
       fetcher.submit(
         {
-          productId: product.productId,
-          reorder_days: updatedProduct.reorder_days, // Send the updated reorder days
+          productId: updatedProduct.productId,
+          reorder_days: updatedProduct.reorder_days, // Use updated reorder_days
         },
-        { method: "patch" } // Ensure you're sending the correct product ID
+        { method: "patch" }
       );
     }
+  
     setEditingProduct(null); // Reset the editing state after saving
   };
   // console.log(data)
