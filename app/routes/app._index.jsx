@@ -20,13 +20,60 @@ import { ImageIcon } from "@shopify/polaris-icons";
 
 
 export const loader = async ({ request }) => {
-  const {admin,session }=await authenticate.admin(request);
-  const data=await admin.rest.resources.Product.all({
-    session: session,
-  });
-  const shop = await admin.rest.resources.Shop.all({
-      session: session,
-    });
+  const { admin } = await authenticate.admin(request);
+
+  const response_data = await admin.graphql(
+    `#graphql
+    query {
+      products(first: 10, reverse: true) {
+        edges {
+          node {
+            id
+            title
+            handle
+            resourcePublicationOnCurrentPublication {
+              publication {
+                name
+                id
+              }
+              publishDate
+              isPublished
+            }
+          }
+        }
+      }
+    }`,
+  );
+
+  const data = await response_data.json();
+
+  
+const response_shop = await admin.graphql(
+  `#graphql
+  query {
+    shop {
+      name
+      email
+      currencyCode
+      checkoutApiSupported
+      taxesIncluded
+      resourceLimits {
+        maxProductVariants
+      }
+    }
+  }`
+);
+
+const shop = await response_shop.json();
+
+
+  // const {admin,session }=await authenticate.admin(request);
+  // const data=await admin.rest.resources.Product.all({
+  //   session: session,
+  // });
+  // const shop = await admin.rest.resources.Shop.all({
+  //     session: session,
+  //   });
 
 
   const response = await fetch("https://reorderappapi.onrender.com/auth/reorder_details", {
