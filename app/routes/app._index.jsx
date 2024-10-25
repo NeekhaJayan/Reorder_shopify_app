@@ -149,6 +149,7 @@ export const action = async ({ request }) => {
 
 export default function Index() {
   const {products,reorderDetails,shopDetails}=useLoaderData();
+  console.log(products)
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const [formState, setformState] = useState('');
@@ -160,7 +161,6 @@ export default function Index() {
   const handleChange = (value)=>setformState({...formState,date:value})
   // console.log("After Assigning",productData)
   async function selectProduct() {
-    console.log(products)
     const products = await window.shopify.resourcePicker({
       type: "product",
       action: "select", // customized action verb, either 'select' or 'add',
