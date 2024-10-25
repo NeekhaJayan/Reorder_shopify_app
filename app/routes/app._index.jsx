@@ -49,14 +49,8 @@ export const loader = async ({ request }) => {
         }
       }
     }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
   }
-}
-
-    }`,
+}`,
   );
 
   // Destructure the response
