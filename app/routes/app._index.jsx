@@ -88,7 +88,7 @@ const shop = await response_shop.json();
   }
 
   const reorderDetails = await response.json();
-
+  console.log(data,shop)
   return json({ products: data, reorderDetails: reorderDetails,shopDetails:shop });
  
  
