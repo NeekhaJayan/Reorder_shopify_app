@@ -33,13 +33,13 @@ export const loader = async ({ request }) => {
     `#graphql
     query {
       products(first: 10) {
-        edges {
-          node {
-            id
-            title
-            handle
-          }
+       edges {
           cursor
+        }
+        nodes {
+          id
+          title
+          description
         }
       }
     }`,
