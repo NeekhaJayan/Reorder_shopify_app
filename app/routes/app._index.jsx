@@ -56,7 +56,7 @@ export const loader = async ({ request }) => {
   // Destructure the response
   const body = await response_product.json();
   
-  const data = response_product.data?.products; 
+  const data = body?.data?.products; 
   console.log(data)
   const response_shop = await admin.graphql(
   `#graphql
@@ -76,9 +76,9 @@ export const loader = async ({ request }) => {
 
   // Destructure the response
   const shop_body = await response_shop.json();
-  console.log(response_shop)
-  const shop = shop_body.data?.shop;
-
+  
+  const shop = shop_body?.data?.shop;
+  console.log(shop)
 
   const response = await fetch("https://reorderappapi.onrender.com/auth/reorder_details", {
     method: "GET",
