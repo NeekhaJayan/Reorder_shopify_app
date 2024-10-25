@@ -32,7 +32,7 @@ export const loader = async ({ request }) => {
   const response_product = await admin.graphql(
     `#graphql
     query {
-      products(first: 10) {
+      products(first:5) {
        edges {
           cursor
         }
