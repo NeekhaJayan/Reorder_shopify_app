@@ -21,9 +21,21 @@ import { ImageIcon } from "@shopify/polaris-icons";
 
 export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
-  const data=await admin.rest.resources.Product.all({
-    session: session,
-  });
+  // const data=await admin.rest.resources.Product.all({
+  //   session: session,
+  // });
+  const response_product = await admin.graphql(
+    `#graphql
+    query {
+      node(id: "gid://shopify/Product/7546506772589") {
+        id
+        ... on Product {
+          title
+        }
+      }
+    }`,
+  );
+  // gid://shopify/Product/7546506772589
   // const shop = await admin.rest.resources.Shop.all({
   //     session: session,
   //   });
@@ -43,9 +55,9 @@ export const loader = async ({ request }) => {
   // );
 
   // // Destructure the response
-  // const body = await response_product.json();
+  const body = await response_product.json();
   
-  // const data = body?.data?.products; 
+  const data = body?.data?.products; 
   console.log(data)
   const response_shop = await admin.graphql(
   `#graphql
