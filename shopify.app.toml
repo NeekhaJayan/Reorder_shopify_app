@@ -3,7 +3,7 @@
 client_id = "ff8383f7adfb90290caa96dd1bfc9994"
 name = "deca-store-app1"
 handle = "deca-store-app1"
-application_url = "https://ro-yen-parameters-relief.trycloudflare.com"
+application_url = "https://reorder-shopify-app.onrender.com/"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://ro-yen-parameters-relief.trycloudflare.com/auth/callback",
-  "https://ro-yen-parameters-relief.trycloudflare.com/auth/shopify/callback",
-  "https://ro-yen-parameters-relief.trycloudflare.com/api/auth/callback"
+  "https://reorder-shopify-app.onrender.com/auth/callback",
+  "https://reorder-shopify-app.onrender.com/auth/shopify/callback",
+  "https://reorder-shopify-app.onrender.com/api/auth/callback"
 ]
 
 [webhooks]

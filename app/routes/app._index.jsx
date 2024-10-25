@@ -29,7 +29,7 @@ export const loader = async ({ request }) => {
     });
 
 
-  const response = await fetch("http://localhost:8000/auth/reorder_details", {
+  const response = await fetch("https://reorderappapi.onrender.com/auth/reorder_details", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -67,13 +67,13 @@ export const action = async ({ request }) => {
     reorder_days: reorder_days,
   };
 
-  let apiUrl = "http://localhost:8000/auth/reorder";
+  let apiUrl = "https://reorderappapi.onrender.com/auth/reorder";
   let fetchMethod = "POST"; // Default method is POST
 
   // If the request is PATCH, handle updating the product
   if (method === "PATCH") {
      
-    apiUrl = `http://localhost:8000/auth/reorder/${productId}`; // Use specific API endpoint for PATCH
+    apiUrl = `https://reorderappapi.onrender.com/auth/reorder/${productId}`; // Use specific API endpoint for PATCH
     fetchMethod = "PATCH"; // Update the method to PATCH
     productData={
       product_id: productId,
