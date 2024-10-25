@@ -27,12 +27,15 @@ export const loader = async ({ request }) => {
   const response_product = await admin.graphql(
     `#graphql
     query {
-      node(id: "gid://shopify/Product/") {
-        id
-        ... on Product {
+      products(first: 10){
+        node 
+        {
+          id
           title
-        }
+           }
+      
       }
+      
     }`,
   );
   // gid://shopify/Product/7546506772589
