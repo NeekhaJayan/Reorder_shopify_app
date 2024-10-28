@@ -196,15 +196,16 @@ export default function Index() {
 
       const numericId = globalId.split("/").pop();
       // Check if the selected product already exists in productData
+      console.log(numericId,globalId)
       const isDuplicate = productData.some((item) => item.productId === numericId);
-  
+      console.log(isDuplicate)
       if (isDuplicate) {
         alert("This product is already in the list.");
       } else {
         // Only set form state if the product isn't a duplicate
         setFormProductState({
           ...formProductState,
-          productId: id,
+          productId: globalId,
           productVariantId: variants[0].id,
           productTitle: title,
           productHandle: handle,
