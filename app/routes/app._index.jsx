@@ -192,10 +192,11 @@ export default function Index() {
     //   });
     // }
     if (products) {
-      const { images, id, variants, title, handle } = products[0];
-  
+      const { images, id: globalId, variants, title, handle } = products[0];
+
+      const numericId = globalId.split("/").pop();
       // Check if the selected product already exists in productData
-      const isDuplicate = productData.some((item) => item.productId === id);
+      const isDuplicate = productData.some((item) => item.productId === numericId);
   
       if (isDuplicate) {
         alert("This product is already in the list.");
