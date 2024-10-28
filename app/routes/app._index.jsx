@@ -176,7 +176,7 @@ export default function Index() {
     const products = await window.shopify.resourcePicker({
       type: "product",
       action: "select",
-      query:"NOT gid://shopify/Product/7546506772589", // customized action verb, either 'select' or 'add',
+      query:"-id:7546506772589", // customized action verb, either 'select' or 'add',
     });
     // console.log(products)
     // if (products) {
