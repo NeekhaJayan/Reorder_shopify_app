@@ -167,7 +167,7 @@ export default function Index() {
   const [formState, setformState] = useState('');
   const [formProductState, setFormProductState] = useState(products);
   const [errors, setErrors] = useState({});
-  const [productData, setProductData] = useState();
+  const [productData, setProductData] = useState(reorderDetails);
   const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
   const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
   const handleChange = (value)=>setformState({...formState,date:value})
