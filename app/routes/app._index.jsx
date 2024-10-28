@@ -177,7 +177,7 @@ export default function Index() {
       type: "product",
       action: "select", // customized action verb, either 'select' or 'add',
     });
-    console.log(products)
+    // console.log(products)
     // if (products) {
     //   const { images, id, variants, title, handle } = products[0];
 
@@ -196,9 +196,9 @@ export default function Index() {
 
       const numericId = globalId.split("/").pop();
       // Check if the selected product already exists in productData
-      console.log(numericId,globalId)
+      // console.log(numericId,globalId)
       const isDuplicate = productData.some((item) => item.productId === numericId);
-      console.log(isDuplicate)
+      // console.log(isDuplicate)
       if (isDuplicate) {
         alert("This product is already in the list.");
       } else {
