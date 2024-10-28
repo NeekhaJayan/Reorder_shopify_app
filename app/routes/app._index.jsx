@@ -121,13 +121,13 @@ export const action = async ({ request }) => {
   };
 
   let apiUrl = "https://reorderappapi.onrender.com/auth/reorder";
-  let fetchMethod = "POST"; // Default method is POST
+  
 
   // If the request is PATCH, handle updating the product
   if (method === "PATCH") {
      
     apiUrl = `https://reorderappapi.onrender.com/auth/reorder/${productId}`; // Use specific API endpoint for PATCH
-    fetchMethod = "PATCH"; // Update the method to PATCH
+     // Update the method to PATCH
     productData={
       product_id: productId,
       reorder_days: formData.get("reorder_days"),
@@ -167,9 +167,9 @@ export default function Index() {
   const [formState, setformState] = useState('');
   const [formProductState, setFormProductState] = useState(products);
   const [errors, setErrors] = useState({});
-  const [productData, setProductData] = useState(reorderDetails);
+  const [productData, setProductData] = useState();
   const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
-  const [updatedProducts, setUpdatedProducts] = useState(productData);
+  const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
   const handleChange = (value)=>setformState({...formState,date:value})
   // console.log("After Assigning",productData)
   async function selectProduct() {
@@ -229,9 +229,9 @@ export default function Index() {
   useEffect(() => {
   if (data?.result) {
     const resultArray = Array.isArray(data.result) ? data.result : [data.result]; // Ensure it's an array
-    setProductData((prevData) => [...prevData, ...resultArray]);
+    setUpdatedProducts((prevData) => [...prevData, ...resultArray]);
   }
-}, [data]);
+}, [data.result]);
 
 
   const EmptyProductState = () => (
