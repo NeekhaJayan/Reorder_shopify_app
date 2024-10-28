@@ -178,18 +178,39 @@ export default function Index() {
       action: "select", // customized action verb, either 'select' or 'add',
     });
     console.log(products)
+    // if (products) {
+    //   const { images, id, variants, title, handle } = products[0];
+
+    //   setFormProductState({
+    //     ...formProductState,
+    //     productId: id,
+    //     productVariantId: variants[0].id,
+    //     productTitle: title,
+    //     productHandle: handle,
+    //     productAlt: images[0]?.altText,
+    //     productImage: images[0]?.originalSrc,
+    //   });
+    // }
     if (products) {
       const { images, id, variants, title, handle } = products[0];
-
-      setFormProductState({
-        ...formProductState,
-        productId: id,
-        productVariantId: variants[0].id,
-        productTitle: title,
-        productHandle: handle,
-        productAlt: images[0]?.altText,
-        productImage: images[0]?.originalSrc,
-      });
+  
+      // Check if the selected product already exists in productData
+      const isDuplicate = productData.some((item) => item.productId === id);
+  
+      if (isDuplicate) {
+        alert("This product is already in the list.");
+      } else {
+        // Only set form state if the product isn't a duplicate
+        setFormProductState({
+          ...formProductState,
+          productId: id,
+          productVariantId: variants[0].id,
+          productTitle: title,
+          productHandle: handle,
+          productAlt: images[0]?.altText,
+          productImage: images[0]?.originalSrc,
+        });
+      }
     }
   }
    // Handle change in reorder_days field
