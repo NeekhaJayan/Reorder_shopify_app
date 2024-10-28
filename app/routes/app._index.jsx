@@ -231,7 +231,7 @@ export default function Index() {
     const resultArray = Array.isArray(data.result) ? data.result : [data.result]; // Ensure it's an array
     setUpdatedProducts((prevData) => [...prevData, ...resultArray]);
   }
-}, [data.result]);
+}, [data]);
 
 
   const EmptyProductState = () => (
