@@ -177,7 +177,7 @@ export default function Index() {
       type: "product",
       action: "select",
       options: {
-        initialQuery: "-id:7546506772589" // Exclude product with this ID
+        initialQuery: "-id:gid://shopify/Product/7546506772589" // Exclude product with this ID
       }// customized action verb, either 'select' or 'add',
     });
     // console.log(products)
