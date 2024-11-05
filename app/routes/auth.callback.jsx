@@ -1,14 +1,12 @@
 // routes/auth.callback.jsx
 
 import { json, redirect } from "@remix-run/node";
-import { authenticate } from "../shopify.server";
 import {createAndPinReorderDaysMetafieldDefinition } from "../utils/shopify"; // Path to GraphQL function
 import fetch from "node-fetch";
 
 // OAuth callback handler
 export const loader = async ({ request }) => {
   console.log("Loader triggered");
-  // const {admin,session,accesstoken }=await authenticate.admin(request);
   const url = new URL(request.url);
   const shop = url.searchParams.get("shop");
   const code = url.searchParams.get("code");
