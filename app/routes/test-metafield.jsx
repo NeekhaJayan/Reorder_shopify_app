@@ -9,7 +9,7 @@ export const loader = async ({ request }) => {
     // const {admin}=await authenticate.webhook(request);
   // Replace with your own shop and access token values for testing
   const shop = "deca-development-store.myshopify.com";
-  const accessToken = "shpua_90a15edd94a173e07b1adaa3eef3826c";
+  const accessToken = "shpua_07a08bc8f4fc9a6028ddd26807a1e3d0";
 
   try {
     // Call the function to create the metafield
