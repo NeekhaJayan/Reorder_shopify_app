@@ -2,7 +2,7 @@
 
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
-import {createAndPinReorderDaysMetafieldDefinition } from "../utils/shopify";
+import {createAppDataMetafieldDefinition } from "../utils/shopify";
 
 export const loader = async ({ request }) => {
   const { admin } = await authenticate.admin(request);
@@ -13,23 +13,9 @@ export const loader = async ({ request }) => {
 
   try {
     // Call the function to create the metafield
-    // await createAndPinReorderDaysMetafieldDefinition(accessToken, shop);
-    const response_list = await admin.graphql(
-      `#graphql
-      query {
-        privateMetafield(id: "gid://shopify/PrivateMetafield/1060470840") {
-          id
-          key
-          namespace
-          value
-        }
-      }`,
-    );
-  
+    await createAppDataMetafieldDefinition(accessToken, shop);
     
-    const data_list = await response_list.json();
-    console.log(data_list);
-    return json({ message: data_list });
+    return json({ message: "Metafield Created Successfully" });
   } catch (error) {
     console.error("Error creating metafield:", error);
     return json({ error: "Metafield creation failed" }, { status: 500 });
