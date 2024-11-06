@@ -57,7 +57,7 @@ export const loader = async ({ request }) => {
     return json({ error: "Metafield creation failed" }, { status: 500 });
   }
 
-  const response = await fetch("http://127.0.0.1:8000/auth/reorder_details", {
+  const response = await fetch("https://reorderappapi.onrender.com/auth/reorder_details", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -96,13 +96,13 @@ export const action = async ({ request }) => {
   //   reorder_days: reorder_days,
   // };
 
-  // let apiUrl = "http://127.0.0.1:8000/auth/reorder";
+  // let apiUrl = "https://reorderappapi.onrender.com/auth/reorder";
   
 
   // If the request is PATCH, handle updating the product
   // if (method === "PATCH") {
      
-  let apiUrl = `http://127.0.0.1:8000/auth/reorder/${productId}`; // Use specific API endpoint for PATCH
+  let apiUrl = `https://reorderappapi.onrender.com/auth/reorder/${productId}`; // Use specific API endpoint for PATCH
      // Update the method to PATCH
     let productData={
       product_id: productId,
@@ -266,7 +266,7 @@ export default function Index() {
 };
 
 async function checkIfAppIsInstalled(shop) {
-  const response = await fetch(`http://127.0.0.1:8000/auth/checkAppInstalled?shop=${shop}`, {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/checkAppInstalled?shop=${shop}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -282,7 +282,7 @@ async function checkIfAppIsInstalled(shop) {
 }
 
 async function markAppAsInstalled(shop,email) {
-  const response = await fetch(`http://127.0.0.1:8000/auth/markAppAsInstalled`, {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/markAppAsInstalled`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -10,7 +10,7 @@ export const action = async ({ request }) => {
   // If this webhook already ran, the session may have been deleted previously.
   if (session) {
     await db.session.deleteMany({ where: { shop } });
-    const response = await fetch(`http://127.0.0.1:8000/auth/markAppAsUnInstalled`, {
+    const response = await fetch(`https://reorderappapi.onrender.com/auth/markAppAsUnInstalled`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
