@@ -46,6 +46,7 @@ export const loader = async ({ request }) => {
   const access_token=session.accessToken
   const email= shop.data.shop.email
   const isInstalled = await checkIfAppIsInstalled(shopname);
+  console.log(access_token);
   if (!isInstalled)
   try {
     // Call the function to create the metafield
@@ -67,8 +68,10 @@ export const loader = async ({ request }) => {
   if (!response.ok) {
     throw new Error("Failed to send product data to FastAPI");
   }
-
+ 
   const reorderDetails = await response.json();
+
+ 
 
   return json({ reorderDetails: reorderDetails,shopDetails:shop });
  
