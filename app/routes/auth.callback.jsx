@@ -1,7 +1,7 @@
 // routes/auth.callback.jsx
 
 import { json, redirect } from "@remix-run/node";
-// import {createAndPinReorderDaysMetafieldDefinition } from "../utils/shopify"; // Path to GraphQL function
+import {createAndPinReorderDaysMetafieldDefinition } from "../utils/shopify"; // Path to GraphQL function
 import fetch from "node-fetch";
 
 // OAuth callback handler
@@ -22,7 +22,7 @@ export const loader = async ({ request }) => {
     await saveShopCredentials(shop, accessToken);
 
     // Call metafield definition creation function
-    // await createAndPinReorderDaysMetafieldDefinition(accessToken, shop);
+    await createAndPinReorderDaysMetafieldDefinition(accessToken, shop);
 
     // Redirect to main app page
     return redirect(`/app?shop=${shop}`);
