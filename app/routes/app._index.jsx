@@ -17,71 +17,47 @@ import {
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
 import { ImageIcon } from "@shopify/polaris-icons";
-
+import {createAndPinReorderDaysMetafieldDefinition } from "../utils/shopify";
 
 export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
-  // const data=await admin.rest.resources.Product.all({
-  //   session: session,
-  // });
-  const response_product = await admin.graphql(
-    `#graphql
-    query {
-      node(id: "gid://shopify/Product/7546506772589") {
-        id
-        ... on Product {
-          title
-        }
-      }
-    }`,
-  );
-  // gid://shopify/Product/7546506772589
-  // const shop = await admin.rest.resources.Shop.all({
-  //     session: session,
-  //   });
-  // const {admin,session } = await authenticate.admin(request);
-
-  // const response_product = await admin.graphql(
-  //   `#graphql
-  //   query {
-  //     products(first: 10, query: "product_type:snowboards") {
-  //       edges {
-  //         node {
-  //           title
-  //         }
-  //       }
-  //     }
-  //   }`,
-  // );
-
-  // // Destructure the response
-  const body = await response_product.json();
-  
-  const data = body; 
-  console.log(data)
   const response_shop = await admin.graphql(
-  `#graphql
-    query {
-      shop {
-        name
-        email
-        currencyCode
-        checkoutApiSupported
-        taxesIncluded
-        resourceLimits {
-          maxProductVariants
+    `#graphql
+      query {
+        shop {
+          name
+          email
+          currencyCode
+          checkoutApiSupported
+          taxesIncluded
+          resourceLimits {
+            maxProductVariants
+          }
         }
-      }
-    }`,
-  );
-
-  // Destructure the response
-  const shop_body = await response_shop.json();
+      }`,
+    );
   
+    // Destructure the response
+  const shop_body = await response_shop.json();
+    
   const shop = shop_body;
-  console.log(shop)
 
-  const response = await fetch("https://reorderappapi.onrender.com/auth/reorder_details", {
+  const shopname= session.shop
+  const access_token=session.accessToken
+  const email= shop.data.shop.email
+  const isInstalled = await checkIfAppIsInstalled(shopname);
+  if (!isInstalled)
+  try {
+    // Call the function to create the metafield
+    await createAndPinReorderDaysMetafieldDefinition(access_token, shopname);
+    await markAppAsInstalled(shopname,email);
+    return json({ message: "Metafield creation successful" });
+  } catch (error) {
+    console.error("Error creating metafield:", error);
+    return json({ error: "Metafield creation failed" }, { status: 500 });
+  }
+
+  const response = await fetch("http://127.0.0.1:8000/auth/reorder_details", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -94,7 +70,7 @@ export const loader = async ({ request }) => {
 
   const reorderDetails = await response.json();
 
-  return json({ products: data, reorderDetails: reorderDetails,shopDetails:shop });
+  return json({ reorderDetails: reorderDetails,shopDetails:shop });
  
  
 };
@@ -112,32 +88,32 @@ export const action = async ({ request }) => {
   const reorder_days = parseFloat(formData.get("date"));
 
   // Construct the product data to send
-  let productData = {
-    shop: shopname,
-    email: email,
-    product_id: productId,
-    product_title:productTitle,
-    reorder_days: reorder_days,
-  };
+  // let productData = {
+  //   shop: shopname,
+  //   email: email,
+  //   product_id: productId,
+  //   product_title:productTitle,
+  //   reorder_days: reorder_days,
+  // };
 
-  let apiUrl = "https://reorderappapi.onrender.com/auth/reorder";
+  // let apiUrl = "http://127.0.0.1:8000/auth/reorder";
   
 
   // If the request is PATCH, handle updating the product
-  if (method === "PATCH") {
+  // if (method === "PATCH") {
      
-    apiUrl = `https://reorderappapi.onrender.com/auth/reorder/${productId}`; // Use specific API endpoint for PATCH
+  let apiUrl = `http://127.0.0.1:8000/auth/reorder/${productId}`; // Use specific API endpoint for PATCH
      // Update the method to PATCH
-    productData={
+    let productData={
       product_id: productId,
       reorder_days: formData.get("reorder_days"),
     }
-    console.log(productData)
-  }
+    // console.log(productData)
+  // }
   try {
     // Create a new fetch call for each request
     const response = await fetch(apiUrl, {
-      method: method,
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -160,65 +136,13 @@ export const action = async ({ request }) => {
 
 
 export default function Index() {
-  const {products,reorderDetails,shopDetails}=useLoaderData();
-  console.log(products)
+  const {reorderDetails,shopDetails}=useLoaderData();
   const fetcher = useFetcher();
   const { data, state } = fetcher;
-  const [formState, setformState] = useState('');
-  const [formProductState, setFormProductState] = useState(products);
-  const [errors, setErrors] = useState({});
   const [productData, setProductData] = useState(reorderDetails);
   const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
   const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
-  const handleChange = (value)=>setformState({...formState,date:value})
-  // console.log("After Assigning",productData)
-  async function selectProduct() {
-    const products = await window.shopify.resourcePicker({
-      type: "product",
-      action: "select",
-      options: {
-        initialQuery: "-id:gid://shopify/Product/7546506772589" // Exclude product with this ID
-      }// customized action verb, either 'select' or 'add',
-    });
-    // console.log(products)
-    // if (products) {
-    //   const { images, id, variants, title, handle } = products[0];
 
-    //   setFormProductState({
-    //     ...formProductState,
-    //     productId: id,
-    //     productVariantId: variants[0].id,
-    //     productTitle: title,
-    //     productHandle: handle,
-    //     productAlt: images[0]?.altText,
-    //     productImage: images[0]?.originalSrc,
-    //   });
-    // }
-    if (products) {
-      const { images, id: globalId, variants, title, handle } = products[0];
-
-      const numericId = globalId.split("/").pop();
-      // Check if the selected product already exists in productData
-      // console.log(numericId,globalId)
-      const isDuplicate = productData.some((item) => item.productId === numericId);
-      // console.log(isDuplicate)
-      if (isDuplicate) {
-        alert("This product is already in the list.");
-      } else {
-        // Only set form state if the product isn't a duplicate
-        setFormProductState({
-          ...formProductState,
-          productId: globalId,
-          productVariantId: variants[0].id,
-          productTitle: title,
-          productHandle: handle,
-          productAlt: images[0]?.altText,
-          productImage: images[0]?.originalSrc,
-        });
-      }
-    }
-  }
-   // Handle change in reorder_days field
    const handleReorderChange = (productId, value) => {
     setUpdatedProducts((prev) =>
       prev.map((product) =>
@@ -251,14 +175,6 @@ export default function Index() {
   
     setEditingProduct(null); // Reset the editing state after saving
   };
-  // console.log(data)
-  useEffect(() => {
-  if (data?.result) {
-    const resultArray = Array.isArray(data.result) ? data.result : [data.result]; // Ensure it's an array
-    setUpdatedProducts((prevData) => [...prevData, ...resultArray]);
-  }
-}, [data]);
-
 
   const EmptyProductState = () => (
     <EmptyState
@@ -332,66 +248,7 @@ export default function Index() {
       <BlockStack gap="400">
         <Layout>
           <Layout.Section>
-            <Card>
-              
-            <fetcher.Form method="post">
-                <input type="hidden" name="shopname" value={shopDetails.data.shop.name} />
-                <input type="hidden" name="email" value={shopDetails.data.shop.email}/>
-                <BlockStack gap="500">
-                  <BlockStack gap="500">
-                <InlineStack align="space-between">
-                  <Text as={"h2"} variant="headingLg">
-                    Product
-                  </Text>
-                 
-                  {formProductState.productId ? (
-                    <Button variant="plain" onClick={selectProduct}>
-                      Change product
-                    </Button>
-                  ) : null}
-                </InlineStack>
-                {formProductState.productId ? (
-                  <InlineStack blockAlign="center" gap="500">
-                    <Thumbnail
-                      source={formProductState.productImage || ImageIcon}
-                      alt={formProductState.productAlt}
-                    />
-                    <Text as="span" variant="headingMd" fontWeight="semibold">
-                      {formProductState.productTitle}
-                    </Text>
-                  </InlineStack>
-                ) : (
-                  <BlockStack gap="200">
-                    <Button onClick={selectProduct} id="select-product">
-                      Select product
-                    </Button>
-                    {errors.productId ? (
-                      <InlineError
-                        message={errors.productId}
-                        fieldID="myFieldID"
-                      />
-                    ) : null}
-                  </BlockStack>
-                )} 
-                <input
-                    type="hidden"
-                    name="productId"
-                    value={formProductState.productId || ""}
-                  /> 
-                <input
-                    type="hidden"
-                    name="productTitle"
-                    value={formProductState.productTitle || ""}
-                  /> 
-              </BlockStack>
-                  <TextField label="Re-order Date" type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />
-                  <Button submit>Save</Button> 
-                </BlockStack> 
-            </fetcher.Form>
-            {state === "submitting" && <p>Submitting...</p>}
-            {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
-            
-            </Card>
+           
 
             <Card padding="0">
             {productData.length === 0 ? (
@@ -407,3 +264,33 @@ export default function Index() {
     </Page>
   );
 };
+
+async function checkIfAppIsInstalled(shop) {
+  const response = await fetch(`http://127.0.0.1:8000/auth/checkAppInstalled?shop=${shop}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to check if app is installed");
+  }
+
+  const data = await response.json();
+  console.log(data.installed);
+  return data.installed;
+}
+
+async function markAppAsInstalled(shop,email) {
+  const response = await fetch(`http://127.0.0.1:8000/auth/markAppAsInstalled`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ shop ,email})
+  });
+  
+  if (!response.ok) {
+    throw new Error("Failed to mark the app as installed");
+  }
+}
