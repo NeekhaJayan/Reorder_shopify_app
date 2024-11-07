@@ -145,6 +145,83 @@ export const listProductsWithMetafields = async (accessToken, shop) => {
   return productData
 };
 
+const getMetafieldDefinitionId = async (accessToken, shop) => {
+  const getIdQuery = `
+    {
+      metafieldDefinitions(first: 10, namespace: "deca_reorderday", ownerType: PRODUCT) {
+        edges {
+          node {
+            id
+            namespace
+            key
+            name
+          }
+        }
+      }
+    }
+  `;
+
+  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": accessToken,
+    },
+    body: JSON.stringify({ query: getIdQuery }),
+  });
+
+  const responseData = await response.json();
+
+  if (responseData.errors) {
+    console.error("GraphQL error while fetching metafield:", responseData.errors);
+    return null;
+  }
+
+  // Extract the ID of the first metafield definition, if it exists
+  const metafieldId = responseData.data.metafieldDefinitions.edges[0]?.node.id;
+  return metafieldId;
+};
+
+export const deleteMetafieldDefinition = async (accessToken, shop) => {
+  const metafieldId = await getMetafieldDefinitionId(accessToken, shop);
+
+  if (!metafieldId) {
+    console.error("No metafield definition found with the specified namespace.");
+    return;
+  }
+
+  const deleteQuery = `
+    mutation {
+      metafieldDefinitionDelete(
+        id: "${metafieldId}"
+      ) {
+        deletedDefinitionId
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": accessToken,
+    },
+    body: JSON.stringify({ query: deleteQuery }),
+  });
+
+  const responseData = await response.json();
+
+  if (responseData.errors) {
+    console.error("GraphQL error while deleting metafield:", responseData.errors);
+    return;
+  }
+
+  return responseData.data.metafieldDefinitionDelete;
+};
 
 
 
