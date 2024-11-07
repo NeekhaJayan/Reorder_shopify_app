@@ -5,7 +5,7 @@ export const createAndPinReorderDaysMetafieldDefinition = async (accessToken, sh
     mutation {
       metafieldDefinitionCreate(
         definition: {
-          namespace: "custom",
+          namespace: "deca_reorderday",
           key: "reorder_days",
           type: "number_integer",
           name: "Reorder Days",
@@ -52,91 +52,98 @@ export const createAndPinReorderDaysMetafieldDefinition = async (accessToken, sh
 
 };
 
-export const createAppDataMetafieldDefinition = async (accessToken, shop) => {
-  // Step 1: Get the app installation ID
-  const appIdQuery = `query {
-    currentAppInstallation {
-      id
-    }
-  }`;
-  
-  const appIdResponse = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
-    },
-    body: JSON.stringify({ query: appIdQuery }),
-  });
-  
-  const appIdResponseData = await appIdResponse.json();
-
-  if (appIdResponseData.errors) {
-    console.error("GraphQL error during app ID fetch:", appIdResponseData.errors);
-    return;
-  }
-
-  const appInstallationId = appIdResponseData.data.currentAppInstallation?.id;
-  if (!appInstallationId) {
-    console.error("App installation ID not found.");
-    return;
-  }
-
-  // Step 2: Create the metafield definition using the app installation ID
-  const createQuery = `
-    mutation CreateAppDataMetafield($metafieldsSetInput: [MetafieldsSetInput!]!) {
-      metafieldsSet(metafields: $metafieldsSetInput) {
-        metafields {
-          id
-          namespace
-          key
-        }
-        userErrors {
-          field
-          message
+const getAllProducts = async (accessToken, shop) => {
+  const getProductsQuery = `
+    query {
+      products(first: 50) {  
+        edges {
+          node {
+            id
+            title
+          }
         }
       }
     }
   `;
 
-  const metafieldsSetInput = [
-    {
-      ownerId: appInstallationId,
-      namespace: "reorderdays",
-      key: "reorderdays",
-      value: "30",
-      type: "single_line_text_field"
-    }
-  ];
-
-  const createResponse = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
+  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "X-Shopify-Access-Token": accessToken,
     },
-    body: JSON.stringify({
-      query: createQuery,
-      variables: { metafieldsSetInput }
-    }),
+    body: JSON.stringify({ query: getProductsQuery }),
   });
 
-  const createResponseData = await createResponse.json();
+  const responseData = await response.json();
 
-  if (createResponseData.errors) {
-    console.error("GraphQL error during metafield creation:", createResponseData.errors);
+  if (responseData.errors) {
+    console.error("GraphQL error while fetching products:", responseData.errors);
     return;
   }
 
-  const userErrors = createResponseData.data.metafieldsSet.userErrors;
-  if (userErrors.length > 0) {
-    console.error("User error during metafield creation:", userErrors);
+  const products = responseData.data.products.edges.map(edge => edge.node);
+  return products;
+};
+const getMetafieldForProduct = async (accessToken, shop, productId) => {
+  const getMetafieldQuery = `
+    query GetProductMetafield($productId: ID!) {
+      product(id: $productId) {
+        metafield(namespace: "deca_reorderday", key: "reorder_days") {
+          id
+          namespace
+          key
+          value
+        }
+      }
+    }
+  `;
+
+  const variables = { productId };
+
+  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": accessToken,
+    },
+    body: JSON.stringify({ query: getMetafieldQuery, variables }),
+  });
+
+  const responseData = await response.json();
+
+  if (responseData.errors) {
+    console.error("GraphQL error while fetching metafield:", responseData.errors);
     return;
   }
 
-  console.log("Metafield created successfully:", createResponseData.data.metafieldsSet.metafields);
+  return responseData.data.product.metafield;
 };
 
+export const listProductsWithMetafields = async (accessToken, shop) => {
+  // Step 1: Fetch all products
+  const products = await getAllProducts(accessToken, shop);
+  if (!products) {
+    return;
+  }
+  const productData = [];
+  // Step 2: For each product, fetch its metafields
+  for (const product of products) {
+    const metafields = await getMetafieldForProduct(accessToken, shop, product.id);
+    // Check if metafield data exists and is not null
+    if (metafields) {
+      productData.push({
+        productId: product.id,
+        productTitle: product.title,
+        created_at: product.created_at,
+        reorder_days: metafields.value, // Assign the metafield's value to reorder_days
+      });
+      // console.log(`Product: ${product.title} (ID: ${product.id})`);
+      // console.log(`  - Metafield: ${metafields.namespace}.${metafields.key} = ${metafields.value}`);
+    }
+  }
+  return productData
+};
 
 
 
