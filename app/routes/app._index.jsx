@@ -153,7 +153,7 @@ export default function Index() {
 };
 
 async function checkIfAppIsInstalled(shop) {
-  const response = await fetch(`https://reorder-shopify-app.onrender.com/auth/checkAppInstalled?shop=${shop}`, {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/checkAppInstalled?shop=${shop}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -170,7 +170,7 @@ async function checkIfAppIsInstalled(shop) {
 
 async function markAppAsInstalled(shop) {
   console.log(JSON.stringify({ shop}))
-  const response = await fetch(`https://reorder-shopify-app.onrender.com/auth/markAppAsInstalled`, {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/markAppAsInstalled`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
