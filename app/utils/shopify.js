@@ -1,44 +1,33 @@
 // Update your function to create and pin a metafield definition
-export const createAndPinReorderDaysMetafieldDefinition = async (accessToken, shop) => {
-  const uniqueKey = `reorder_days_${Date.now()}`;
-  const createQuery = `
-    mutation {
-      metafieldDefinitionCreate(
-        definition: {
-          namespace: "deca_reorderday",
-          key: "reorder_days",
-          type: "number_integer",
-          name: "Reorder Days",
-          description: "Number of days until reorder",
-          ownerType: PRODUCT,
-          pin: true
-        }
-      ) {
-        createdDefinition {
-          id
-          namespace
-          key
-          name
-        }
-        userErrors {
-          field
-          message
-        }
+export const createAndPinReorderDaysMetafieldDefinition = async (admin) => {
+  const response = await admin.graphql(
+    `#graphql
+       mutation {
+    metafieldDefinitionCreate(
+      definition: {
+        namespace: "deca_reorderday",
+        key: "reorder_days",
+        type: "number_integer",
+        name: "Reorder Days",
+        description: "Number of days until reorder",
+        ownerType: PRODUCT,
+        pin: true
+      }
+    ) {
+      createdDefinition {
+        id
+        namespace
+        key
+        name
+      }
+      userErrors {
+        field
+        message
       }
     }
-  `;
-
-  const createResponse = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
-    },
-    body: JSON.stringify({ query: createQuery }),
-  });
-
-  const createResponseData = await createResponse.json();
-
+  }`
+  );
+  const createResponseData = await response.json();
   if (createResponseData.errors) {
     console.error("GraphQL error during creation:", createResponseData.errors);
     return;
@@ -52,8 +41,9 @@ export const createAndPinReorderDaysMetafieldDefinition = async (accessToken, sh
 
 };
 
-const getAllProducts = async (accessToken, shop) => {
-  const getProductsQuery = `
+const getAllProducts = async (admin) => {
+  const response = await admin.graphql(
+    `#graphql
     query {
       products(first: 50) {  
         edges {
@@ -64,16 +54,7 @@ const getAllProducts = async (accessToken, shop) => {
         }
       }
     }
-  `;
-
-  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
-    },
-    body: JSON.stringify({ query: getProductsQuery }),
-  });
+  `);
 
   const responseData = await response.json();
 
@@ -85,8 +66,9 @@ const getAllProducts = async (accessToken, shop) => {
   const products = responseData.data.products.edges.map(edge => edge.node);
   return products;
 };
-const getMetafieldForProduct = async (accessToken, shop, productId) => {
-  const getMetafieldQuery = `
+const getMetafieldForProduct = async (admin, productId) => {
+ const response = await admin.graphql(
+    `#graphql
     query GetProductMetafield($productId: ID!) {
       product(id: $productId) {
         metafield(namespace: "deca_reorderday", key: "reorder_days") {
@@ -97,18 +79,11 @@ const getMetafieldForProduct = async (accessToken, shop, productId) => {
         }
       }
     }
-  `;
-
-  const variables = { productId };
-
-  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
+  `,{
+    variables: {
+      productId:productId,
     },
-    body: JSON.stringify({ query: getMetafieldQuery, variables }),
-  });
+  },);
 
   const responseData = await response.json();
 
@@ -120,16 +95,16 @@ const getMetafieldForProduct = async (accessToken, shop, productId) => {
   return responseData.data.product.metafield;
 };
 
-export const listProductsWithMetafields = async (accessToken, shop) => {
+export const listProductsWithMetafields = async (admin) => {
   // Step 1: Fetch all products
-  const products = await getAllProducts(accessToken, shop);
+  const products = await getAllProducts(admin);
   if (!products) {
     return;
   }
   const productData = [];
   // Step 2: For each product, fetch its metafields
   for (const product of products) {
-    const metafields = await getMetafieldForProduct(accessToken, shop, product.id);
+    const metafields = await getMetafieldForProduct(admin, product.id);
     // Check if metafield data exists and is not null
     if (metafields) {
       productData.push({
@@ -145,8 +120,9 @@ export const listProductsWithMetafields = async (accessToken, shop) => {
   return productData
 };
 
-const getMetafieldDefinitionId = async (accessToken, shop) => {
-  const getIdQuery = `
+const getMetafieldDefinitionId = async (admin) => {
+  const response = await admin.graphql(
+    `#graphql
     {
       metafieldDefinitions(first: 10, namespace: "deca_reorderday", ownerType: PRODUCT) {
         edges {
@@ -159,16 +135,7 @@ const getMetafieldDefinitionId = async (accessToken, shop) => {
         }
       }
     }
-  `;
-
-  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
-    },
-    body: JSON.stringify({ query: getIdQuery }),
-  });
+  `);
 
   const responseData = await response.json();
 
@@ -182,15 +149,111 @@ const getMetafieldDefinitionId = async (accessToken, shop) => {
   return metafieldId;
 };
 
-export const deleteMetafieldDefinition = async (accessToken, shop) => {
-  const metafieldId = await getMetafieldDefinitionId(accessToken, shop);
+const getProductsWithMetafield = async (admin) => {
+  const response = await admin.graphql(
+    `#graphql
+    {
+      products(first: 50) {
+        edges {
+          node {
+            id
+            metafields(namespace: "deca_reorderday", first: 1) {
+              edges {
+                node {
+                  id
+                  namespace
+                  key
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+    }`
+  );
 
+  const responseData = await response.json();
+  // console.log(responseData)
+
+  if (responseData.errors) {
+    console.error("GraphQL error while fetching products:", responseData.errors);
+    return [];
+  }
+
+  return responseData.data.products.edges;
+};
+const deleteProductMetafield = async (admin, metafieldId) => {
+  
+  const response = await admin.graphql(
+    `#graphql
+    mutation metafieldDelete($input: MetafieldDeleteInput!) {
+      metafieldDelete(input: $input) {
+        deletedId
+        userErrors {
+          field
+          message
+        }
+      }
+    }`,
+    {
+      variables: {
+        "input": {
+          "id": metafieldId
+        }
+      },
+    },
+  );
+  
+  const responseData = await response.json();
+  
+  
+
+  if (responseData.errors) {
+    console.error("GraphQL error while deleting product metafield:", responseData.errors);
+    return null;
+  }
+
+  return responseData.data.metafieldDelete;
+};
+
+// Function to delete metafields for all products
+export const deleteMetafieldForAllProducts = async (admin) => {
+  const metafieldId = await getMetafieldDefinitionId(admin);
+  const products = await getProductsWithMetafield(admin);
+
+  if (!products.length) {
+    console.log("No products found with the specified metafield.");
+    return;
+  }
+
+  for (const product of products) {
+    const metafieldEdges = product.node.metafields.edges;
+    console.log("metafieldEdges",metafieldEdges)
+    if (metafieldEdges.length > 0) {
+      const metafieldId = metafieldEdges[0].node.id;
+      console.log("metafieldId",metafieldId)
+      console.log(`Deleting metafield: ${metafieldId} for product: ${product.node.id}`);
+      const deleteResult = await deleteProductMetafield(admin, metafieldId);
+
+      if (deleteResult?.deletedMetafieldId) {
+        console.log(`Successfully deleted metafield: ${deleteResult.deletedMetafieldId}`);
+      } else {
+        console.error("Failed to delete metafield:", deleteResult?.userErrors);
+      }
+    }
+  }  
+};
+
+export const deleteMetafieldDefinition = async (admin) => {
+  const metafieldId = await getMetafieldDefinitionId(admin);
+  console.log(metafieldId)
   if (!metafieldId) {
     console.error("No metafield definition found with the specified namespace.");
     return;
   }
-
-  const deleteQuery = `
+  const response = await admin.graphql(
+    `#graphql
     mutation {
       metafieldDefinitionDelete(
         id: "${metafieldId}"
@@ -202,16 +265,7 @@ export const deleteMetafieldDefinition = async (accessToken, shop) => {
         }
       }
     }
-  `;
-
-  const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Access-Token": accessToken,
-    },
-    body: JSON.stringify({ query: deleteQuery }),
-  });
+  `);
 
   const responseData = await response.json();
 
@@ -221,6 +275,8 @@ export const deleteMetafieldDefinition = async (accessToken, shop) => {
   }
 
   return responseData.data.metafieldDefinitionDelete;
+
+ 
 };
 
 

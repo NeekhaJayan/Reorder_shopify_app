@@ -23,20 +23,25 @@ export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
   const shopname= session.shop
   const access_token=session.accessToken
+  // const email=session.email
   const isInstalled = await checkIfAppIsInstalled(shopname);
-  console.log(access_token);
+
   if (!isInstalled)
   try {
     // Call the function to create the metafield
-    await createAndPinReorderDaysMetafieldDefinition(access_token, shopname);
-    await markAppAsInstalled(shopname,email);
+    
+    await createAndPinReorderDaysMetafieldDefinition(admin);
+    await markAppAsInstalled(shopname);
     return json({ message: "Metafield creation successful" });
   } catch (error) {
     console.error("Error creating metafield:", error);
     return json({ error: "Metafield creation failed" }, { status: 500 });
   }
-  const productData=await listProductsWithMetafields(access_token, shopname);
+
+  const productData=await listProductsWithMetafields(admin);
+  console.log(productData)
   return json({ reorderDetails: productData});
+
  
  
 };
@@ -47,7 +52,7 @@ export const action = async ({ request }) => {
 
 
 export default function Index() {
-  const {reorderDetails}=useLoaderData();
+  const {reorderDetails = []}=useLoaderData();
   const [productData, setProductData] = useState(reorderDetails); 
   const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
 
@@ -133,10 +138,10 @@ export default function Index() {
            
 
             <Card padding="0">
-            {productData.length === 0 ? (
+            {Array.isArray(productData) && productData.length === 0 ? (
               <EmptyProductState />
             ) : (
-              <ProductTable productData={productData} />
+              <ProductTable productData={productData || []} />
             )}
           </Card>
           </Layout.Section>
@@ -148,7 +153,7 @@ export default function Index() {
 };
 
 async function checkIfAppIsInstalled(shop) {
-  const response = await fetch(`https://reorderappapi.onrender.com/auth/checkAppInstalled?shop=${shop}`, {
+  const response = await fetch(`http://127.0.0.1:8000/auth/checkAppInstalled?shop=${shop}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -163,13 +168,14 @@ async function checkIfAppIsInstalled(shop) {
   return data.installed;
 }
 
-async function markAppAsInstalled(shop,email) {
-  const response = await fetch(`https://reorderappapi.onrender.com/auth/markAppAsInstalled`, {
+async function markAppAsInstalled(shop) {
+  console.log(JSON.stringify({ shop}))
+  const response = await fetch(`http://127.0.0.1:8000/auth/markAppAsInstalled`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ shop ,email})
+    body: JSON.stringify({ shop})
   });
   
   if (!response.ok) {
