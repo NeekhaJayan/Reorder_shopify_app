@@ -22,7 +22,7 @@ const shopify = shopifyApp({
   restResources,
   hooks: {
     afterAuth: async ({ admin, session }) => {
-      await shopify.registerWebhooks({ session });
+      // await shopify.registerWebhooks({ session });
   
       try {
         const metafield = await getMetafield(admin);
