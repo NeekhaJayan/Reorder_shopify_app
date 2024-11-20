@@ -12,47 +12,29 @@ import {
   Box,
   List,
   Link,
-  InlineStack,Select,TextField,Thumbnail,InlineError,IndexTable,EmptyState
+  InlineStack,Select,TextField,Thumbnail,InlineError,IndexTable,EmptyState,MediaCard
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
 import { ImageIcon } from "@shopify/polaris-icons";
-import {createAndPinReorderDaysMetafieldDefinition,listProductsWithMetafields } from "../utils/shopify";
+import {listProductsWithMetafields } from "../utils/shopify";
 
 export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
   const shopname= session.shop
   const access_token=session.accessToken
-  // const email=session.email
-  const isInstalled = await checkIfAppIsInstalled(shopname);
-
-  if (!isInstalled)
-  try {
-    // Call the function to create the metafield
-    
-    await createAndPinReorderDaysMetafieldDefinition(admin);
-    await markAppAsInstalled(shopname);
-    return json({ message: "Metafield creation successful" });
-  } catch (error) {
-    console.error("Error creating metafield:", error);
-    return json({ error: "Metafield creation failed" }, { status: 500 });
-  }
-
   const productData=await listProductsWithMetafields(admin);
-  console.log(productData)
-  return json({ reorderDetails: productData});
+  return json({ reorderDetails: productData,shop:shopname});
 
  
  
 };
 
-export const action = async ({ request }) => {
-
-};
+export const action = async ({ request }) => {};
 
 
 export default function Index() {
-  const {reorderDetails = []}=useLoaderData();
+  const {reorderDetails = [],shop}=useLoaderData();
   const [productData, setProductData] = useState(reorderDetails); 
   const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
 
@@ -104,7 +86,7 @@ export default function Index() {
         { title: "Product Name" },
         { title: "Reorder Interval" },
       ]}
-      selectable={true}
+      selectable={false}
     >
       {updatedProducts.map((product) => (
         <ProductTableRow
@@ -117,68 +99,69 @@ export default function Index() {
   
   // {console.log(productData);}
   const ProductTableRow = ({ product }) => (
+    
     <IndexTable.Row id={product.productId} position={product.productId}>
       <IndexTable.Cell>{product.productTitle}</IndexTable.Cell>
       <IndexTable.Cell>
-        <TextField
-          value={product.reorder_days}
-        />
+     {product.reorder_days} 
+      </IndexTable.Cell>
+      <IndexTable.Cell>
+      <a
+        href={`https://${shop}/admin/products/${product.productId.replace("gid://shopify/Product/","",)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      > Edit 
+      </a>
       </IndexTable.Cell>
     </IndexTable.Row>
   );
   
   return (
     <Page>
-      <TitleBar title="Remix app template">
-        
+      <TitleBar title="Reorder Reminder">
+        Set the typical usage duration for each product
       </TitleBar>
-      <BlockStack gap="400">
-        <Layout>
-          <Layout.Section>
-           
+      <BlockStack gap="800">
+        <MediaCard
+        title="Getting Started"
+        primaryAction={{
+          content: 'Configure your re-order reminder email settings ',
+          onAction: () => {window.location.href = '/app/settings'; },
+        }}
+        description="Set the typical usage duration for each product,allowing you to specify how many days a product is expected to last under normal use.Based on this duration,the app will calculate when to send a reorder reminder to your customers,ensuring they receive a timely nudge to restock before running low"
+        popoverActions={[{content: 'Dismiss', onAction: () => {}}]}
+        style={{ marginBottom: '20px' }}
+      >
+        <img
+          alt=""
+          width="100%"
+          height="100%"
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
+          src="https://burst.shopifycdn.com/photos/business-woman-smiling-in-office.jpg?width=1850"
+        />
+        </MediaCard>
+        <BlockStack gap="400">
+          <Layout>
+            <Layout.Section>
+            
 
-            <Card padding="0">
-            {Array.isArray(productData) && productData.length === 0 ? (
-              <EmptyProductState />
-            ) : (
-              <ProductTable productData={productData || []} />
-            )}
-          </Card>
-          </Layout.Section>
-          
-        </Layout>
+              <Card padding="0">
+              {Array.isArray(productData) && productData.length === 0 ? (
+                <EmptyProductState />
+              ) : (
+                <ProductTable productData={productData || []} />
+              )}
+            </Card>
+            </Layout.Section>
+            
+          </Layout>
+        </BlockStack>
       </BlockStack>
+      
+      
     </Page>
   );
 };
-
-async function checkIfAppIsInstalled(shop) {
-  const response = await fetch(`https://reorderappapi.onrender.com/auth/checkAppInstalled?shop=${shop}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to check if app is installed");
-  }
-
-  const data = await response.json();
-  console.log(data.installed);
-  return data.installed;
-}
-
-async function markAppAsInstalled(shop) {
-  console.log(JSON.stringify({ shop}))
-  const response = await fetch(`https://reorderappapi.onrender.com/auth/markAppAsInstalled`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ shop})
-  });
-  
-  if (!response.ok) {
-    throw new Error("Failed to mark the app as installed");
-  }
-}

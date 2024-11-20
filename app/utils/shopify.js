@@ -8,7 +8,7 @@ export const createAndPinReorderDaysMetafieldDefinition = async (admin) => {
         namespace: "deca_reorderday",
         key: "reorder_days",
         type: "number_integer",
-        name: "Reorder Days",
+        name: "Configure Product Usage Days",
         description: "Number of days until reorder",
         ownerType: PRODUCT,
         pin: true

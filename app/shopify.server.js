@@ -20,6 +20,27 @@ const shopify = shopifyApp({
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   restResources,
+  hooks: {
+    afterAuth: async ({ admin, session }) => {
+      await shopify.registerWebhooks({ session });
+  
+      try {
+        const metafield = await getMetafield(admin);
+  
+        if (metafield == null) {
+          await createMetafield(admin);
+        }
+      } catch (error) { // Removed ":any"
+        if ("graphQLErrors" in error) {
+          console.error(error.graphQLErrors);
+        } else {
+          console.error(error);
+        }
+  
+        throw error;
+      }
+    },
+  },
   future: {
     unstable_newEmbeddedAuthStrategy: true,
   },
@@ -36,3 +57,64 @@ export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
+
+
+async function getMetafield(admin) {
+  const response = await admin.graphql(getMetafieldQuery, {
+    variables: {
+      key: "reorder_days",
+      namespace: "deca_reorderday",
+      ownerType: "PRODUCT",
+    },
+  });
+
+  const json = await response.json();
+  return json.data?.metafieldDefinitions.nodes[0];
+}
+
+const getMetafieldQuery = `
+query getMetafieldDefinition($key: String!, $namespace: String!, $ownerType: MetafieldOwnerType!) {
+  metafieldDefinitions(first: 1, key: $key, namespace: $namespace, ownerType: $ownerType) {
+    nodes {
+      id
+    }
+  }
+}
+`;
+
+async function createMetafield(admin) {
+  const response = await admin.graphql(createMetafieldMutation, {
+    variables: {
+      definition: {
+        namespace: "deca_reorderday",
+        key: "reorder_days",
+        type: "number_integer",
+        name: "Configure Product Usage Days",
+        description: "Number of days until reorder",
+        ownerType: "PRODUCT",
+        pin: true
+      },
+    },
+  });
+
+  const json = await response.json();
+  console.log(JSON.stringify(json, null, 2));
+}
+
+const createMetafieldMutation = `
+mutation metafieldDefinitionCreate($definition: MetafieldDefinitionInput!) {
+  metafieldDefinitionCreate(definition: $definition) {
+    createdDefinition {
+      key
+      namespace
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+`;
+
+
+
