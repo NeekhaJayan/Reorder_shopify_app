@@ -20,9 +20,13 @@ const shopify = shopifyApp({
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   restResources,
+  webhooks: {
+    PRODUCTS_CREATE: { deliveryMethod: DeliveryMethod.Http,callbackUrl: "/webhooks/products/create",},
+    APP_UNINSTALLED: { deliveryMethod: DeliveryMethod.Http, callbackUrl: "/webhooks/app/uninstalled", },
+  },
   hooks: {
     afterAuth: async ({ admin, session }) => {
-      // await shopify.registerWebhooks({ session });
+      await shopify.registerWebhooks({ session });
   
       try {
         const metafield = await getMetafield(admin);
