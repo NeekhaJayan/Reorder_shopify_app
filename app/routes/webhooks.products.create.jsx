@@ -2,26 +2,26 @@ import { authenticate } from "../shopify.server";
 
 export const action = async ({ request }) => {
   const { shop, payload, topic } = await authenticate.webhook(request);
-  const {admin,session }=await authenticate.admin(request);
+  // const {admin,session }=await authenticate.admin(request);
   console.log(`Received ${topic} webhook for ${shop}`);
   console.log(JSON.stringify(payload, null, 2));
   const productId = payload.id;
 
   // Webhook requests can trigger multiple times and after an app has already been uninstalled.
   // If this webhook already ran, the session may have been deleted previously.
-  switch (topic) {
-    case 'products/create':
-      responseMessage = await handleProductCreate(productId,admin);
-      break;
-    case 'products/update':
-      responseMessage = await handleProductUpdate(productId,admin);
-      break;
-    case 'products/delete':
-      responseMessage = await handleProductDelete(productId);
-      break;
-    default:
-      return json({ message: 'Unhandled webhook topic' }, { status: 400 });
-  }
+  // switch (topic) {
+  //   case 'products/create':
+  //     responseMessage = await handleProductCreate(productId,admin);
+  //     break;
+  //   case 'products/update':
+  //     responseMessage = await handleProductUpdate(productId,admin);
+  //     break;
+  //   case 'products/delete':
+  //     responseMessage = await handleProductDelete(productId);
+  //     break;
+  //   default:
+  //     return json({ message: 'Unhandled webhook topic' }, { status: 400 });
+  // }
 
   return new Response();
 };
