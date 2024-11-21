@@ -11,15 +11,15 @@ export const action = async ({ request }) => {
   // Webhook requests can trigger multiple times and after an app has already been uninstalled.
   // If this webhook already ran, the session may have been deleted previously.
   switch (topic) {
-    case 'products/create':
+    case 'PRODUCTS_CREATE':
       console.log("product create ")
       responseMessage = await handleProductCreate(productId);
       console.log(responseMessage)
       break;
-    case 'products/update':
+    case 'PRODUCTS_UPDATE':
       responseMessage = await handleProductUpdate(productId);
       break;
-    case 'products/delete':
+    case 'PRODUCTS_DELETE':
       responseMessage = await handleProductDelete(productId);
       break;
     default:
