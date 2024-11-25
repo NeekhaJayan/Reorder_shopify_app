@@ -43,6 +43,24 @@ export const action = async ({ request }) => {
 async function handleProductCreate(accessToken, shop, productId) {
   console.log(`Product Created with ID: ${productId}`);
   const metafields = await fetchProductMetafields(accessToken, shop, productId);
+  const shop_id=await fetchShopId(accessToken, shop)
+  const payload = {
+    shop_id: shop_id, // Assuming `shop` is the shop ID or domain
+    shopify_product_id: productId,
+    title: payload.title, // Example, adjust according to metafield structure
+    reorder_days: metafields.find(metafield => metafield.key === "reorder_days")?.value || 0 // Example
+  };
+  const response = await fetch(`http://127.0.0.1:8000/auth/products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({payload})
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to mark the app as installed");
+  }
   return `Product created and metafields fetched: ${JSON.stringify(metafields)}`;
 }
 
@@ -106,3 +124,51 @@ const fetchProductMetafields = async (accessToken, shop, productId) => {
     return [];
   }
 };
+
+const fetchShopId = async (accessToken, shop) => {
+  const getShopDetailsQuery = `
+    query {
+      shop {
+        id
+        name
+        email
+        primaryDomain {
+          url
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+      body: JSON.stringify({
+        query: getShopDetailsQuery,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`GraphQL request failed: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    if (data.errors) {
+      console.error("GraphQL Errors:", data.errors);
+      throw new Error("Failed to fetch shop details due to GraphQL errors.");
+    }
+
+    // Extract shop details
+    const shopDetails = data.data.shop;
+    return shopDetails.id;
+  } catch (error) {
+    console.error("Error fetching shop details:", error.message);
+    return null;
+  }
+};
+
+
