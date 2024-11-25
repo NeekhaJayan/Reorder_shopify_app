@@ -6,24 +6,27 @@ export const action = async ({ request }) => {
 
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(request);
-  console.log(payload);
   const productId = payload.id;
-  const admin = payload.admin;
-  console.log(admin);
+  const accessToken = session?.accessToken;
+
+  if (!accessToken) {
+    console.error("Missing access token.");
+    return new Response("Unauthorized", { status: 401 });
+  }
   let responseMessage;
 
   try {
     switch (topic) {
       case "PRODUCTS_CREATE":
-        responseMessage = await handleProductCreate(productId,admin);
+        responseMessage = await handleProductCreate(productId);
         break;
 
       case "PRODUCTS_UPDATE":
-        responseMessage = await handleProductUpdate(productId,admin);
+        responseMessage = await handleProductUpdate(productId);
         break;
 
       case "PRODUCTS_DELETE":
-        responseMessage = await handleProductDelete(productId,admin);
+        responseMessage = await handleProductDelete(productId);
         break;
 
       default:
@@ -38,15 +41,15 @@ export const action = async ({ request }) => {
   }
 };
 
-async function handleProductCreate(productId,admin) {
+async function handleProductCreate(productId) {
   console.log(`Product Created with ID: ${productId}`);
-  const metafields = await fetchProductMetafields( productId,admin);
-  const shop_id=await fetchShopId(accessToken, shop)
+  // const metafields = await fetchProductMetafields(accessToken, shop, productId);
+  // const shop_id=await fetchShopId(accessToken, shop)
   const payload = {
-    shop_id: shop_id, // Assuming `shop` is the shop ID or domain
+    shop_id: 1, // Assuming `shop` is the shop ID or domain
     shopify_product_id: productId,
     title: payload.title, // Example, adjust according to metafield structure
-    reorder_days: metafields.find(metafield => metafield.key === "reorder_days")?.value || 0 // Example
+    reorder_days: "" // Example
   };
   const response = await fetch(`http://127.0.0.1:8000/auth/products`, {
     method: "POST",
@@ -62,9 +65,9 @@ async function handleProductCreate(productId,admin) {
   return `Product created and metafields fetched: ${JSON.stringify(metafields)}`;
 }
 
-async function handleProductUpdate(productId,admin) {
+async function handleProductUpdate( productId) {
   console.log(`Product Updated with ID: ${productId}`);
-  const metafields = await fetchProductMetafields(productId,admin);
+  // const metafields = await fetchProductMetafields(accessToken, shop, productId);
   return `Product updated and metafields fetched: ${JSON.stringify(metafields)}`;
 }
 
@@ -73,90 +76,8 @@ async function handleProductDelete(productId) {
   return `Product deleted with ID: ${productId}`;
 }
 
-// const fetchProductMetafields = async (accessToken, shop, productId) => {
-//   const getProductMetafield = `
-//     query getProductMetafields($id: ID!) {
-//       product(id: $id) {
-//         id
-//         title
-//         metafields(first: 10) {
-//           edges {
-//             node {
-//               namespace
-//               key
-//               value
-//             }
-//           }
-//         }
-//       }
-//     }
-//   `;
-
-//   try {
-//     const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         "X-Shopify-Access-Token": accessToken,
-//       },
-//       body: JSON.stringify({
-//         query: getProductMetafield,
-//         variables: { id: `gid://shopify/Product/${productId}` },
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`GraphQL request failed: ${response.statusText}`);
-//     }
-
-//     const data = await response.json();
-
-//     if (data.errors) {
-//       console.error("GraphQL Errors:", data.errors);
-//       throw new Error("Failed to fetch metafields due to GraphQL errors.");
-//     }
-
-//     return data.data.product?.metafields.edges.map(edge => edge.node) || [];
-//   } catch (error) {
-//     console.error("Error fetching metafields:", error.message);
-//     return [];
-//   }
-// };
-
-const fetchShopId = async (admin, shop) => {
-  // Define the GraphQL query
-  const getShopDetailsQuery = `
-    query {
-      shop {
-        id
-        name
-        email
-        primaryDomain {
-          url
-        }
-      }
-    }
-  `;
-
-  try {
-    // Send the GraphQL request using admin's graphql method
-    const response = await admin.graphql(getShopDetailsQuery);
-    const data = await response.json();
-    if (data.errors) {
-      console.error("GraphQL Errors:", data.errors);
-      throw new Error("Failed to fetch shop details due to GraphQL errors.");
-    }
-    const shopDetails = data.data.shop;
-    return shopDetails.id;
-  } catch (error) {
-    console.error("Error fetching shop details:", error.message);
-    return null;
-  }
-};
-
-
-async function fetchProductMetafields(productId,admin) {
-  const query = `
+const fetchProductMetafields = async (accessToken, shop, productId) => {
+  const getProductMetafield = `
     query getProductMetafields($id: ID!) {
       product(id: $id) {
         id
@@ -174,14 +95,81 @@ async function fetchProductMetafields(productId,admin) {
     }
   `;
 
-  const variables = {
-    id: `gid://shopify/Product/${productId}`,
-  };
+  try {
+    const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+      body: JSON.stringify({
+        query: getProductMetafield,
+        variables: { id: `gid://shopify/Product/${productId}` },
+      }),
+    });
 
-  const response = await admin.graphql(query,variables);
+    if (!response.ok) {
+      throw new Error(`GraphQL request failed: ${response.statusText}`);
+    }
 
-  const data = await response.json();
-  return data.data.product?.metafields.edges.map(edge => edge.node) || [];
-}
+    const data = await response.json();
+
+    if (data.errors) {
+      console.error("GraphQL Errors:", data.errors);
+      throw new Error("Failed to fetch metafields due to GraphQL errors.");
+    }
+
+    return data.data.product?.metafields.edges.map(edge => edge.node) || [];
+  } catch (error) {
+    console.error("Error fetching metafields:", error.message);
+    return [];
+  }
+};
+
+const fetchShopId = async (accessToken, shop) => {
+  const getShopDetailsQuery = `
+    query {
+      shop {
+        id
+        name
+        email
+        primaryDomain {
+          url
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetch(`https://${shop}/admin/api/2024-10/graphql.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+      body: JSON.stringify({
+        query: getShopDetailsQuery,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`GraphQL request failed: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    if (data.errors) {
+      console.error("GraphQL Errors:", data.errors);
+      throw new Error("Failed to fetch shop details due to GraphQL errors.");
+    }
+
+    // Extract shop details
+    const shopDetails = data.data.shop;
+    return shopDetails.id;
+  } catch (error) {
+    console.error("Error fetching shop details:", error.message);
+    return null;
+  }
+};
 
 

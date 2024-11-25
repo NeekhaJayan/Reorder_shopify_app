@@ -22,16 +22,7 @@ const shopify = shopifyApp({
   distribution: AppDistribution.AppStore,
   restResources,
   webhooks: {
-    PRODUCTS_CREATE: async ({ admin, session }) => {
-      return {
-        deliveryMethod: 'HTTP', // Using HTTP to deliver webhook data
-        callbackUrl: '/webhooks/products/create', 
-        payload: {
-          admin: admin,
-          session: session,
-        },
-      };
-    },
+    PRODUCTS_CREATE:{deliveryMethod: DeliveryMethod.Http,callbackUrl: '/webhooks/products/create',},
     APP_UNINSTALLED: { deliveryMethod: DeliveryMethod.Http, callbackUrl: "/webhooks/app/uninstalled", },
   },
   hooks: {
