@@ -9,8 +9,8 @@ export const action = async ({ request }) => {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  console.log(`Received ${topic} webhook for ${shop}`);
-
+  console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
+  console.log(request);
   const productId = payload.id;
   let responseMessage;
 
