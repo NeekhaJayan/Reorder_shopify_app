@@ -7,13 +7,14 @@ export const action = async ({ request }) => {
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(request);
   const productId = payload.id;
+  const productTitle=payload.title;
   
   let responseMessage;
 
   try {
     switch (topic) {
       case "PRODUCTS_CREATE":
-        responseMessage = await handleProductCreate(productId);
+        responseMessage = await handleProductCreate(productId,productTitle);
         break;
 
       case "PRODUCTS_UPDATE":
@@ -36,14 +37,14 @@ export const action = async ({ request }) => {
   }
 };
 
-async function handleProductCreate(productId) {
+async function handleProductCreate(productId,productTitle) {
   console.log(`Product Created with ID: ${productId}`);
   // const metafields = await fetchProductMetafields(accessToken, shop, productId);
   // const shop_id=await fetchShopId(accessToken, shop)
   const payload = {
     shop_id: 1, // Assuming `shop` is the shop ID or domain
     shopify_product_id: productId,
-    title: payload.title, // Example, adjust according to metafield structure
+    title: productTitle, // Example, adjust according to metafield structure
     reorder_days: "" // Example
   };
   const response = await fetch(`http://127.0.0.1:8000/auth/products`, {
