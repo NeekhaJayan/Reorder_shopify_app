@@ -6,14 +6,10 @@ export const action = async ({ request }) => {
 
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(request);
+  console.log(payload);
   const productId = payload.id;
   const admin = payload.admin;
-  const accessToken = session?.accessToken;
-
-  if (!accessToken) {
-    console.error("Missing access token.");
-    return new Response("Unauthorized", { status: 401 });
-  }
+  console.log(admin);
   let responseMessage;
 
   try {
