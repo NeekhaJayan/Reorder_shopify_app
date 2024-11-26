@@ -21,14 +21,10 @@ const shopify = shopifyApp({
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   restResources,
-  webhooks: {
-    PRODUCTS_CREATE:{deliveryMethod: DeliveryMethod.Http,callbackUrl: '/webhooks/products/create',},
-    APP_UNINSTALLED: { deliveryMethod: DeliveryMethod.Http, callbackUrl: "/webhooks/app/uninstalled", },
-  },
   hooks: {
     afterAuth: async ({ admin, session }) => {
-      await shopify.registerWebhooks({ session });
-  
+      // await shopify.registerWebhooks({ session });
+      await registerProductCreateWebhook(admin);
       try {
         const metafield = await getMetafield(admin);
   
@@ -121,5 +117,33 @@ mutation metafieldDefinitionCreate($definition: MetafieldDefinitionInput!) {
 }
 `;
 
+async function registerProductCreateWebhook(admin) 
+{
+  const response = await admin.graphql(
+     `#graphql
+      mutation {
+        webhookSubscriptionCreate(
+          topic: PRODUCTS_CREATE
+          webhookSubscription: {
+            format: JSON
+            callbackUrl: "https://reorder-shopify-app.onrender.com/webhooks/products/create"
+            includeFields: ["id", "title", "metafields"]
+          }
+        ) {
+          webhookSubscription {
+            id
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `
+  );
+  const data = await response.json();
+  console.log('Webhook registration result:', data);
+  return data;
 
+ }
 
