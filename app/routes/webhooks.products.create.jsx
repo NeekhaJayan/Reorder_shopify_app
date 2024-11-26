@@ -4,17 +4,17 @@ import db from "../db.server";
 export const action = async ({ request }) => {
   const { shop, payload, topic} = await authenticate.webhook(request);
   
-  const session = await db.session.findUnique({
+  const session = await db.session.findFirst({
     where: {
       shop: shop, // Find the session based on the shop domain
-    }, 
+    },
   });
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(payload);
   const productId = payload.id;
   const productTitle=payload.title;
   console.log(productTitle);
-  console.log(session.access_token);
+  console.log(session.accessToken);
   let responseMessage;
 
   try {
