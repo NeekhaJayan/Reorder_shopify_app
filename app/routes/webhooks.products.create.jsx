@@ -1,14 +1,20 @@
 import { authenticate } from "../shopify.server";
+import db from "../db.server";
 
 export const action = async ({ request }) => {
-  const { shop, payload, topic, session } = await authenticate.webhook(request);
+  const { shop, payload, topic} = await authenticate.webhook(request);
   
-
+  const session = await db.session.findUnique({
+    where: {
+      shop: shop, // Find the session based on the shop domain
+    }, 
+  });
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(payload);
   const productId = payload.id;
   const productTitle=payload.title;
   console.log(productTitle);
+  console.log(session.access_token);
   let responseMessage;
 
   try {
