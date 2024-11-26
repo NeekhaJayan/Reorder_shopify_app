@@ -5,10 +5,10 @@ export const action = async ({ request }) => {
   
 
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
-  console.log(request);
+  console.log(payload);
   const productId = payload.id;
   const productTitle=payload.title;
-  
+  console.log(productTitle);
   let responseMessage;
 
   try {
@@ -47,7 +47,7 @@ async function handleProductCreate(productId,productTitle) {
     title: productTitle, // Example, adjust according to metafield structure
     reorder_days: "" // Example
   };
-  const response = await fetch(`http://127.0.0.1:8000/auth/products`, {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/products`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
