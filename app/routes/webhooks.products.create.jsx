@@ -1,10 +1,15 @@
 import { authenticate } from "../shopify.server";
-import db from "../db.server";
+import prisma from "../db.server";
 
 export const action = async ({ request }) => {
   const { shop, payload, topic} = await authenticate.webhook(request);
+
+  if (!prisma || !prisma.shopifySession) {
+    console.error("Prisma client or ShopifySession model is not defined.");
+    return new Response("Database connection error.", { status: 500 });
+  }
   
-  const session = await db.shopifySession.findUnique({
+  const session = await prisma.shopifySession.findUnique({
     where: { shop },
   });
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
