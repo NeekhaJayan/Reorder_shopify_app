@@ -10,7 +10,7 @@ export const action = async ({ request }) => {
   }
   
   const session = await prisma.session.findUnique({
-    where: { shop },
+    where: { shop : shop},
   });
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(payload);
