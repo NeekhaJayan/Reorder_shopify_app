@@ -4,7 +4,7 @@ import db from "../db.server";
 export const action = async ({ request }) => {
   const { shop, payload, topic} = await authenticate.webhook(request);
   
-  const session = await prisma.shopifySession.findUnique({
+  const session = await db.shopifySession.findUnique({
     where: { shop },
   });
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
