@@ -23,23 +23,7 @@ const shopify = shopifyApp({
   restResources,
   hooks: {
     afterAuth: async ({ admin, session }) => {
-      // await shopify.registerWebhooks({ session });
-      await registerProductCreateWebhook(admin);
-      try {
-        const metafield = await getMetafield(admin);
-  
-        if (metafield == null) {
-          await createMetafield(admin);
-        }
-      } catch (error) { // Removed ":any"
-        if ("graphQLErrors" in error) {
-          console.error(error.graphQLErrors);
-        } else {
-          console.error(error);
-        }
-  
-        throw error;
-      }
+      await shopify.registerWebhooks({ session });
     },
   },
   future: {
@@ -60,90 +44,4 @@ export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
 
 
-async function getMetafield(admin) {
-  const response = await admin.graphql(getMetafieldQuery, {
-    variables: {
-      key: "reorder_days",
-      namespace: "deca_reorderday",
-      ownerType: "PRODUCT",
-    },
-  });
-
-  const json = await response.json();
-  return json.data?.metafieldDefinitions.nodes[0];
-}
-
-const getMetafieldQuery = `
-query getMetafieldDefinition($key: String!, $namespace: String!, $ownerType: MetafieldOwnerType!) {
-  metafieldDefinitions(first: 1, key: $key, namespace: $namespace, ownerType: $ownerType) {
-    nodes {
-      id
-    }
-  }
-}
-`;
-
-async function createMetafield(admin) {
-  const response = await admin.graphql(createMetafieldMutation, {
-    variables: {
-      definition: {
-        namespace: "deca_reorderday",
-        key: "reorder_days",
-        type: "number_integer",
-        name: "Configure Product Usage Days",
-        description: "Number of days until reorder",
-        ownerType: "PRODUCT",
-        pin: true
-      },
-    },
-  });
-
-  const json = await response.json();
-  console.log(JSON.stringify(json, null, 2));
-}
-
-const createMetafieldMutation = `
-mutation metafieldDefinitionCreate($definition: MetafieldDefinitionInput!) {
-  metafieldDefinitionCreate(definition: $definition) {
-    createdDefinition {
-      key
-      namespace
-    }
-    userErrors {
-      field
-      message
-    }
-  }
-}
-`;
-
-async function registerProductCreateWebhook(admin) 
-{
-  const response = await admin.graphql(
-     `#graphql
-      mutation {
-        webhookSubscriptionCreate(
-          topic: PRODUCTS_CREATE
-          webhookSubscription: {
-            format: JSON
-            callbackUrl: "https://reorder-shopify-app.onrender.com/webhooks/products/create"
-            includeFields: ["id", "title", "metafields"]
-          }
-        ) {
-          webhookSubscription {
-            id
-          }
-          userErrors {
-            field
-            message
-          }
-        }
-      }
-    `
-  );
-  const data = await response.json();
-  console.log('Webhook registration result:', data);
-  return data;
-
- }
 
