@@ -6,10 +6,6 @@ export const action = async ({ request }) => {
 
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(payload);
-  // const product_ids = payload.line_items.map(item => ({
-  //   product_id: item.product_id,
-  //   quantity: item.quantity,
-  // }));
   // const order_payload_details = {
   //   order_id: payload.id,
   //   customer_id: payload.customer.id,
@@ -24,12 +20,27 @@ export const action = async ({ request }) => {
   //   order_date: payload.created_at,
   // };
 
-  // console.log(order_payload_details);
+  const order_payload_details = {
+    order_id: payload.id || "Unknown Order ID",
+    customer_id: payload.customer?.id || "Unknown Customer ID",
+    customer_email: payload.customer?.email || "Unknown Email",
+    customer_name: payload.customer?.first_name || "Unknown Name",
+    customer_phone: payload.customer?.phone || "Unknown Phone",
+    line_items: Array.isArray(payload.line_items)
+      ? payload.line_items.map(item => ({
+          product_id: item.product_id || "Unknown Product ID",
+          quantity: item.quantity || 0,
+          price: item.price || "Unknown Price"
+        }))
+      : [],
+    order_date: payload.created_at || "Unknown Date",
+  };
+  console.log(order_payload_details);
 
-  // return new Response(JSON.stringify(order_payload_details), {
-  //   headers: { "Content-Type": "application/json" },
-  // });
-  return new Response();
+  return new Response(JSON.stringify(order_payload_details), {
+    headers: { "Content-Type": "application/json" },
+  });
+  // return new Response();
 };
 
 
