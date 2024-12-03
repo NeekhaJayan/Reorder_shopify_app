@@ -62,6 +62,8 @@ export const action = async ({ request }) => {
     .catch((error) => {
       console.error('Error sending data to FastAPI:', error.message);
     });
+
+    return new Response("Webhook received", { status: 200 });
 };
 
 
