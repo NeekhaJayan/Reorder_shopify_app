@@ -1,8 +1,8 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "ff8383f7adfb90290caa96dd1bfc9994"
-name = "deca-store-app1"
-handle = "deca-store-app1"
+name = "reorder-reminder"
+handle = "reorder-reminder1"
 application_url = "https://reorder-shopify-app.onrender.com/"
 embedded = true
 
@@ -13,7 +13,7 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_products,write_products"
+scopes = "read_customers,read_fulfillments,read_orders,read_products,write_checkouts,write_orders,write_products"
 
 [auth]
 redirect_urls = [
@@ -40,6 +40,11 @@ api_version = "2024-10"
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
   uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "checkouts/create", "orders/fulfilled" ]
+  uri = "/webhooks/order"
+
 
 [pos]
 embedded = false
