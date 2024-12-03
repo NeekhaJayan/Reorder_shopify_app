@@ -24,7 +24,7 @@ const shopify = shopifyApp({
   hooks: {
     afterAuth: async ({ admin, session }) => {
       await shopify.registerWebhooks({ session });
-      console.log(session,admin)
+      
       const shop_payload_details={
         shopify_domain: session.shop
       }

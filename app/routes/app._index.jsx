@@ -29,9 +29,8 @@ export const loader = async ({ request }) => {
     },
   });
   const shop = await shop_response.json();
-  console.log(shop)
   
-  const response = await fetch("https://reorderappapi.onrender.com/auth/products", {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/products/${shop.shop_id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
