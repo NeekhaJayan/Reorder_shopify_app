@@ -21,9 +21,11 @@ export default function App() {
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <NavMenu>
         <Link to="/app" rel="home">
-          Home
+          Reorder Reminder Pro
         </Link>
+        <Link to="/app/products">Products</Link>
         <Link to="/app/settings">Settings</Link>
+        <Link to="/app/pricing">Pricing</Link>
       </NavMenu>
       <Outlet />
     </AppProvider>

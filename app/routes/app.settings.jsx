@@ -7,7 +7,7 @@ import {
   BlockStack,Button,TextContainer,LegacyCard,FormLayout,Checkbox,TextField,DropZone} from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 
-export default function SettingsPage() {
+export default function AdditionalPage() {
   return (
     <Page
       backAction={{content: 'Settings', url: '#'}}
