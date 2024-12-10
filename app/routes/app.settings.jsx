@@ -17,33 +17,33 @@ export default function SettingsPage() {
   const editorRef = useRef(null);
   const quillRef = useRef(null);
   
-  useEffect(() => {
-    if (typeof window !== "undefined" && editorRef.current && !quillRef.current) {
-      import("quill")
-        .then(({ default: Quill }) => {
-          const quill = new Quill(editorRef.current, {
-            theme: "snow",
-            placeholder: "Write your email content here...",
-          });
+  // useEffect(() => {
+  //   if (typeof window !== "undefined" && editorRef.current && !quillRef.current) {
+  //     import("quill")
+  //       .then(({ default: Quill }) => {
+  //         const quill = new Quill(editorRef.current, {
+  //           theme: "snow",
+  //           placeholder: "Write your email content here...",
+  //         });
 
-          quill.on("text-change", () => {
-            setEmailBody(quill.root.innerHTML); // Capture changes
-          });
+  //         quill.on("text-change", () => {
+  //           setEmailBody(quill.root.innerHTML); // Capture changes
+  //         });
 
-          quillRef.current = quill; // Store the instance
-        })
-        .catch((error) => {
-          console.error("Failed to load Quill:", error);
-        });
-    }
+  //         quillRef.current = quill; // Store the instance
+  //       })
+  //       .catch((error) => {
+  //         console.error("Failed to load Quill:", error);
+  //       });
+  //   }
 
-    // Cleanup function to destroy Quill instance
-    return () => {
-      if (quillRef.current) {
-        quillRef.current = null;
-      }
-    };
-  }, []);
+  //   // Cleanup function to destroy Quill instance
+  //   return () => {
+  //     if (quillRef.current) {
+  //       quillRef.current = null;
+  //     }
+  //   };
+  // }, []);
   const handleSave = () => {
     console.log('Email Body:', emailBody);
     // Save emailBody to the backend
@@ -133,7 +133,7 @@ export default function SettingsPage() {
                       <Text as="h2" variant="headingSm" fontWeight='regular'>
                         Email Content
                       </Text>
-                      <div ref={editorRef} style={{ height: '200px' }} />
+                      {/* <div ref={editorRef} style={{ height: '200px' }} /> */}
                     </FormLayout>
                   </Card>
                 </Layout.Section>
