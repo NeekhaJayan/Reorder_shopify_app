@@ -23,7 +23,7 @@ export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
   // console.log(admin,session)
   const shop_domain=session.shop
-  const shop_response = await fetch(`http://127.0.0.1:8000/auth/shops/${shop_domain}`, {
+  const shop_response = await fetch(`https://reorderappapi.onrender.com/auth/shops/${shop_domain}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export const loader = async ({ request }) => {
   const shop = await shop_response.json();
   console.log(shop.shop_id)
   
-  const response = await fetch(`http://127.0.0.1:8000/auth/products/${shop.shop_id}`, {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/products/${shop.shop_id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -70,13 +70,13 @@ export const action = async ({ request }) => {
     reorder_days: reorder_days,
   };
 console.log(inputData);
-  let apiUrl = "http://127.0.0.1:8000/auth/products";
+  let apiUrl = "https://reorderappapi.onrender.com/auth/products";
   
 
   // If the request is PATCH, handle updating the product
   if (method === "PATCH") {
      
-    apiUrl = `http://127.0.0.1:8000/auth/products/${productId}`; // Use specific API endpoint for PATCH
+    apiUrl = `https://reorderappapi.onrender.com/auth/products/${productId}`; // Use specific API endpoint for PATCH
      // Update the method to PATCH
      inputData={
       shopify_product_id:productId,
