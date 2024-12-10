@@ -4,10 +4,10 @@ import {
   Layout,
   Page,
   Text,
-  BlockStack,Button,TextContainer,LegacyCard,FormLayout,Checkbox,TextField,DropZone} from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
+  BlockStack,Button,Tabs,FormLayout,Checkbox,TextField,DropZone} from "@shopify/polaris";
+import { json } from "@remix-run/node";
 
-export default function AdditionalPage() {
+export default function SettingsPage() {
   return (
     <Page
       backAction={{content: 'Settings', url: '#'}}
@@ -62,19 +62,6 @@ export default function AdditionalPage() {
   );
 }
 
-function Code({ children }) {
-  return (
-    <Box
-      as="span"
-      padding="025"
-      paddingInlineStart="100"
-      paddingInlineEnd="100"
-      background="bg-surface-active"
-      borderWidth="025"
-      borderColor="border"
-      borderRadius="100"
-    >
-      <code>{children}</code>
-    </Box>
-  );
-}
+
+
+  
