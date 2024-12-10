@@ -7,15 +7,15 @@ import {
   BlockStack,Button,Tabs,FormLayout,Checkbox,TextField,DropZone} from "@shopify/polaris";
 import { useState, useEffect, useRef } from "react";
 // import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
+// import 'quill/dist/quill.snow.css';
 
 
 
 export default function SettingsPage() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [emailBody, setEmailBody] = useState('');
-  const editorRef = useRef(null);
-  const quillRef = useRef(null);
+  // const editorRef = useRef(null);
+  // const quillRef = useRef(null);
   
   // useEffect(() => {
   //   if (typeof window !== "undefined" && editorRef.current && !quillRef.current) {
