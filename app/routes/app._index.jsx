@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {Bleed, Box, Card,  Divider,Image, Text,Page,Layout, TextContainer ,InlineGrid, InlineStack} from '@shopify/polaris';
 // import {Page, Card, Text, Layout, Button, Image,Box, InlineGrid, InlineStack } from "@shopify/polaris";
