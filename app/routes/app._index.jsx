@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {Bleed, Box, Card,  Divider,Image, Text,Page,Layout, TextContainer ,InlineGrid, InlineStack} from '@shopify/polaris';
 // import {Page, Card, Text, Layout, Button, Image,Box, InlineGrid, InlineStack } from "@shopify/polaris";
@@ -45,23 +46,22 @@ const Placeholder = ({height = 'auto', width = 'auto'}) => {
 const CenteredText = ({ children }) => {
   return (
     <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        textAlign: 'center',
-        color:'black',
-        justifyContent: 'center',
-        height: '100%',
-        width: '100%',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        backgroundColor: 'var(--p-color-text-info)',
-      }}
-       // Adjust height for different row sizes if needed
+    style={{
+      width: width,
+      height: '100px', // Adjust height for different row sizes
+      border: '1px solid #ccc',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      backgroundColor: 'var(--p-color-text-info)',
+    }}
+    // Adjust height for different row sizes if needed
        
     >
-      {children}
+      <TextContainer>{children}</TextContainer>
     </div>
+  
   );
 };
 

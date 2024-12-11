@@ -198,11 +198,11 @@ export default function Index() {
     setEditingProduct(productId); // Only the selected product should be editable
   }, []);
   // Submit updated reorder interval to the API
-  const resetReorderfield = useCallback((productId) => {
+  const resetReorderfield = useCallback((productid) => {
     // Update the state to set reorder_days to null
     setUpdatedProducts((prev) =>
       prev.map((product) =>
-        product.shopify_product_id === productId
+        product.shopify_product_id === productid
           ? { ...product, reorder_days: null }
           : product
       )
@@ -210,7 +210,10 @@ export default function Index() {
   
     // Submit the reset value to the backend
     fetcher.submit(
-      {productId:productId, reorder_days: null },
+      {
+        productId: productid,
+        reorder_days: null,
+      },
       { method: "patch" }
     );
   
