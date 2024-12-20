@@ -1,5 +1,4 @@
 import {
-  Box,
   Card,
   Layout,
   Page,
@@ -11,9 +10,8 @@ import {
   Checkbox,
   TextField,
   DropZone,
-  LegacyCard,Grid,Badge, InlineGrid
 } from "@shopify/polaris";
-import React, { useState, Suspense,useCallback } from "react";
+import React, { useState,useCallback,useEffect } from "react";
 import {useFetcher,useLoaderData} from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import "react-quill/dist/quill.snow.css";
@@ -25,8 +23,19 @@ export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
   const accessToken=session.accessToken
   const shop_domain=session.shop
-  console.log(shop_domain)
-  return {shop_domain,accessToken};
+  const response = await fetch(`http://127.0.0.1:8000/auth/get-settings?shop_name=${shop_domain}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to send product data to FastAPI");
+  }
+
+  const settingDetails = await response.json();
+  return {shop_domain,settingDetails};
 
 }
 
@@ -42,7 +51,7 @@ export const action = async ({ request }) => {
     if (Settings.tab === "general-settings") {
       const data={generalSettings:Settings}
       // Call your API or perform necessary actions
-      const response = await fetch(`https://reorderappapi.onrender.com/auth/save-settings`, {
+      const response = await fetch(`http://127.0.0.1:8000/auth/save-settings`, {
         method: "POST", // Adjust method as per your API
         headers: {
           "Content-Type": "application/json",
@@ -87,23 +96,39 @@ export const action = async ({ request }) => {
 
 
 export default function SettingsPage() {
-  const {shop_domain ,accessToken} = useLoaderData();
+  const { shop_domain, settingDetails } = useLoaderData();
   const [selectedTab, setSelectedTab] = useState(0);
-  const [bufferTime, setBufferTime] = useState('');
-  const [coupon, setCoupon] = useState('');
-  const [discountPercent,setDiscountPercent]= useState('');
-  const [subject, setSubject] = useState('');
-  const [fromName, setFromName] = useState('');
-  const [mailServer, setMailServer] = useState('');
-  const [port, setPort] = useState('');
-  const [isChecked, setIsChecked] = useState(true);
+  const [bufferTime, setBufferTime] = useState(settingDetails?.generalSettings?.bufferTime || '');
+  const [coupon, setCoupon] = useState(settingDetails?.emailTemplateSettings?.coupon || '');
+  const [discountPercent, setDiscountPercent] = useState(settingDetails?.emailTemplateSettings?.discountPercent || '');
+  const [subject, setSubject] = useState(settingDetails?.emailTemplateSettings?.subject || '');
+  const [fromName, setFromName] = useState(settingDetails?.emailTemplateSettings?.fromName || '');
+  const [mailServer, setMailServer] = useState(settingDetails?.emailTemplateSettings?.mailServer || '');
+  const [port, setPort] = useState(settingDetails?.emailTemplateSettings?.port || '');
+  const [isChecked, setIsChecked] = useState(settingDetails?.emailTemplateSettings?.isChecked || true);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const fetcher = useFetcher();
+  const { data, state } = fetcher;
 
+  useEffect(() => {
+    // Optional: Handle the case where settingDetails are fetched but not immediately available
+    if (settingDetails) {
+      console.log(settingDetails.general_settings?.bufferTime)
+      setBufferTime(settingDetails.general_settings?.bufferTime || '');
+      setCoupon(settingDetails.email_template_settings?.coupon || '');
+      setDiscountPercent(settingDetails.email_template_settings?.discountPercent || '');
+      setSubject(settingDetails.email_template_settings?.subject || '');
+      setFromName(settingDetails.email_template_settings?.fromName || '');
+      setMailServer(settingDetails.email_template_settings?.mail_server || '');
+      setPort(settingDetails.email_template_settings?.port || '');
+      setIsChecked(settingDetails.email_template_settings?.isChecked || true);
+    }
+  }, [settingDetails]);
+
+  console.log(bufferTime)
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
   };
-  const fetcher = useFetcher();
-  const { data, state } = fetcher;
   
   const tabs = [
     {
@@ -131,96 +156,6 @@ export default function SettingsPage() {
   const handleDrop = (files) => {
     setUploadedFile(files[0]);
   };
-  // const PricingPlans= () => {
-  //   const handleSubscribe = async (price) => {
-  //     const confirmationUrl = pricing(admin,shop,price);
-  //     window.location.href = confirmationUrl;
-  //   };
-  //   return (
-  //     <Layout>
-  //       <Layout.Section>
-  //         <Card>
-  
-         
-  //         <Text variant="headingLg" alignment="center" as="h2" tone="success">
-  //           Choose Your Plan
-  //         </Text>
-  
-  //         {/* InlineGrid for responsive layout */}
-  //         <BlockStack inlineAlign="center"gap="400">
-  //             <InlineGrid
-  //               columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }}
-  //               gap="500"
-  //               align="center"
-  //             >
-  //               {/* Free Plan */}
-  //               <div style={{height: '320px' ,width: '320px'}}>
-  //               <Card sectioned>
-  //                 <div style={{ textAlign: "left", marginBottom: "0.5rem" }}>
-  //                   <Badge status="attention">Free</Badge>
-  //                 </div>
-  //                 <Text alignment="left" variant="headingLg" as="h3">
-  //                   Free Plan
-  //                 </Text>
-  //                 <Text alignment="left" as="p" padding="400" tone="subdued">
-  //                   A great way to get started
-  //                 </Text>
-                  
-                
-  //                 <ul style={{ listStyle: "none", padding: 15, textAlign: "left",marginTop: "var(--p-space-500)" }}>
-  //                   <li>✅ 5 Configurable Products</li>
-  //                   <li>✅ Automated Reorder Reminders</li>
-  //                   <li>✅ Reorder Coupon Option</li>
-  //                   <li>✅ Buffer Time: 5 Days</li>
-  //                   <li>✅ Email Support</li>
-  //                 </ul>
-  
-  //                 <div style={{ textAlign: "center", marginTop: "1rem",marginBottom: "3rem" }}>
-  //                   {/* <Button primary>Subscribe</Button> */}
-  //                 </div>
-  //               </Card>
-  //               </div>
-  
-  //               {/* Pro Plan */}
-  //               <div style={{height: '320px' ,width: '320px'}}>
-  //               <Card sectioned>
-  //                 <div style={{ textAlign: "left", marginBottom: "0.5rem" }}>
-  //                   <Badge status="success">Best Value</Badge>
-  //                 </div>
-  //                 <Text alignment="left" variant="headingLg" as="h3">
-  //                   Pro Plan
-  //                 </Text>
-  //                 <Text alignment="left" as="p" tone="subdued">
-  //                   Unlock full potential
-  //                 </Text>
-  //                 <Text alignment="left" variant="heading2xl" as="p">
-  //                   $9.99/month
-  //                 </Text>
-  
-  //                 <ul style={{ listStyle: "none", padding: 0, textAlign: "left" }}>
-  //                   <li>✅ Unlimited Configurable Products</li>
-  //                   <li>✅ Automated Reorder Reminders</li>
-  //                   <li>✅ Reorder Coupon Option</li>
-  //                   <li>✅ Editable Buffer Time</li>
-  //                   <li>✅ Email & WhatsApp Support</li>
-  //                 </ul>
-  
-  //                 <div style={{ textAlign: "center", marginTop: "1rem" }}>
-  //                   <Button primary onClick={handleSubscribe(9.99)}>Subscribe</Button>
-  //                 </div>
-  //               </Card>
-  //               </div>
-                
-  //             </InlineGrid>
-  //         </BlockStack>
-  
-  //         </Card>
-  //       </Layout.Section>
-  //     </Layout>
-  
-  //   );
-  // };
-
   return (
     <Page
       backAction={{ content: "Settings", url: "#" }}
@@ -354,19 +289,13 @@ export default function SettingsPage() {
                         />
                       <TextField
                           label="Coupon Discount Percentage"
-                          name="coupon_discount_percentage"
+                          name="discountPercent"
                           value={discountPercent}
                           onChange={(value) => setDiscountPercent(value)}
                           autoComplete="off"
                         />
                       </FormLayout.Group>
-                      {/* <Text as="h2" variant="headingSm" fontWeight="regular">
-                        Email Content
-                      </Text> */}
-                      {/* <Suspense fallback={<div>Loading editor...</div>}>
-                        <ReactQuill theme="snow"  name="emailContent" value={mailContent} onChange={setMailContent} style={{ height: "150px",marginBottom: "var(--p-space-500)" }}/>
-                        <input type="hidden" name="emailContent" value={mailContent} />
-                      </Suspense> */}
+                    
                       <div style={{ marginTop: "var(--p-space-500)" , textAlign: "center"}}>
                           
                           <ReorderEmailPreview/>
