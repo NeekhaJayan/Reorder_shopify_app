@@ -23,7 +23,7 @@ export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
   const accessToken=session.accessToken
   const shop_domain=session.shop
-  const response = await fetch(`http://127.0.0.1:8000/auth/get-settings?shop_name=${shop_domain}`, {
+  const response = await fetch(`https://reorderappapi.onrender.com/auth/get-settings?shop_name=${shop_domain}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export const action = async ({ request }) => {
     }
     if (Settings.tab === "template-settings") {
       const data={emailTemplateSettings:Settings}
-      console.log(data);
+      
       const response = await fetch(`https://reorderappapi.onrender.com/auth/save-settings`, {
         method: "POST", // Adjust method as per your API
         headers: {
@@ -113,7 +113,7 @@ export default function SettingsPage() {
   useEffect(() => {
     // Optional: Handle the case where settingDetails are fetched but not immediately available
     if (settingDetails) {
-      console.log(settingDetails.general_settings?.bufferTime)
+      
       setBufferTime(settingDetails.general_settings?.bufferTime || '');
       setCoupon(settingDetails.email_template_settings?.coupon || '');
       setDiscountPercent(settingDetails.email_template_settings?.discountPercent || '');
@@ -125,7 +125,7 @@ export default function SettingsPage() {
     }
   }, [settingDetails]);
 
-  console.log(bufferTime)
+  
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
   };
