@@ -25,8 +25,8 @@ export const loader = async ({ request }) => {
   const {admin,session }=await authenticate.admin(request);
   const accessToken=session.accessToken
   const shop_domain=session.shop
-  console.log(accessToken)
-  return {shop_domain};
+  console.log(shop_domain)
+  return {shop_domain,accessToken};
 
 }
 
@@ -87,7 +87,7 @@ export const action = async ({ request }) => {
 
 
 export default function SettingsPage() {
-  const {shop_domain } = useLoaderData();
+  const {shop_domain ,accessToken} = useLoaderData();
   const [selectedTab, setSelectedTab] = useState(0);
   const [bufferTime, setBufferTime] = useState('');
   const [coupon, setCoupon] = useState('');
@@ -97,6 +97,7 @@ export default function SettingsPage() {
   const [mailServer, setMailServer] = useState('');
   const [port, setPort] = useState('');
   const [isChecked, setIsChecked] = useState(true);
+  const [uploadedFile, setUploadedFile] = useState(null);
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
@@ -127,7 +128,9 @@ export default function SettingsPage() {
     (selectedTab) => setSelectedTab(selectedTab),
     [],
   );
-
+  const handleDrop = (files) => {
+    setUploadedFile(files[0]);
+  };
   // const PricingPlans= () => {
   //   const handleSubscribe = async (price) => {
   //     const confirmationUrl = pricing(admin,shop,price);
@@ -236,9 +239,15 @@ export default function SettingsPage() {
                         
                         <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"general-settings"} />
-                        <DropZone label="Banner Image" name="bannerImage">
+                        <DropZone label="Banner Image"  onDrop={handleDrop}>
                           <DropZone.FileUpload actionHint="We recommend an image which is 600px wide." />
                         </DropZone>
+                        {uploadedFile && (
+                          <p style={{ marginTop: "10px", color: "green" }}>
+                            Uploaded File: {uploadedFile.name}
+                          </p>
+                        )}
+                        <input type="hidden" name="bannerImage" value={uploadedFile ? uploadedFile.name : ""}/>
                         <FormLayout.Group condensed>
                         <TextField
                           label="Buffer Time"
@@ -389,7 +398,7 @@ export default function SettingsPage() {
             )}
             {selectedTab === 2 && (
               <PricingPlans/>
-            )}
+                         )}
           </div>
         </Tabs>
       </Card>
