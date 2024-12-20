@@ -23,7 +23,6 @@ export default function App() {
         <Link to="/app" rel="home">
           Reorder Reminder Pro
         </Link>
-        <Link to="/app/products">Products</Link>
         <Link to="/app/settings">Settings</Link>
         
       </NavMenu>
