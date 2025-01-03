@@ -103,7 +103,7 @@ console.log(inputData);
     const result = await response.json();
     console.log("Response from FastAPI:", result);
 
-    return ("Estimated Usage Days saved successfully!");
+    return (success:"Estimated Usage Days saved successfully!");
   } catch (error) {
     console.error("Error:", error);
     return { error: "Failed to save Estimated Usage Days. Please check your input and try again. If the issue persists, contact support for assistance" };
@@ -432,6 +432,7 @@ export default function Index() {
             </fetcher.Form>
             {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
+            {data?.success && <p style={{ color: "green" }}>Error: {data.success}</p>}
             
             </Card>
             <div style={{ display: "inline-block", width: "15px" }}></div> 
