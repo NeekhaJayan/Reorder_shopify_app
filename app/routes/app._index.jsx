@@ -345,10 +345,10 @@ export default function Index() {
           <Image
             source="../logo.png" // Replace with a valid image URL
             alt="A placeholder image with purple and orange stripes"
-            style={{ width: 100, height: 100 ,alignItems: 'center'}}
+            style={{ width: 100, height: 100 ,alignItems: 'center',marginTop:"3rem"}}
           />
         </div>
-        <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center' }}>
+        <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center',marginBottom:'3rem' }}>
           
           <Text variant="heading2xl" as="h2" alignment="center">
             Welcome to ReOrder Reminder Pro
