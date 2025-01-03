@@ -103,7 +103,8 @@ console.log(inputData);
     const result = await response.json();
     console.log("Response from FastAPI:", result);
 
-    return {success:"Estimated Usage Days saved successfully!"};
+    if (method === "POST"){return {success:"Estimated Usage Days saved successfully!",result:result};}
+    return "Estimated Usage Days saved successfully!";
   } catch (error) {
     console.error("Error:", error);
     return { error: "Failed to save Estimated Usage Days. Please check your input and try again. If the issue persists, contact support for assistance" };
