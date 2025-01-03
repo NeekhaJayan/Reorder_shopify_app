@@ -2,6 +2,7 @@ import {
   Box,
   Card,
   Bleed,
+  Tooltip,
   Layout,
   Page,
   Text,
@@ -17,6 +18,8 @@ import {
   Image,
   DropZone,
 } from "@shopify/polaris";
+import { Icon} from "@shopify/polaris";
+import { InfoIcon } from "@shopify/polaris-icons";
 import React, { useState,useCallback,useEffect } from "react";
 import {useFetcher,useLoaderData} from "@remix-run/react";
 import { authenticate } from "../shopify.server";
@@ -50,7 +53,7 @@ export const action = async ({ request }) => {
   try {
     const formData = await request.formData();
     const Settings = Object.fromEntries(formData); 
-  
+    setLoading(true);
 
     if (Settings.tab === "template-settings") {
       const data={emailTemplateSettings:Settings}
@@ -60,22 +63,25 @@ export const action = async ({ request }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(Settings),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`API Error: ${errorText}`);
+        console.log(errorText);
+        setLoading(false);
+        throw new Error(`Failed to save the email template. Please check your content and try again. If the problem persists, contact support for assistance.`);
+      
       }
 
       const result = await response.json();
-      return { success: true, result };
+      return { success: result };
     }
 
     return { success: false, error: "Invalid tab identifier" };
   } catch (error) {
     console.error("Error in action handler:", error);
-    return { error: "Failed to send data"  };
+    return { error:" Failed to save the email template. Please check your content and try again. If the problem persists, contact support for assistance. " };
   }
 };
 
@@ -91,16 +97,17 @@ export default function SettingsPage() {
   const [mailServer, setMailServer] = useState(settingDetails?.emailTemplateSettings?.mailServer || '');
   const [port, setPort] = useState(settingDetails?.emailTemplateSettings?.port || '');
   const [isChecked, setIsChecked] = useState(settingDetails?.emailTemplateSettings?.isChecked || true);
-  const [uploadedFile, setUploadedFile] = useState(settingDetails?.general_settings?.bufferImage || '');
   const [files, setFiles] = useState([]);
   const [rejectedFiles, setRejectedFiles] = useState([]);
   const hasError = rejectedFiles.length > 0;
+  const [loading, setLoading] = useState(false);
   const fetcher = useFetcher();
   const { data, state } = fetcher;
+  const uploadFile=settingDetails?.general_settings?.bannerImage
   useEffect(() => {
     // Optional: Handle the case where settingDetails are fetched but not immediately available
     if (settingDetails) {
-      console.log(settingDetails?.general_settings?.bufferImage)
+      
       setBufferTime(settingDetails.email_template_settings?.bufferTime || '');
       setCoupon(settingDetails.email_template_settings?.coupon || '');
       setDiscountPercent(settingDetails.email_template_settings?.discountPercent || '');
@@ -109,9 +116,14 @@ export default function SettingsPage() {
       setMailServer(settingDetails.email_template_settings?.mail_server || '');
       setPort(settingDetails.email_template_settings?.port || '');
       setIsChecked(settingDetails.email_template_settings?.isChecked || true);
-      setUploadedFile(settingDetails?.general_settings?.bufferImage || '');
+      if (uploadFile) {
+        setFiles([{
+          name: settingDetails?.general_settings?.bannerImageName , // You can replace this with the actual file name
+          url: uploadFile // This can be a URL or path to the image
+        }]);
+      }
     }
-  }, [settingDetails]);
+  }, [settingDetails, uploadFile]);
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
@@ -149,11 +161,13 @@ export default function SettingsPage() {
     <LegacyStack vertical>
       {files.map((file, index) => (
         <LegacyStack alignment="center" key={index}>
-          
-          <Image
-                    source={window.URL.createObjectURL(file)} // Replace with a valid image URL
-                    alt={file.name}
-                  />
+          {file.url ? (
+          // If the file has a URL, directly use it
+          <Image source={file.url} alt={file.name || 'Uploaded Image'} />
+        ) : (
+          // If the file is a File object, create a URL for it
+          <Image source={window.URL.createObjectURL(file)} alt={file.name} />
+        )}
           <div>
             {file.name}{' '}
             <Text variant="bodySm" as="p">
@@ -257,22 +271,28 @@ export default function SettingsPage() {
   // };
   const handleSubmit = async (event) => {
     event.preventDefault(); 
+    setLoading(true);
     const formData = new FormData();
     formData.append("bannerImage", files[0]); // Ensure files is an array
     formData.append("shop_name", shop_domain);
     
-    const response = await fetch(`https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`, {
-      method: "POST", // Adjust method as per your API
-      body: formData,
+    // const response = await fetch(`https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`, {
+    //   method: "POST", // Adjust method as per your API
+    //   body: formData,
+    // });
+    const response = await fetcher.submit(formData, {
+      method: "POST", 
+      action: `https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`,
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`API Error: ${errorText}`);
+      throw new Error(`Failed to upload image. Please check your content and try again. If the problem persists, contact support for assistance.
+`);
     }
 
     const result = await response.json();
-    return { success: true, result };
+    return { success:result };
   };
 
   return (
@@ -318,8 +338,10 @@ export default function SettingsPage() {
                       
                   </div>
                 </Form>
+                {loading && <div className="loader">Loading...</div>}
                 {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
+            {data?.success && <p style={{ color: "green" }}>Error: {data.success}</p>}
                 </Layout.Section>
               </Layout>
             )}
@@ -344,11 +366,14 @@ export default function SettingsPage() {
                     <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"template-settings"} />
                         <BlockStack gap="200">
+                        
                           <Text as="h2" variant="headingSm">
                             Email Settings
                           </Text>
+                        
                           <Box  paddingBlockEnd="200" borderRadius="100">
                             <FormLayout.Group condensed>
+                            <div style={{display: "flex", alignItems: "center" }}>
                               <TextField
                                 type="text"
                                 label="Mail Server"
@@ -357,6 +382,13 @@ export default function SettingsPage() {
                                 onChange={(value) => setMailServer(value)}
                                 autoComplete="email"
                               />
+                              <Tooltip dismissOnMouseOut content="Enter the SMTP server address provided by your email provider (e.g., smtp.gmail.com).">
+                                <div style={{ marginRight: "8px" }}>
+                                  <Icon source={InfoIcon} tone="base" />
+                                </div>
+                              </Tooltip>
+                            </div>
+                            <div style={{display: "flex", alignItems: "center" }}>
                               <TextField
                                 type="text"
                                 label="Port"
@@ -365,8 +397,15 @@ export default function SettingsPage() {
                                 onChange={(value) => setPort(value)}
                                 autoComplete="off"
                               />
+                              <Tooltip dismissOnMouseOut content="Specify the port number used by your SMTP server. Standard ports are 587 (TLS) or 465 (SSL).">
+                                <div style={{ marginRight: "8px" }}>
+                                  <Icon source={InfoIcon} tone="base" />
+                                </div>
+                              </Tooltip>
+                            </div>
                             </FormLayout.Group>
                             <FormLayout.Group condensed>
+                            <div style={{display: "flex", alignItems: "center" }}>
                               <TextField
                                 label="Subject"
                                 name="subject"
@@ -374,14 +413,27 @@ export default function SettingsPage() {
                                 onChange={(value) => setSubject(value)}
                                 autoComplete="off"
                               />
-                              <TextField
-                                type="email"
-                                label="From name"
-                                name="fromName"
-                                value={fromName}
-                                onChange={(value) => setFromName(value)}
-                                autoComplete="email"
-                              />
+                              <Tooltip dismissOnMouseOut content="Set the default subject line for automated emails sent to your customers.">
+                                <div style={{ marginRight: "8px" }}>
+                                  <Icon source={InfoIcon} tone="base" />
+                                </div>
+                              </Tooltip>
+                              </div>
+                              <div style={{display: "flex", alignItems: "center" }}>
+                                <TextField
+                                  type="email"
+                                  label="From name"
+                                  name="fromName"
+                                  value={fromName}
+                                  onChange={(value) => setFromName(value)}
+                                  autoComplete="email"
+                                />
+                                <Tooltip dismissOnMouseOut content="This is the name that customers will see as the sender of the email (e.g., Your Store Name).">
+                                  <div style={{ marginRight: "8px" }}>
+                                    <Icon source={InfoIcon} tone="base" />
+                                  </div>
+                                </Tooltip>
+                                </div>
                             </FormLayout.Group>
                           </Box>
                         </BlockStack>
@@ -400,20 +452,34 @@ export default function SettingsPage() {
                               </Text>
                               <Box paddingBlockEnd="200">  
                                 <FormLayout.Group condensed>
-                                <TextField
-                                    label="Coupon"
-                                    name="coupon"
-                                    value={coupon}
-                                    onChange={(value) => setCoupon(value)}
-                                    autoComplete="off"
-                                  />
-                                <TextField
-                                    label="Coupon Discount Percentage"
-                                    name="discountPercent"
-                                    value={discountPercent}
-                                    onChange={(value) => setDiscountPercent(value)}
-                                    autoComplete="off"
-                                  />
+                                <div style={{display: "flex", alignItems: "center" }}>
+                                  <TextField
+                                      label="Coupon"
+                                      name="coupon"
+                                      value={coupon}
+                                      onChange={(value) => setCoupon(value)}
+                                      autoComplete="off"
+                                    />
+                                  <Tooltip dismissOnMouseOut content="Enter the unique code to be sent to customers with reordering reminders (e.g., SAVE10).">
+                                    <div style={{ marginRight: "8px" }}>
+                                      <Icon source={InfoIcon} tone="base" />
+                                    </div>
+                                  </Tooltip>
+                                </div>
+                                <div style={{display: "flex", alignItems: "center" }}>
+                                  <TextField
+                                      label="Coupon Discount Percentage"
+                                      name="discountPercent"
+                                      value={discountPercent}
+                                      onChange={(value) => setDiscountPercent(value)}
+                                      autoComplete="off"
+                                    />
+                                  <Tooltip dismissOnMouseOut content="Enter the discount percentage (e.g., 10 for 10%) to be applied to reorder reminders.">
+                                    <div style={{ marginRight: "8px" }}>
+                                      <Icon source={InfoIcon} tone="base" />
+                                    </div>
+                                  </Tooltip>
+                                </div>
                                 </FormLayout.Group>
                               </Box>
                           </BlockStack>
@@ -427,6 +493,7 @@ export default function SettingsPage() {
                             </Text>
                             <Box paddingBlockEnd="200">  
                               <FormLayout.Group condensed>
+                              <div style={{ display: "flex", alignItems: "center" }}>
                                 <TextField
                                     label="Buffer Time"
                                     name="bufferTime"
@@ -434,6 +501,12 @@ export default function SettingsPage() {
                                     onChange={(value) => setBufferTime(value)}
                                     autoComplete="off"
                                   />
+                                  <Tooltip dismissOnMouseOut content="Set additional time (in days) before a product runs out to trigger the reorder reminder, accounting .">
+                                    <div style={{ marginRight: "8px" }}>
+                                      <Icon source={InfoIcon} tone="base" />
+                                    </div>
+                                  </Tooltip>
+                              </div>
                                 
                               </FormLayout.Group>
                             </Box>
@@ -470,8 +543,10 @@ export default function SettingsPage() {
                       
                   </div>
                 </fetcher.Form>
+                {loading && <div className="loader">Loading...</div>}
                 {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
+            {data?.success && <p style={{ color: "green" }}>{data.success}</p>}
                 </Layout.Section>
                 
               </Layout>

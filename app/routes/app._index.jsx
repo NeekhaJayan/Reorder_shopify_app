@@ -97,16 +97,16 @@ console.log(inputData);
     });
 
     if (!response.ok) {
-      throw new Error("Failed to send Update data to FastAPI");
+      throw new Error("Failed to save Estimated Usage Days. Please check your input and try again. If the issue persists, contact support for assistance");
     }
 
     const result = await response.json();
     console.log("Response from FastAPI:", result);
 
-    return json({ result });
+    return ("Estimated Usage Days saved successfully!");
   } catch (error) {
     console.error("Error:", error);
-    return { error: "Failed to send product data" };
+    return { error: "Failed to save Estimated Usage Days. Please check your input and try again. If the issue persists, contact support for assistance" };
   }
 };
 
@@ -341,11 +341,15 @@ export default function Index() {
       </TitleBar>
       <Card roundedAbove="sm">
       <Bleed marginInline="400" marginBlock="400">
-        <Image
-          source="../public/reorder_logo1.png" // Replace with a valid image URL
-          alt="A placeholder image with purple and orange stripes"
-        />
-        <Box background="bg-surface-secondary" padding="400">
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <Image
+            source="../reorder_logo1.png" // Replace with a valid image URL
+            alt="A placeholder image with purple and orange stripes"
+            style={{ width: 100, height: 100 ,alignItems: 'center'}}
+          />
+        </div>
+        <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center' }}>
+          
           <Text variant="heading2xl" as="h2" alignment="center">
             Welcome to ReOrder Reminder Pro
           </Text>
@@ -357,7 +361,7 @@ export default function Index() {
             alignment="center"
             padding="400"
           >
-            Smart, Automated Reorder Reminders for Repeat Sales Growth!
+            Intelligent, Automated Reorder Reminders for Repeat Sales Growth!
           </Text>
           <Divider borderColor="border-inverse" />
           
@@ -381,10 +385,7 @@ export default function Index() {
                 )}
                   <BlockStack gap="500">
                 <InlineStack align="space-between">
-                  <Text as={"h2"} variant="headingLg">
-                    Product
-                  </Text>
-                 
+            
                   {formProductState.productId ? (
                     <Button variant="plain" onClick={selectProduct}>
                       Change product
@@ -425,7 +426,7 @@ export default function Index() {
                     value={formProductState.productTitle || ""}
                   /> 
               </BlockStack>
-                  <TextField label="Re-order Date" type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />
+                  <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />
                   <Button submit>Save</Button> 
                 </BlockStack> 
             </fetcher.Form>
@@ -436,6 +437,9 @@ export default function Index() {
             <div style={{ display: "inline-block", width: "15px" }}></div> 
             <Divider borderColor="border-inverse" />
             <div style={{ display: "inline-block", width: "15px" }}></div> 
+            <Text variant="headingLg" as="h5" fontWeight="medium" alignment="center">
+            Here, you'll find a list of all products with Estimated Usage Days set up.
+            </Text>
             <Text
             variant="headingMd" as="h6"
             tone="subdued"
@@ -453,6 +457,16 @@ export default function Index() {
               <ProductTable productData={updatedProducts} />
             )}
           </Card>
+          <Divider borderColor="border-inverse" />
+          <Text variant="headingMd" as="h6" alignment="center">
+          How We Calculate Reminder Timing:
+          </Text>
+          <Text variant="headingSm" tone="subdued" as="h6" alignment="center">
+            We calculate the reminder date based on the following formula:
+          </Text>
+          <Text variant="headingSm" as="h6" alignment="center">
+          Order Date + (Ordered Quantity x Estimated Usage Days of the Product) + Buffer Time
+          </Text>
           </Layout.Section>
           
         </Layout>
