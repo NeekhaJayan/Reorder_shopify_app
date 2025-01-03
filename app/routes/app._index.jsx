@@ -117,20 +117,20 @@ export default function Index() {
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const [formState, setformState] = useState('');
-  const [formProductState, setFormProductState] = useState({
+  const initialState = {
     productId: "",
     productVariantId: "",
     productTitle: "",
     productHandle: "",
     productAlt: "",
     productImage: "",
-  });
+  };
+  const [formProductState, setFormProductState] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
   const [resetProduct,setResetProduct]=useState(null);
   const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
   const handleChange = (value)=>setformState({...formState,date:value})
- 
   const [selectedProductIds, setSelectedProductIds] = useState(
     reorderDetails.map(product => product.shopify_product_id) // Assuming `savedProducts` contains the list of already saved products
   );  // Track selected products
@@ -264,6 +264,9 @@ export default function Index() {
     if (data?.result) {
       const resultArray = Array.isArray(data.result) ? data.result : [data.result]; // Ensure it's an array
       setUpdatedProducts((prevData) => [...prevData, ...resultArray]);
+      setFormProductState(initialState);
+      setformState('')
+
     }
   }, [data]);
 
@@ -384,7 +387,7 @@ export default function Index() {
                     onDismiss={() => setBannerMessage("")} // Dismiss the banner
                   />
                 )}
-                  <BlockStack gap="500">
+                <BlockStack gap="500">
                 <InlineStack align="space-between">
             
                   {formProductState.productId ? (
