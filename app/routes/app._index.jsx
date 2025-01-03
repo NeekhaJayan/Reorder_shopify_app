@@ -343,7 +343,7 @@ export default function Index() {
       <Bleed marginInline="400" marginBlock="400">
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <Image
-            source="../icon.png" // Replace with a valid image URL
+            source="../logo.png" // Replace with a valid image URL
             alt="A placeholder image with purple and orange stripes"
             style={{ width: 100, height: 100 ,alignItems: 'center'}}
           />
@@ -432,7 +432,7 @@ export default function Index() {
             </fetcher.Form>
             {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
-            {data?.success && <p style={{ color: "green" }}>Error: {data.success}</p>}
+            {data?.success && <p style={{ color: "green" }}>{data.success}</p>}
             
             </Card>
             <div style={{ display: "inline-block", width: "15px" }}></div> 

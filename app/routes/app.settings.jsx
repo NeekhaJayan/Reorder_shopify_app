@@ -341,7 +341,7 @@ export default function SettingsPage() {
                 {loading && <div className="loader">Loading...</div>}
                 {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
-            {data?.success && <p style={{ color: "green" }}>Error: {data.success}</p>}
+            {data?.success && <p style={{ color: "green" }}>{data.success}</p>}
                 </Layout.Section>
               </Layout>
             )}
