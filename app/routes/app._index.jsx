@@ -343,7 +343,7 @@ export default function Index() {
       <Bleed marginInline="400" marginBlock="400">
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <Image
-            source="../reorder_logo1.png" // Replace with a valid image URL
+            source="../icon.png" // Replace with a valid image URL
             alt="A placeholder image with purple and orange stripes"
             style={{ width: 100, height: 100 ,alignItems: 'center'}}
           />
