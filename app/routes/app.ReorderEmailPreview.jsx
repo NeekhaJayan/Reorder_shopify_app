@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@shopify/polaris";
 
-const ReorderEmailPreview = () =>{
+const ReorderEmailPreview = ({ image_path }) =>{
     const [placeholders, setPlaceholders] = useState({
       first_name: "John Doe",
       product_name: "Premium Coffee Beans",
@@ -38,6 +38,10 @@ const ReorderEmailPreview = () =>{
             text-align: center;
             padding: 20px;
             color: white;
+          }
+          .header img {
+            max-width: 100px; 
+            height: auto;     
           }
           .content {
             padding: 20px;
@@ -77,6 +81,7 @@ const ReorderEmailPreview = () =>{
       <body>
         <div class="email-container">
           <div class="header">
+            <img src=${image_path} alt="Shop Logo" />
             <h1>Your Shop</h1>
           </div>
           <div class="content">

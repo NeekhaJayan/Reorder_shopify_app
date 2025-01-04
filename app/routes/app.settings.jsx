@@ -179,7 +179,7 @@ export default function SettingsPage() {
       ))}
     </LegacyStack>
   );
- 
+  const imageUrlForPreview = files.length > 0 && files[0].url ? files[0].url : (files.length > 0 && window.URL.createObjectURL(files[0]));
   // const PricingPlans= () => {
   //   const handleSubscribe = async (price) => {
   //     const confirmationUrl = pricing(admin,shop,price);
@@ -313,7 +313,7 @@ export default function SettingsPage() {
                         
                         <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"general-settings"} />
-                        <DropZone label="Banner Image"  onDrop={handleDrop}>
+                        <DropZone label="Logo Image"  onDrop={handleDrop}>
                         {uploadedFiles}
                         {fileUpload}
                           
@@ -341,7 +341,7 @@ export default function SettingsPage() {
                 {loading && <div className="loader">Loading...</div>}
                 {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
-            {data?.success && <p style={{ color: "green" }}>{data.success}</p>}
+            {data?.success && <p style={{ color: "darkgreen" }}> {data.success}</p>}
                 </Layout.Section>
               </Layout>
             )}
@@ -373,7 +373,7 @@ export default function SettingsPage() {
                         
                           <Box  paddingBlockEnd="200" borderRadius="100">
                             <FormLayout.Group condensed>
-                            <div style={{display: "flex", alignItems: "center" }}>
+                            <div style={{display: "flex", alignItems: "end" }}>
                               <TextField
                                 type="text"
                                 label="Mail Server"
@@ -388,7 +388,7 @@ export default function SettingsPage() {
                                 </div>
                               </Tooltip>
                             </div>
-                            <div style={{display: "flex", alignItems: "center" }}>
+                            <div style={{display: "flex", alignItems: "end" }}>
                               <TextField
                                 type="text"
                                 label="Port"
@@ -405,7 +405,7 @@ export default function SettingsPage() {
                             </div>
                             </FormLayout.Group>
                             <FormLayout.Group condensed>
-                            <div style={{display: "flex", alignItems: "center" }}>
+                            <div style={{display: "flex", alignItems: "end",marginTop:'1rem' }}>
                               <TextField
                                 label="Subject"
                                 name="subject"
@@ -419,7 +419,7 @@ export default function SettingsPage() {
                                 </div>
                               </Tooltip>
                               </div>
-                              <div style={{display: "flex", alignItems: "center" }}>
+                              <div style={{display: "flex", alignItems: "end",marginTop:'1rem' }}>
                                 <TextField
                                   type="email"
                                   label="From name"
@@ -437,22 +437,12 @@ export default function SettingsPage() {
                             </FormLayout.Group>
                           </Box>
                         </BlockStack>
-                      {/* <Checkbox
-                        label="Reminder emails enabled"
-                        name="reminderEmailsEnabled"
-                        checked={isChecked}
-                        onChange={handleCheckboxChange}
-                      /> */}
-                      {/* <input type="hidden" name="reminderEmailsEnabled" value={isChecked ? 'true' : 'false'} /> */}
                       <Bleed marginBlockEnd="400" marginInline="400">
                         <Box borderColor="border" borderWidth="025"  padding="400" borderRadius="100">
                           <BlockStack gap="200">
-                              <Text as="h2" variant="headingSm">
-                              Coupon
-                              </Text>
                               <Box paddingBlockEnd="200">  
                                 <FormLayout.Group condensed>
-                                <div style={{display: "flex", alignItems: "center" }}>
+                                <div style={{display: "flex", alignItems: "end" }}>
                                   <TextField
                                       label="Coupon"
                                       name="coupon"
@@ -466,7 +456,7 @@ export default function SettingsPage() {
                                     </div>
                                   </Tooltip>
                                 </div>
-                                <div style={{display: "flex", alignItems: "center" }}>
+                                <div style={{display: "flex", alignItems: "end" }}>
                                   <TextField
                                       label="Coupon Discount Percentage"
                                       name="discountPercent"
@@ -488,12 +478,9 @@ export default function SettingsPage() {
                       <Bleed marginBlockEnd="400" marginInline="400">
                         <Box borderColor="border" borderWidth="025" padding="400" borderRadius="100">
                           <BlockStack gap="200">
-                            <Text as="h2" variant="headingSm">
-                            Buffer Time
-                            </Text>
                             <Box paddingBlockEnd="200">  
                               <FormLayout.Group condensed>
-                              <div style={{ display: "flex", alignItems: "center" }}>
+                              <div style={{ display: "flex", alignItems: "end" }}>
                                 <TextField
                                     label="Buffer Time"
                                     name="bufferTime"
@@ -520,10 +507,12 @@ export default function SettingsPage() {
                         <ReactQuill theme="snow"  name="emailContent" value={mailContent} onChange={setMailContent} style={{ height: "150px",marginBottom: "var(--p-space-500)" }}/>
                         <input type="hidden" name="emailContent" value={mailContent} />
                       </Suspense> */}
+                      {imageUrlForPreview && (
                       <div style={{ marginTop: "var(--p-space-500)" , textAlign: "center"}}>
                           
-                          <ReorderEmailPreview/>
+                          <ReorderEmailPreview image_path={imageUrlForPreview} />
                       </div>
+                      )}
                       
                       
                     </FormLayout>
@@ -546,7 +535,7 @@ export default function SettingsPage() {
                 {loading && <div className="loader">Loading...</div>}
                 {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
-            {data?.success && <p style={{ color: "green" }}>{data.success}</p>}
+            {data?.success && <p style={{ color: "darkgreen" }}>{data.success}</p>}
                 </Layout.Section>
                 
               </Layout>

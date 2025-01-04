@@ -343,43 +343,39 @@ export default function Index() {
       <TitleBar title="Welcome to ReOrder Reminder Pro">
             Smart, Automated Reorder Reminders for Repeat Sales Growth!
       </TitleBar>
-      <Card roundedAbove="sm">
-      <Bleed marginInline="400" marginBlock="400">
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <Image
-            source="../logo.png" // Replace with a valid image URL
-            alt="A placeholder image with purple and orange stripes"
-            style={{ width: 100, height: 100 ,alignItems: 'center',marginTop:"3rem"}}
-          />
-        </div>
-        <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center',marginBottom:'3rem' }}>
-          
-          <Text variant="heading2xl" as="h2" alignment="center">
-            Welcome to ReOrder Reminder Pro
-          </Text>
-          <Text
-            variant="headingLg"
-            as="span"
-            tone="subdued"
-            fontWeight="regular"
-            alignment="center"
-            padding="400"
-          >
-            Intelligent, Automated Reorder Reminders for Repeat Sales Growth!
-          </Text>
-          <Divider borderColor="border-inverse" />
-          
-        </Box>
-      </Bleed>
-    </Card>
-      <BlockStack gap="400">
-        <Layout>
-          <Layout.Section>
+      <Card roundedAbove="sm" padding="400">
+        <Bleed marginInline="400" marginBlock="400" >
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Image
+              source="../logo.png" // Replace with a valid image URL
+              alt="A placeholder image with purple and orange stripes"
+              style={{height: 70 ,alignItems: 'center',marginTop:"1rem"}}
+            />
+          </div>
+          <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center',marginBottom:'1rem' }}>
+            
+            <Text variant="heading2xl" as="h2" alignment="center">
+              Welcome to ReOrder Reminder Pro
+            </Text>
+            <Text
+              variant="headingLg"
+              as="span"
+              tone="subdued"
+              fontWeight="regular"
+              alignment="center"
+              padding="400"
+            >
+              Intelligent, Automated Reorder Reminders for Repeat Sales Growth!
+            </Text>
+            
+          </Box>
+        </Bleed>
+        <BlockStack gap="400" >
+          <div style={{paddingLeft:'5rem',paddingRight:'5rem',paddingTop:'1rem',paddingBottom:'1rem',justifyContent:'center'}}>
             <Card>
-              
-            <fetcher.Form method="post">
+                <fetcher.Form method="post">
                 <input type="hidden" name="shopid" value={shopID} />
-                <BlockStack gap="500">
+                <BlockStack gap="500" >
                   {bannerMessage && (
                   <Banner
                     title={bannerMessage}
@@ -387,61 +383,66 @@ export default function Index() {
                     onDismiss={() => setBannerMessage("")} // Dismiss the banner
                   />
                 )}
-                <BlockStack gap="500">
-                <InlineStack align="space-between">
-            
-                  {formProductState.productId ? (
-                    <Button variant="plain" onClick={selectProduct}>
-                      Change product
-                    </Button>
-                  ) : null}
-                </InlineStack>
-                {formProductState.productId ? (
-                  <InlineStack blockAlign="center" gap="500">
-                    <Thumbnail
-                      source={formProductState.productImage || ImageIcon}
-                      alt={formProductState.productAlt}
-                    />
-                    <Text as="span" variant="headingMd" fontWeight="semibold">
-                      {formProductState.productTitle}
-                    </Text>
-                  </InlineStack>
-                ) : (
-                  <BlockStack gap="200">
-                    <Button onClick={selectProduct} id="select-product">
-                      Select product
-                    </Button>
-                    {errors.productId ? (
-                      <InlineError
-                        message={errors.productId}
-                        fieldID="myFieldID"
-                      />
-                    ) : null}
-                  </BlockStack>
-                )} 
-                <input
-                    type="hidden"
-                    name="productId"
-                    value={formProductState.productId || ""}
-                  /> 
-                <input
-                    type="hidden"
-                    name="productTitle"
-                    value={formProductState.productTitle || ""}
-                  /> 
-              </BlockStack>
-                  <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />
-                  <Button submit>Save</Button> 
+                  <div style={{paddingLeft:'1rem',paddingRight:'1rem'}}>
+                    <BlockStack gap="500">
+                    <InlineStack align="space-between">
+                
+                      {formProductState.productId ? (
+                        <Button variant="plain" onClick={selectProduct}>
+                          Change product
+                        </Button>
+                      ) : null}
+                    </InlineStack>
+                    {formProductState.productId ? (
+                      <InlineStack blockAlign="center" gap="500">
+                        <Thumbnail
+                          source={formProductState.productImage || ImageIcon}
+                          alt={formProductState.productAlt}
+                        />
+                        <Text as="span" variant="headingMd" fontWeight="semibold">
+                          {formProductState.productTitle}
+                        </Text>
+                      </InlineStack>
+                    ) : (
+                      <BlockStack gap="200">
+                        <Button onClick={selectProduct} id="select-product">
+                          Select product
+                        </Button>
+                        {errors.productId ? (
+                          <InlineError
+                            message={errors.productId}
+                            fieldID="myFieldID"
+                          />
+                        ) : null}
+                      </BlockStack>
+                    )} 
+                    <input
+                        type="hidden"
+                        name="productId"
+                        value={formProductState.productId || ""}
+                      /> 
+                    <input
+                        type="hidden"
+                        name="productTitle"
+                        value={formProductState.productTitle || ""}
+                      /> 
+                    </BlockStack>
+                    <div style={{marginTop:'5px'}}>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
+                      </div>
+                      <div style={{justifyContent:'center'}}>
+                        <Button submit >Save</Button> 
+                      </div>
+                    </div>
+                  </div>
                 </BlockStack> 
-            </fetcher.Form>
-            {state === "submitting" && <p>Submitting...</p>}
-            {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
-            {data?.success && <p style={{ color: "green" }}>{data.success}</p>}
-            
+                </fetcher.Form>
+                {state === "submitting" && <p>Submitting...</p>}
+                {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
+                {data?.success && <p style={{ color: "darkgreen" }}>{data.success}</p>}
             </Card>
-            <div style={{ display: "inline-block", width: "15px" }}></div> 
-            <Divider borderColor="border-inverse" />
-            <div style={{ display: "inline-block", width: "15px" }}></div> 
+          </div>
             <Text variant="headingLg" as="h5" fontWeight="medium" alignment="center">
             Here, you'll find a list of all products with Estimated Usage Days set up.
             </Text>
@@ -449,33 +450,36 @@ export default function Index() {
             variant="headingMd" as="h6"
             tone="subdued"
             fontWeight="regular"
+            alignment="center"
             
           >
             These products are ready to send automated reorder reminders to your customers based on their typical usage.
-          </Text>
-          
-          <div style={{ display: "inline-block", width: "15px" }}></div> 
-            <Card padding="0">
-            {updatedProducts.length === 0 ? (
-              <EmptyProductState />
-            ) : (
-              <ProductTable productData={updatedProducts} />
-            )}
-          </Card>
-          <Divider borderColor="border-inverse" />
-          <Text variant="headingMd" as="h6" alignment="center">
-          How We Calculate Reminder Timing:
-          </Text>
-          <Text variant="headingSm" tone="subdued" as="h6" alignment="center">
-            We calculate the reminder date based on the following formula:
-          </Text>
-          <Text variant="headingSm" as="h6" alignment="center">
-          Order Date + (Ordered Quantity x Estimated Usage Days of the Product) + Buffer Time
-          </Text>
-          </Layout.Section>
-          
-        </Layout>
-      </BlockStack>
+            </Text>
+            <div style={{ marginLeft:'5rem',marginRight:'5rem'}}>
+              <Card padding="0" >
+              {updatedProducts.length === 0 ? (
+                <EmptyProductState />
+              ) : (
+                <ProductTable productData={updatedProducts} />
+              )}
+              </Card>
+            </div>
+            
+            <Box background="bg-fill-warning" style={{ marginTop:'0.5rem'}}>
+              <Text variant="headingMd" as="h6" alignment="center">
+              How We Calculate Reminder Timing:
+              </Text>
+              <Text variant="headingSm" tone="subdued" as="h6" alignment="center">
+                We calculate the reminder date based on the following formula:
+              </Text>
+              <Text variant="headingSm" as="h6" alignment="center">
+              Order Date + (Ordered Quantity x Estimated Usage Days of the Product) + Buffer Time
+              </Text>
+            </Box>
+            
+
+        </BlockStack>
+      </Card>
     </Page>
   );
 };
