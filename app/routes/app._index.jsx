@@ -431,7 +431,7 @@ export default function Index() {
                       <div style={{ marginBottom: '1rem' }}>
                         <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
                       </div>
-                      <div style={{justifyContent:'center'}}>
+                      <div style={{display:'grid' ,justifyContent:'center'}}>
                         <Button submit >Save</Button> 
                       </div>
                     </div>
