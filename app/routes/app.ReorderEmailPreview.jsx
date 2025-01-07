@@ -108,7 +108,7 @@ const ReorderEmailPreview = ({ image_path }) =>{
       </body>
       </html>
     `;
-    const newWindow = window.open("", "Preview", "width=800,height=600");
+    const newWindow = window.open("", "Preview", "width=800,height=1000");
     newWindow.document.write(template);
     newWindow.document.close();
   };

@@ -219,7 +219,7 @@ export default function SettingsPage() {
                         
                         <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"general-settings"} />
-                        <DropZone label="Logo Image"  onDrop={handleDrop}>
+                        <DropZone label="Logo"  onDrop={handleDrop}>
                         {uploadedFiles}
                         {fileUpload}
                           
