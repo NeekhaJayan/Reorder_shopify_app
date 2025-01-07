@@ -23,6 +23,8 @@ const ReorderEmailPreview = ({ image_path }) =>{
             padding: 0;
             background-color: #f9fafb;
             color: #202223;
+            height: 100%;
+            overflow: auto;
           }
           .email-container {
             max-width: 600px;
