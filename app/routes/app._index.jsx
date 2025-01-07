@@ -10,7 +10,8 @@ import {
   Button,
   BlockStack,
   Box,
-  List,
+  Spinner,
+  Modal,
   Link,
   Bleed,
   Image,
@@ -117,6 +118,7 @@ export default function Index() {
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const [formState, setformState] = useState('');
+  const [loading, setLoading] = useState(false);
   const initialState = {
     productId: "",
     productVariantId: "",
@@ -187,7 +189,16 @@ export default function Index() {
     }
   }
    // Handle change in reorder_days field
-   const handleReorderChange = useCallback((product_id, value) => {
+  const [activeModal, setActiveModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const toggleModal = useCallback(() => {
+            setActiveModal((prev) => !prev);
+        }, []);
+  const confirmReset = useCallback((productId) => {
+          setSelectedProductId(productId);
+          toggleModal(); // Open the modal
+           }, [toggleModal]);
+  const handleReorderChange = useCallback((product_id, value) => {
     setUpdatedProducts((prev) =>
       prev.map((product) =>
         product.shopify_product_id === product_id
@@ -222,14 +233,16 @@ export default function Index() {
   
     // Clear editing and reset state
     setEditingProduct(null);
-    setResetProduct(null);
+    // setResetProduct(null);
+    setSelectedProductId(null);
+    setActiveModal(false);
   }, [fetcher]);
   
-  const confirmReset = (productId) => {
-    if (window.confirm("Are you sure you want to reset the reorder days?")) {
-      resetReorderfield(productId);
-    }
-  };
+  // const confirmReset = (productId) => {
+  //   if (window.confirm("Are you sure you want to reset the reorder days?")) {
+  //     resetReorderfield(productId);
+  //   }
+  // };
   const saveReorderDay = useCallback(
     (product) => {
       const updatedProduct = updatedProducts.find(
@@ -237,6 +250,7 @@ export default function Index() {
       );
 
       if (updatedProduct) {
+        setLoading(true);
         fetcher.submit(
           {
             productId: updatedProduct.shopify_product_id,
@@ -255,10 +269,17 @@ export default function Index() {
         );
       }
 
-      setEditingProduct(null);
+      setEditingProduct(null);  
+      
+      
     },
     [fetcher, updatedProducts]
   );
+  useEffect(() => {
+    if (fetcher.state === "idle") {
+      setLoading(false); // Stop loading when fetcher is idle
+    }
+  }, [fetcher.state]);
 
   useEffect(() => {
     if (data?.result) {
@@ -295,7 +316,18 @@ export default function Index() {
         { title: "Product Name" },
         { title: "Estimated Usage Days" },
         { title: "Date created" },
-        { title: "Actions" },
+        {
+          title: loading ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Spinner size="small" accessibilityLabel="Loading data" />
+              <Text variant="bodyMd" as="span" style={{ marginLeft: "8px" }}>
+                Saving
+              </Text>
+            </div>
+          ) : (
+            "Actions"
+          ),
+        },
       ]}
       selectable={false}
     >
@@ -325,16 +357,35 @@ export default function Index() {
         />
       </IndexTable.Cell>
       <IndexTable.Cell>{new Date(product.created_at).toDateString()}</IndexTable.Cell>
-      <IndexTable.Cell>
+      <IndexTable.Cell><div>
         {isEditing ? (
           <Button onClick={onSave}>Save</Button> // Save only the selected product
         ) : (
           <Button variant="plain" onClick={onEdit}>Edit</Button> // Start editing the specific product
         )}
         <div style={{ display: "inline-block", width: "8px" }}></div> {/* Spacer */}
-        <Button variant="plain" onClick={() => confirmReset(product.shopify_product_id)}>Reset</Button>
+        <Button variant="plain" onClick={() => confirmReset(product.shopify_product_id)}>Reset</Button><Modal
+                size="small"
+                open={activeModal}
+                onClose={toggleModal}
+                title="Reset Estimated Usage Days"
+                primaryAction={{
+                  content: 'Reset',
+                  onAction: () => resetReorderfield(selectedProductId),
+                }}
+                secondaryAction={{
+                  content: 'Cancel',
+                  onAction: toggleModal,
+                }}
+              >
+                <Modal.Section>
+                  <p>
+                    Are you sure you want to reset? This will remove all Estimated Usage Days, but you can reconfigure them later.
+                  </p>
+                </Modal.Section>
+              </Modal></div>
       </IndexTable.Cell>
-      <IndexTable.Cell></IndexTable.Cell>
+      
     </IndexTable.Row>
   );
   
@@ -372,7 +423,7 @@ export default function Index() {
         </Bleed>
         <BlockStack gap="400" >
           <div style={{paddingLeft:'5rem',paddingRight:'5rem',paddingTop:'1rem',paddingBottom:'1rem',justifyContent:'center'}}>
-            <Card>
+            <Card background="bg-surface-info-active">
                 <fetcher.Form method="post">
                 <input type="hidden" name="shopid" value={shopID} />
                 <BlockStack gap="500" >
@@ -465,7 +516,7 @@ export default function Index() {
               </Card>
             </div>
             
-            <Box background="bg-fill-warning" style={{ marginTop:'0.5rem'}}>
+            <Card background="bg-surface-warning-active" style={{ marginTop:'0.5rem'}}>
               <Text variant="headingMd" as="h6" alignment="center">
               How We Calculate Reminder Timing:
               </Text>
@@ -473,9 +524,9 @@ export default function Index() {
                 We calculate the reminder date based on the following formula:
               </Text>
               <Text variant="headingSm" as="h6" alignment="center">
-              Order Date + (Ordered Quantity x Estimated Usage Days of the Product) + Buffer Time
+              Order Date + (Ordered Quantity * Estimated Usage Days of the Product) - Buffer Time
               </Text>
-            </Box>
+            </Card>
             
 
         </BlockStack>
