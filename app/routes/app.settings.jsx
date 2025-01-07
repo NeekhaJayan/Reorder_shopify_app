@@ -287,6 +287,7 @@ export default function SettingsPage() {
                                 name="mail_server"
                                 onChange={(value) => setMailServer(value)}
                                 autoComplete="email"
+                                placeholder="smtp.gmail.com"
                               />
                               <Tooltip dismissOnMouseOut content="Enter the SMTP server address provided by your email provider (e.g., smtp.gmail.com).">
                                 <div style={{ marginRight: "8px" }}>
@@ -302,6 +303,7 @@ export default function SettingsPage() {
                                 name="port"
                                 onChange={(value) => setPort(value)}
                                 autoComplete="off"
+                                placeholder="587"
                               />
                               <Tooltip dismissOnMouseOut content="Specify the port number used by your SMTP server. Standard ports are 587 (TLS) or 465 (SSL).">
                                 <div style={{ marginRight: "8px" }}>
@@ -318,6 +320,7 @@ export default function SettingsPage() {
                                 value={subject}
                                 onChange={(value) => setSubject(value)}
                                 autoComplete="off"
+                                placeholder="Time to Restock Your Product"
                               />
                               <Tooltip dismissOnMouseOut content="Set the default subject line for automated emails sent to your customers.">
                                 <div style={{ marginRight: "8px" }}>
@@ -333,6 +336,7 @@ export default function SettingsPage() {
                                   value={fromName}
                                   onChange={(value) => setFromName(value)}
                                   autoComplete="email"
+                                  placeholder="Your Store Name"
                                 />
                                 <Tooltip dismissOnMouseOut content="This is the name that customers will see as the sender of the email (e.g., Your Store Name).">
                                   <div style={{ marginRight: "8px" }}>
