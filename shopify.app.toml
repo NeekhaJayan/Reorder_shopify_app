@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "ff8383f7adfb90290caa96dd1bfc9994"
-name = "reorder-reminder"
+name = "ReOrder Reminder Pro"
 handle = "reorder-reminder1"
 application_url = "https://reorder-shopify-app.onrender.com/"
 embedded = true
@@ -45,6 +45,9 @@ api_version = "2024-10"
   topics = [ "checkouts/create", "orders/fulfilled" ]
   uri = "/webhooks/order"
 
+  [[webhooks.subscriptions]]
+  topics = [ "products/delete" ]
+  uri = "/webhooks/product_delete"
 
 [pos]
 embedded = false
