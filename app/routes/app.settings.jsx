@@ -73,7 +73,7 @@ export const loader = async ({ request }) => {
       return {
         shop_domain,
         settingDetails,
-        plan: "Free",
+        plan: "FREE",
       };
     }
     throw new Error("Unable to process the request. Please try again later.");
