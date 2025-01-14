@@ -1,0 +1,47 @@
+.pricing-table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  .table-header,
+.table-row,
+.table-footer {
+  display: table-row;
+}
+  
+  .table-body {
+    display: table-row-group;
+  }
+  
+  .table-row {
+    display: table-row;
+    border-bottom: 1px solid #dfe3e8;
+  }
+  
+  .feature-column,
+  .plan-column {
+    display: table-cell;
+    padding: 16px;
+    vertical-align: middle;
+  }
+  
+  
+  .plan-column h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .plan-column p {
+    margin: 4px 0;
+    font-size: 1em;
+  }
+  
+  .table-header .plan-column {
+    background-color: #ededee;
+    font-weight: bold;
+  }
+  .table-footer .plan-column{
+    background-color:#ededee ;
+  }
