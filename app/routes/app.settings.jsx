@@ -297,7 +297,7 @@ export default function SettingsPage() {
                         </DropZone>
                         
                         
-                        <Button variant="primary" disabled={plan.name==='PRO'} onClick={handleSync}>Sync  orders</Button>
+                        <Button variant="primary" disabled={plan.name!=='PRO'} onClick={handleSync}>Sync  orders</Button>
                         
                     </FormLayout>
                   
