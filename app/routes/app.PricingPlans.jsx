@@ -1,65 +1,14 @@
 import {
   Page, Layout, Card, ResourceList, ResourceItem, Text, Button
 } from "@shopify/polaris";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { authenticate } from "../shopify.server";
+
 import '../styles/PricingTable.css';
 
-export const loader = async ({ request }) => {
-  await authenticate.admin(request);
-  return null;
-};
 
-export const action = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
-  const { price } = await request.json(); // Extract price from the request body
-  const shop = new URL(request.url).searchParams.get("shop"); // Extract shop from URL query params
-  console.log(price,shop)
-  
 
-  
-
-  // const response = await admin.graphql(
-  //   `#graphql
-  //    mutation appSubscriptionCreate($name: String!, $returnUrl: URL!, $price: Decimal!) {
-  //      appSubscriptionCreate(
-  //        name: $name
-  //        returnUrl: $returnUrl
-  //        lineItems: [
-  //          {
-  //            plan: {
-  //              appRecurringPricingDetails: {
-  //                price: { amount: $price, currencyCode: USD }
-  //              }
-  //            }
-  //          }
-  //        ]
-  //        test: true
-  //        trialDays: 7
-  //      ) {
-  //        appSubscription {
-  //          id
-  //        }
-  //        userErrors {
-  //          field
-  //          message
-  //        }
-  //        confirmationUrl
-  //      }
-  //    }
-  //   `,
-  //   {
-  //     name: "Pro Plan",
-  //     returnUrl: `${process.env.SHOPIFY_APP_URL}/billing/callback?shop=${shop}`,
-  //     price,
-  //   }
-  // );
-
-  
-};
-
-const PricingPlans = ( ) => {
+const PricingPlans = ({ plan } ) => {
   const fetcher = useFetcher();
   const shopify = useAppBridge();
   const handleSubscribe = (price) => {
@@ -73,7 +22,8 @@ const PricingPlans = ( ) => {
     // });
   };
   
-  const activePlan = 'FREE';
+  console.log(plan);
+  const activePlan = plan;
 
   const plans = [
     {
@@ -137,14 +87,21 @@ const PricingPlans = ( ) => {
               <div></div>
             </div>
             {plans.map((plan) => (
+              
               <div className="plan-column" key={plan.name}>
                 <Button
-                  // primary={plan.name === activePlan} 
-                 primary url={plan.url}
+                  primary={plan.name === activePlan} 
                   outline={plan.name !== activePlan}
                   disabled={plan.name === activePlan}
-                  
+                  onClick={() => {
+                    if (plan.name !== activePlan) {
+                      // Navigate to the plan's URL only if it's not the active plan
+                      window.location.href = plan.url;
+                    }
+                  }}
                 >
+                  {console.log("Active Plan:", activePlan)}
+                  {console.log("Plan Name:", plan.name)}
                   {plan.name === activePlan ? 'Current Plan' : 'Choose Plan'}
                 </Button>
               </div>

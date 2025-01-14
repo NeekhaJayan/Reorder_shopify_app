@@ -15,7 +15,5 @@ export const loader = async ({ request }) => {
     }),
     });
 
-  redirect('/app/PricingPlans')
-
-  // App logic
+    return redirect('/app/PricingPlans');
 };

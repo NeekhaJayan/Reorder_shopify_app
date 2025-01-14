@@ -22,31 +22,64 @@ import { Icon} from "@shopify/polaris";
 import { InfoIcon } from "@shopify/polaris-icons";
 import React, { useState,useCallback,useEffect } from "react";
 import {useFetcher,useLoaderData} from "@remix-run/react";
-import { authenticate } from "../shopify.server";
+import { authenticate ,MONTHLY_PLAN} from "../shopify.server";
 import "react-quill/dist/quill.snow.css";
 import ReorderEmailPreview from "./app.ReorderEmailPreview";
 import PricingPlans from "./app.PricingPlans";
 
 
 export const loader = async ({ request }) => {
-  const {session }=await authenticate.admin(request);
-  const accessToken=session.accessToken
-  const shop_domain=session.shop
-  const response = await fetch(`https://reorderappapi.onrender.com/auth/get-settings?shop_name=${shop_domain}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const {billing, session } = await authenticate.admin(request);
+  const shop_domain = session.shop;
 
-  if (!response.ok) {
-    throw new Error("Failed to send product data to FastAPI");
+  // Fetch settings data from FastAPI
+  const settingsResponse = await fetch(
+    `https://reorderappapi.onrender.com/auth/get-settings?shop_name=${shop_domain}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!settingsResponse.ok) {
+    throw new Error("Failed to fetch settings data from FastAPI");
   }
 
-  const settingDetails = await response.json();
-  return {shop_domain,settingDetails};
+  const settingDetails = await settingsResponse.json();
 
-}
+  // Fetch pricing plan data
+  try {
+    
+    const billingCheck = await billing.require({
+      plans: [MONTHLY_PLAN],
+      isTest: true,
+      onFailure: () => {
+        throw new Error("No active Plan");
+      },
+    });
+
+    const subscription = billingCheck.appSubscriptions[0];
+    const plan = subscription ? "PRO" : "FREE";
+    console.log(plan)
+    return {
+      shop_domain,
+      settingDetails,
+      plan,
+    };
+  } catch (error) {
+    if (error.message === "No active Plan") {
+      return {
+        shop_domain,
+        settingDetails,
+        plan: "Free",
+      };
+    }
+    throw new Error("Unable to process the request. Please try again later.");
+  }
+};
+
 
 export const action = async ({ request }) => {
   const {admin}=await authenticate.admin(request);
@@ -121,7 +154,7 @@ export const action = async ({ request }) => {
 
 
 export default function SettingsPage() {
-  const { shop_domain, settingDetails } = useLoaderData();
+  const { shop_domain, settingDetails, plan } = useLoaderData();
   const [selectedTab, setSelectedTab] = useState(0);
   const [bufferTime, setBufferTime] = useState(settingDetails?.emailTemplateSettings?.bufferTime || '');
   const [coupon, setCoupon] = useState(settingDetails?.emailTemplateSettings?.coupon || '');
@@ -264,7 +297,7 @@ export default function SettingsPage() {
                         </DropZone>
                         
                         
-                        <Button variant="primary" onClick={handleSync}>Sync  orders</Button>
+                        <Button variant="primary" disabled={plan.name==='PRO'} onClick={handleSync}>Sync  orders</Button>
                         
                     </FormLayout>
                   
@@ -488,7 +521,7 @@ export default function SettingsPage() {
               </Layout>
             )}
             {selectedTab === 2 && (
-              <PricingPlans />
+              <PricingPlans plan={plan} />
                          )}
           </div>
         </Tabs>
