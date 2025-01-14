@@ -29,7 +29,7 @@ import PricingPlans from "./app.PricingPlans";
 
 
 export const loader = async ({ request }) => {
-  const {admin,session }=await authenticate.admin(request);
+  const {session }=await authenticate.admin(request);
   const accessToken=session.accessToken
   const shop_domain=session.shop
   const response = await fetch(`https://reorderappapi.onrender.com/auth/get-settings?shop_name=${shop_domain}`, {
@@ -49,13 +49,13 @@ export const loader = async ({ request }) => {
 }
 
 export const action = async ({ request }) => {
-
+  const {admin}=await authenticate.admin(request);
   try {
     const formData = await request.formData();
     const Settings = Object.fromEntries(formData); 
-    setLoading(true);
-
+    // console.log(admin)
     if (Settings.tab === "template-settings") {
+      setLoading(true);
       const data={emailTemplateSettings:Settings}
       console.log(data);
       const response = await fetch(`https://reorderappapi.onrender.com/auth/save-settings`, {
@@ -77,6 +77,40 @@ export const action = async ({ request }) => {
       const result = await response.json();
       return { success: result };
     }
+    if (Settings.tab === "general-settings"){
+        
+        const tenDaysAgo = new Date();
+        tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+        const formattedDate = tenDaysAgo.toISOString(); // Convert to ISO 8601 format
+        try {
+          console.log(admin)
+          const response = await admin.graphql(
+            `#graphql
+            query {
+              orders(first: 10) {
+                edges {
+                  node {
+                    id
+                    
+                  }
+                }
+              }
+            }`,
+          ); // Ensure `admin` is properly initialized
+          const data = await response.json();
+          const orders = data?.orders?.edges || [];
+
+          console.log("Fetched Orders:", data);
+          if (orders.length === 0) {
+            console.log("No orders found.");
+          }
+
+          // Handle pagination if there are more pages
+        } catch (error) {
+          console.error("Error fetching orders:", error);
+        }
+    }
+    
 
     return { success: false, error: "Invalid tab identifier" };
   } catch (error) {
@@ -125,10 +159,17 @@ export default function SettingsPage() {
     }
   }, [settingDetails, uploadFile]);
 
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
+
+  const handleSync = useCallback(() => {
+    const formData = new FormData();
+    formData.append("tab", "general-settings");
   
+    fetcher.submit(formData, {
+      method: "POST",
+    });
+  }, [fetcher]);  // Add dependencies to the useCallback hook
+
+
   const tabs = [
     {
       id: 'general-settings',
@@ -152,6 +193,7 @@ export default function SettingsPage() {
     (selectedTab) => setSelectedTab(selectedTab),
     [],
   );
+ 
   const handleDrop = useCallback((droppedFiles, acceptedFiles, rejectedFiles) => {
     setFiles((files) => [...files, ...acceptedFiles]);
     setRejectedFiles(rejectedFiles);
@@ -174,18 +216,14 @@ export default function SettingsPage() {
     </LegacyStack>
   );
   const imageUrlForPreview = files.length > 0 && files[0].url ? files[0].url : (files.length > 0 && window.URL.createObjectURL(files[0]));
-
+ 
+  
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     setLoading(true);
     const formData = new FormData();
     formData.append("bannerImage", files[0]); // Ensure files is an array
     formData.append("shop_name", shop_domain);
-    
-    // const response = await fetch(`https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`, {
-    //   method: "POST", // Adjust method as per your API
-    //   body: formData,
-    // });
     const response = await fetcher.submit(formData, {
       method: "POST", 
       action: `https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`,
@@ -219,14 +257,14 @@ export default function SettingsPage() {
                         
                         <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"general-settings"} />
-                        <DropZone label="Logo"  onDrop={handleDrop}>
+                        <DropZone label="Logo Image"  onDrop={handleDrop}>
                         {uploadedFiles}
                         {fileUpload}
                           
                         </DropZone>
                         
                         
-                        
+                        <Button variant="primary" onClick={handleSync}>Sync  orders</Button>
                         
                     </FormLayout>
                   
@@ -255,7 +293,7 @@ export default function SettingsPage() {
               <Layout>
                 <Layout.Section variant="oneThird">
                   <div style={{ marginTop: "var(--p-space-500)" }}>
-                    <BlockStack gap="4">
+                    <BlockStack gap="4" >
                       <Text id="emailSettings" variant="headingMd" as="h2">
                         Reminder Email Settings
                       </Text>
@@ -450,7 +488,7 @@ export default function SettingsPage() {
               </Layout>
             )}
             {selectedTab === 2 && (
-              <PricingPlans/>
+              <PricingPlans />
                          )}
           </div>
         </Tabs>

@@ -9,7 +9,7 @@ import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
 
 // import { restResources } from "@shopify/shopify-api/rest/admin/2024-07";
 import prisma from "./db.server";
-
+export const MONTHLY_PLAN = 'Monthly subscription';
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
@@ -20,6 +20,17 @@ const shopify = shopifyApp({
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   restResources,
+  billing: {
+    [MONTHLY_PLAN]: {
+      lineItems: [
+        {
+          amount: 5,
+          currencyCode: 'USD',
+          interval: BillingInterval.Every30Days,
+        }
+      ],
+    },
+  },
   hooks: {
     afterAuth: async ({ admin, session }) => {
       await shopify.registerWebhooks({ session });
