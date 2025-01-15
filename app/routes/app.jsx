@@ -4,18 +4,39 @@ import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
-import { authenticate } from "../shopify.server";
+import { authenticate ,MONTHLY_PLAN} from "../shopify.server";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
-
-  return json({ apiKey: process.env.SHOPIFY_API_KEY || "" });
+  const {billing} = await authenticate.admin(request);
+  try {
+        
+        const billingCheck = await billing.require({
+          plans: [MONTHLY_PLAN],
+          isTest: true,
+          onFailure: () => {
+            throw new Error("No active Plan");
+          },
+        });
+    
+        const subscription = billingCheck.appSubscriptions[0];
+        const plan = subscription ? "PRO" : "FREE";
+        console.log(plan)
+        return json({ apiKey: process.env.SHOPIFY_API_KEY || "" ,plan});
+        // return {plan};
+      } catch (error) {
+        if (error.message === "No active Plan") {
+          return json({ apiKey: process.env.SHOPIFY_API_KEY || "",plan:"FREE" });
+          // return {plan: "FREE"};
+        }
+        throw new Error("Unable to process the request. Please try again later.");
+      }
+  
 };
 
 export default function App() {
-  const { apiKey } = useLoaderData();
+  const { apiKey ,plan} = useLoaderData();
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
@@ -26,7 +47,7 @@ export default function App() {
         <Link to="/app/settings">Settings</Link>
         
       </NavMenu>
-      <Outlet />
+      <Outlet context={{ plan }} />
     </AppProvider>
   );
 }

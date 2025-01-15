@@ -12,7 +12,7 @@ import {
   FormLayout,
   Checkbox,
   LegacyStack,
-  Thumbnail,
+  SkeletonPage, SkeletonBodyText, SkeletonDisplayText,
   Form,
   TextField,
   Image,
@@ -22,14 +22,14 @@ import { Icon} from "@shopify/polaris";
 import { InfoIcon } from "@shopify/polaris-icons";
 import React, { useState,useCallback,useEffect } from "react";
 import {useFetcher,useLoaderData} from "@remix-run/react";
-import { authenticate ,MONTHLY_PLAN} from "../shopify.server";
+import { authenticate } from "../shopify.server";
 import "react-quill/dist/quill.snow.css";
 import ReorderEmailPreview from "./app.ReorderEmailPreview";
 import PricingPlans from "./app.PricingPlans";
-
+import { useOutletContext } from '@remix-run/react';
 
 export const loader = async ({ request }) => {
-  const {billing, session } = await authenticate.admin(request);
+  const { session } = await authenticate.admin(request);
   const shop_domain = session.shop;
 
   // Fetch settings data from FastAPI
@@ -49,35 +49,7 @@ export const loader = async ({ request }) => {
 
   const settingDetails = await settingsResponse.json();
 
-  // Fetch pricing plan data
-  try {
-    
-    const billingCheck = await billing.require({
-      plans: [MONTHLY_PLAN],
-      isTest: true,
-      onFailure: () => {
-        throw new Error("No active Plan");
-      },
-    });
-
-    const subscription = billingCheck.appSubscriptions[0];
-    const plan = subscription ? "PRO" : "FREE";
-    console.log(plan)
-    return {
-      shop_domain,
-      settingDetails,
-      plan,
-    };
-  } catch (error) {
-    if (error.message === "No active Plan") {
-      return {
-        shop_domain,
-        settingDetails,
-        plan: "FREE",
-      };
-    }
-    throw new Error("Unable to process the request. Please try again later.");
-  }
+    return {shop_domain,settingDetails};  
 };
 
 
@@ -154,7 +126,8 @@ export const action = async ({ request }) => {
 
 
 export default function SettingsPage() {
-  const { shop_domain, settingDetails, plan } = useLoaderData();
+  const { shop_domain, settingDetails } = useLoaderData();
+  const { plan } = useOutletContext();
   const [selectedTab, setSelectedTab] = useState(0);
   const [bufferTime, setBufferTime] = useState(settingDetails?.emailTemplateSettings?.bufferTime || '');
   const [coupon, setCoupon] = useState(settingDetails?.emailTemplateSettings?.coupon || '');
@@ -167,7 +140,7 @@ export default function SettingsPage() {
   const [files, setFiles] = useState([]);
   const [rejectedFiles, setRejectedFiles] = useState([]);
   const hasError = rejectedFiles.length > 0;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const uploadFile=settingDetails?.general_settings?.bannerImage
@@ -190,6 +163,9 @@ export default function SettingsPage() {
         }]);
       }
     }
+    
+    setTimeout(() => setLoading(false), 2000); // Add artificial delay for demonstration
+    
   }, [settingDetails, uploadFile]);
 
 
@@ -272,6 +248,24 @@ export default function SettingsPage() {
     return { success:result };
   };
 
+  if (loading) {
+    return (
+      <SkeletonPage title="Loading Settings">
+        <Layout>
+          <Layout.Section>
+            <SkeletonDisplayText size="medium" />
+            <SkeletonBodyText lines={4} />
+          </Layout.Section>
+          <Layout.Section>
+            {[...Array(3)].map((_, index) => (
+              <SkeletonBodyText key={index} lines={2} />
+            ))}
+          </Layout.Section>
+        </Layout>
+      </SkeletonPage>
+    );
+  }
+
   return (
     <Page
       backAction={{ content: "Settings", url: "#" }}
@@ -297,7 +291,7 @@ export default function SettingsPage() {
                         </DropZone>
                         
                         
-                        <Button variant="primary" disabled={plan.name!=='PRO'} onClick={handleSync}>Sync  orders</Button>
+                        <Button variant="primary" disabled={plan.name==='PRO'} onClick={handleSync}>Sync  orders</Button>
                         
                     </FormLayout>
                   
@@ -419,7 +413,7 @@ export default function SettingsPage() {
                           </Box>
                         </BlockStack>
                       <Bleed marginBlockEnd="400" marginInline="400">
-                        <Box borderColor="border" borderWidth="025"  padding="400" borderRadius="100">
+                        <Box borderColor="border" background={plan.name === 'PRO' ? 'bg-surface-secondary' : null} borderWidth="025"  padding="400" borderRadius="100">
                           <BlockStack gap="200">
                               <Box paddingBlockEnd="200">  
                                 <FormLayout.Group condensed>
@@ -428,6 +422,8 @@ export default function SettingsPage() {
                                       label="Coupon"
                                       name="coupon"
                                       value={coupon}
+                                      disabled={plan.name === 'PRO'}
+                                      helpText={plan.name === 'PRO'?"Only Editable for PRO Plan":null}
                                       onChange={(value) => setCoupon(value)}
                                       autoComplete="off"
                                     />
@@ -442,6 +438,8 @@ export default function SettingsPage() {
                                       label="Coupon Discount Percentage"
                                       name="discountPercent"
                                       value={discountPercent}
+                                      disabled={plan.name === 'PRO'}
+                                      helpText={plan.name === 'PRO'?"Only Editable for PRO Plan":null}
                                       onChange={(value) => setDiscountPercent(value)}
                                       autoComplete="off"
                                     />
@@ -457,7 +455,7 @@ export default function SettingsPage() {
                         </Box>
                       </Bleed>
                       <Bleed marginBlockEnd="400" marginInline="400">
-                        <Box borderColor="border" borderWidth="025" padding="400" borderRadius="100">
+                        <Box borderColor="border" background={plan.name === 'PRO' ? 'bg-surface-secondary' : null} borderWidth="025" padding="400" borderRadius="100">
                           <BlockStack gap="200">
                             <Box paddingBlockEnd="200">  
                               <FormLayout.Group condensed>
@@ -466,6 +464,8 @@ export default function SettingsPage() {
                                     label="Buffer Time"
                                     name="bufferTime"
                                     value={bufferTime}
+                                    disabled={plan.name === 'PRO'}
+                                    helpText={plan.name === 'PRO'?"Only Editable for PRO Plan":null}
                                     onChange={(value) => setBufferTime(value)}
                                     autoComplete="off"
                                   />

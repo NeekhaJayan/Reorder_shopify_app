@@ -15,11 +15,12 @@ import {
   Link,
   Bleed,
   Image,
-  InlineStack,Select,TextField,Thumbnail,InlineError,IndexTable,EmptyState,Banner, Divider
+  InlineStack,TextContainer,TextField,Thumbnail,InlineError,IndexTable,EmptyState,Banner,SkeletonPage, SkeletonBodyText, SkeletonDisplayText
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
 import { ImageIcon } from "@shopify/polaris-icons";
+import { useOutletContext } from '@remix-run/react';
 
 
 export const loader = async ({ request }) => {
@@ -115,10 +116,11 @@ console.log(inputData);
 
 export default function Index() {
   const {reorderDetails,shopID}=useLoaderData();
+  const { plan } = useOutletContext();
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const [formState, setformState] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const initialState = {
     productId: "",
     productVariantId: "",
@@ -139,8 +141,8 @@ export default function Index() {
   const [bannerMessage, setBannerMessage] = useState(""); // Store banner message
   const [bannerStatus, setBannerStatus] = useState("");
   
-
-  async function selectProduct() {
+  
+async function selectProduct() {
     try {
       // Open the Shopify resource picker
       const products = await window.shopify.resourcePicker({
@@ -154,7 +156,8 @@ export default function Index() {
         const { id, title, variants, images, handle } = product;
         const selectedId =id.replace("gid://shopify/Product/", "");
         // Check if this product has already been selected
-        if (selectedProductIds.includes(Number(selectedId))) {
+        const isProductSelected = selectedProductIds.includes(Number(selectedId));
+        if (isProductSelected) {
           // If product is already selected, show a toast notification
           setBannerMessage(`Product "${title}" is already selected.`);
           setBannerStatus("critical");
@@ -162,7 +165,7 @@ export default function Index() {
         }
 
         // If product is not a duplicate, add it to the selected products list
-        setSelectedProductIds(prev => [...prev, id]);
+        setSelectedProductIds(prev => [...prev, Number(selectedId)]);
 
         // Update the form state with selected product details
         setFormProductState({
@@ -276,6 +279,12 @@ export default function Index() {
     [fetcher, updatedProducts]
   );
   useEffect(() => {
+    // Simulate loading when index page loads
+    if (reorderDetails) {
+      setLoading(false);
+    }
+  }, [reorderDetails]);
+  useEffect(() => {
     if (fetcher.state === "idle") {
       setLoading(false); // Stop loading when fetcher is idle
     }
@@ -388,6 +397,25 @@ export default function Index() {
       
     </IndexTable.Row>
   );
+
+  if (loading) {
+    return (
+      <SkeletonPage title="Loading App Data">
+        <Layout>
+          <Layout.Section>
+            <SkeletonDisplayText size="large" />
+            <SkeletonBodyText lines={3} />
+          </Layout.Section>
+          <Layout.Section>
+            {[...Array(5)].map((_, index) => (
+              <SkeletonBodyText key={index} lines={1} />
+            ))}
+          </Layout.Section>
+        </Layout>
+      </SkeletonPage>
+    );
+  }
+
   
   return (
     <Page>
@@ -483,7 +511,17 @@ export default function Index() {
                         <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
                       </div>
                       <div style={{display:'grid' ,justifyContent:'center'}}>
-                        <Button submit >Save</Button> 
+                        <Button submit disabled={plan === "FREE" && updatedProducts.length >= 5} >Save</Button> 
+                        {plan === "FREE" && updatedProducts.length >= 5 && (
+                          <TextContainer>
+                            <Banner onDismiss={() => {}} tone="info">
+                              <p>
+                                You have reached your limit. Please upgrade your plan.
+                              </p>
+                            </Banner>
+                          </TextContainer>
+                        )}
+                        
                       </div>
                     </div>
                   </div>
