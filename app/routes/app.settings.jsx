@@ -290,7 +290,7 @@ export default function SettingsPage() {
                           
                         </DropZone>
                         
-                        {console.log(pla)}
+                        {console.log(plan)}
                         <Button variant="primary" disabled={plan!=='PRO'} onClick={handleSync}>Sync  orders</Button>
                         
                     </FormLayout>
@@ -413,7 +413,7 @@ export default function SettingsPage() {
                           </Box>
                         </BlockStack>
                       <Bleed marginBlockEnd="400" marginInline="400">
-                        <Box borderColor="border" background={plan !== 'PRO' ? 'bg-surface-secondary' : null} borderWidth="025"  padding="400" borderRadius="100">
+                        <Box borderColor="border" background={plan!== 'PRO' ? 'bg-surface-secondary' : null} borderWidth="025"  padding="400" borderRadius="100">
                           <BlockStack gap="200">
                               <Box paddingBlockEnd="200">  
                                 <FormLayout.Group condensed>
@@ -422,8 +422,8 @@ export default function SettingsPage() {
                                       label="Coupon"
                                       name="coupon"
                                       value={coupon}
-                                      disabled={plan !== 'PRO'}
-                                      helpText={plan !== 'PRO'?"Only Editable for PRO Plan":null}
+                                      disabled={plan!== 'PRO'}
+                                      helpText={plan!== 'PRO'?"Only Editable for PRO Plan":null}
                                       onChange={(value) => setCoupon(value)}
                                       autoComplete="off"
                                     />
@@ -438,8 +438,8 @@ export default function SettingsPage() {
                                       label="Coupon Discount Percentage"
                                       name="discountPercent"
                                       value={discountPercent}
-                                      disabled={plan !== 'PRO'}
-                                      helpText={plan !== 'PRO'?"Only Editable for PRO Plan":null}
+                                      disabled={plan!== 'PRO'}
+                                      helpText={plan!== 'PRO'?"Only Editable for PRO Plan":null}
                                       onChange={(value) => setDiscountPercent(value)}
                                       autoComplete="off"
                                     />
@@ -455,7 +455,7 @@ export default function SettingsPage() {
                         </Box>
                       </Bleed>
                       <Bleed marginBlockEnd="400" marginInline="400">
-                        <Box borderColor="border" background={plan !== 'PRO' ? 'bg-surface-secondary' : null} borderWidth="025" padding="400" borderRadius="100">
+                        <Box borderColor="border" background={plan!== 'PRO' ? 'bg-surface-secondary' : null} borderWidth="025" padding="400" borderRadius="100">
                           <BlockStack gap="200">
                             <Box paddingBlockEnd="200">  
                               <FormLayout.Group condensed>
@@ -464,8 +464,8 @@ export default function SettingsPage() {
                                     label="Buffer Time"
                                     name="bufferTime"
                                     value={bufferTime}
-                                    disabled={plan !== 'PRO'}
-                                    helpText={plan !== 'PRO'?"Only Editable for PRO Plan":null}
+                                    disabled={plan!== 'PRO'}
+                                    helpText={plan!== 'PRO'?"Only Editable for PRO Plan":null}
                                     onChange={(value) => setBufferTime(value)}
                                     autoComplete="off"
                                   />
