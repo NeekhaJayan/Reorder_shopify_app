@@ -439,7 +439,12 @@ export default function SettingsPage() {
                                       name="coupon"
                                       value={coupon}
                                       disabled={plan!== 'PRO'}
-                                
+                                      helpText={plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                        <Icon source={AlertTriangleIcon} color="success" />
+                                        <Text as="span" fontWeight="bold">
+                                        Coupons Available in Pro Plan
+                                        </Text>
+                                      </div>):null}
                                       onChange={(value) => setCoupon(value)}
                                       autoComplete="off"
                                     />
@@ -455,12 +460,7 @@ export default function SettingsPage() {
                                       name="discountPercent"
                                       value={discountPercent}
                                       disabled={plan!== 'PRO'}
-                                      helpText={plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                        <Icon source={AlertTriangleIcon} color="success" />
-                                        <Text as="span" fontWeight="bold">
-                                        Coupons Available in Pro Plan
-                                        </Text>
-                                      </div>):null}
+                                      
                                       onChange={(value) => setDiscountPercent(value)}
                                       autoComplete="off"
                                     />
