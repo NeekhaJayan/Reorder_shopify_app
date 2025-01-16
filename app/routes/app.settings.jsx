@@ -19,7 +19,7 @@ import {
   DropZone,
 } from "@shopify/polaris";
 import { Icon} from "@shopify/polaris";
-import { InfoIcon } from "@shopify/polaris-icons";
+import { InfoIcon,AlertTriangleIcon } from "@shopify/polaris-icons";
 import React, { useState,useCallback,useEffect } from "react";
 import {useFetcher,useLoaderData} from "@remix-run/react";
 import { authenticate } from "../shopify.server";
