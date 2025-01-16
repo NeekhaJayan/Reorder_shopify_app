@@ -302,7 +302,7 @@ export default function SettingsPage() {
                                         Sync the last month's orders to ensure reminder emails are sent for recent purchases
                                       </Text>
                                   <div style={{marginTop:"0.5rem"}}>
-                                  <Button variant="primary" disabled={plan!=='PRO'} onClick={handleSync}  >Sync  orders</Button>                                 
+                                  <Button variant="primary" disabled={plan!=='PRO'} onClick={handleSync}  >Sync Now</Button>                                 
                                   </div>
                               </Box>
                           </BlockStack>
@@ -486,12 +486,15 @@ export default function SettingsPage() {
                                     name="bufferTime"
                                     value={bufferTime}
                                     disabled={plan!== 'PRO'}
-                                    helpText={plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                      <Icon source={AlertTriangleIcon} color="success" />
-                                      <Text as="span" fontWeight="bold">
-                                        Buffer Time Editable in Pro Plan
-                                      </Text>
-                                    </div>):null}
+                                    helpText={<div><div>
+                                      Set additional time (in days) before a product runs out to trigger the reorder reminder.
+                                    </div>{plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                      <div><Icon source={AlertTriangleIcon} color="success"/></div>
+                                        
+                                        <Text as="span" fontWeight="bold">
+                                          Buffer Time Editable in Pro Plan
+                                        </Text>
+                                      </div>):null}</div>}
                                     onChange={(value) => setBufferTime(value)}
                                     autoComplete="off"
                                   />

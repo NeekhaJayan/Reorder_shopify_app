@@ -23,37 +23,40 @@ const PricingPlans = ({ plan } ) => {
   };
   
   console.log(plan);
-  const activePlan = plan;
+  const activePlan = plan 
+  ? (plan.toUpperCase() === 'FREE' ? 'Free Plan' : 'Pro Plan') 
+  : 'Unknown Plan'; // Handles undefined or null plan
 
   const plans = [
     {
-      name: 'FREE',
+      name: 'Free Plan',
       price: '$0.000',
       priceValue: 0.0,
       url:"/app/upgrade",
-      features: ['5', true, true, '5',false],
+      features: ['5', true, false, '5 days',false,'Email'],
     },
     {
-      name: 'PRO',
+      name: 'Pro Plan',
       price: '$9.99/mo',
       priceValue: 9.99,
       url:"/app/upgrade",
-      features: [true, true, true, true, true],
+      features: ['Unlimited', true, true,'Editable', true,'Email & Whatsapp'],
     },
   ];
 
   const featuresList = [
-    'Unlimited Products',
-    'Automated Reminders',
-    'Reorder Coupons',
-    'Buffer Time Configuration',
-    'Priority Support',
+    'Max Products Configurable',
+    'Automated Reorder Reminders',
+    'Coupon Code Integration',
+    'Buffer Time for Shipping',
+    'Sync Recent Orders',
+    'Priority Customer Support',
   ];
 
   return (
     <Page title="Pricing">
       
-      <Card background="bg-surface-warning">
+      <Card >
         <div className="pricing-table">
           <div className="table-header">
             <div className="feature-column"></div>
@@ -94,7 +97,7 @@ const PricingPlans = ({ plan } ) => {
                   outline={plan.name !== activePlan}
                   disabled={plan.name === activePlan}
                   onClick={() => {
-                    if (plan.name !== activePlan) {
+                    if (plan.name === 'Pro Plan') {
                       // Navigate to the plan's URL only if it's not the active plan
                       window.location.href = plan.url;
                     }

@@ -512,16 +512,7 @@ async function selectProduct() {
                       </div>
                       <div style={{display:'grid' ,justifyContent:'center'}}>
                         <Button submit disabled={plan === "FREE" && updatedProducts.length >= 5} >Save</Button> 
-                        {plan === "FREE" && updatedProducts.length >= 5 && (
-                          <TextContainer>
-                            <Banner onDismiss={() => {}} tone="info">
-                              <p>
-                              You’ve reached the maximum number of products allowed for your current plan.
-                              Upgrade Now to add more.
-                              </p>
-                            </Banner>
-                          </TextContainer>
-                        )}
+                        
                         
                       </div>
                     </div>
@@ -552,6 +543,16 @@ async function selectProduct() {
               ) : (
                 <ProductTable productData={updatedProducts} />
               )}
+              {plan === "FREE" && updatedProducts.length >= 5 && (
+                  <TextContainer>
+                    <Banner  tone="info">
+                      <p>
+                      You’ve reached the maximum number of products allowed for your current plan.
+                      <Button variant="plain"  >Upgrade Now</Button>  to add more.
+                      </p>
+                    </Banner>
+                  </TextContainer>
+                )}
               </Card>
             </div>
             
