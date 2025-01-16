@@ -291,7 +291,23 @@ export default function SettingsPage() {
                         </DropZone>
                         
                         {console.log(plan)}
-                        <Button variant="primary" disabled={plan!=='PRO'} onClick={handleSync}>Sync  orders</Button>
+                        <Bleed marginBlockEnd="400" marginInline="400">
+                        <Box borderColor="border"  borderWidth="025"  padding="400" borderRadius="100">
+                          <BlockStack gap="200">
+                              <Box paddingBlockEnd="200">  
+                                <Text as="h2"  variant="headingMd">
+                                        Sync Recent Orders
+                                      </Text>
+                                <Text as="h2" variant="headingXs" tone="subdued">
+                                        Sync the last month's orders to ensure reminder emails are sent for recent purchases
+                                      </Text>
+                                  <div style={{marginTop:"0.5rem"}}>
+                                  <Button variant="primary" disabled={plan!=='PRO'} onClick={handleSync}  >Sync  orders</Button>                                 
+                                  </div>
+                              </Box>
+                          </BlockStack>
+                        </Box>
+                      </Bleed>
                         
                     </FormLayout>
                   
@@ -423,7 +439,7 @@ export default function SettingsPage() {
                                       name="coupon"
                                       value={coupon}
                                       disabled={plan!== 'PRO'}
-                                      helpText={plan!== 'PRO'?"Only Editable for PRO Plan":null}
+                                
                                       onChange={(value) => setCoupon(value)}
                                       autoComplete="off"
                                     />
@@ -439,7 +455,12 @@ export default function SettingsPage() {
                                       name="discountPercent"
                                       value={discountPercent}
                                       disabled={plan!== 'PRO'}
-                                      helpText={plan!== 'PRO'?"Only Editable for PRO Plan":null}
+                                      helpText={plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                        <Icon source={AlertTriangleIcon} color="success" />
+                                        <Text as="span" fontWeight="bold">
+                                        Coupons Available in Pro Plan
+                                        </Text>
+                                      </div>):null}
                                       onChange={(value) => setDiscountPercent(value)}
                                       autoComplete="off"
                                     />
@@ -465,7 +486,12 @@ export default function SettingsPage() {
                                     name="bufferTime"
                                     value={bufferTime}
                                     disabled={plan!== 'PRO'}
-                                    helpText={plan!== 'PRO'?"Only Editable for PRO Plan":null}
+                                    helpText={plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                      <Icon source={AlertTriangleIcon} color="success" />
+                                      <Text as="span" fontWeight="bold">
+                                        Buffer Time Editable in Pro Plan
+                                      </Text>
+                                    </div>):null}
                                     onChange={(value) => setBufferTime(value)}
                                     autoComplete="off"
                                   />

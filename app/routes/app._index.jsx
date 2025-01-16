@@ -516,7 +516,8 @@ async function selectProduct() {
                           <TextContainer>
                             <Banner onDismiss={() => {}} tone="info">
                               <p>
-                                You have reached your limit. Please upgrade your plan.
+                              You’ve reached the maximum number of products allowed for your current plan.
+                              Upgrade Now to add more.
                               </p>
                             </Banner>
                           </TextContainer>
