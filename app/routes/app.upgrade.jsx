@@ -14,6 +14,9 @@ export const loader = async ({ request }) => {
       returnUrl: `https://admin.shopify.com/store/${myShop}/apps/${process.env.APP_NAME}/app/PricingPlans`,
     }),
     });
+    if (billingStatus && billingStatus.confirmationUrl) {
+      return redirect(billingStatus.confirmationUrl);
+    }
 
     return redirect('/app/PricingPlans');
 };
