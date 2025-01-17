@@ -548,7 +548,7 @@ async function selectProduct() {
                     <Banner  tone="info">
                       <p>
                       You’ve reached the maximum number of products allowed for your current plan.
-                      <Button variant="plain"  >Upgrade Now</Button>  to add more.
+                      <Link to="/app/settings">Upgrade Now</Link>  to add more.
                       </p>
                     </Banner>
                   </TextContainer>
