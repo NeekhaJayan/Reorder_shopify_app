@@ -275,7 +275,7 @@ export default function SettingsPage() {
 
   return (
     <Page
-      backAction={{ content: "Settings", url: "#" }}
+      backAction={{ content: "Settings", url: "/" }}
       title="Settings"
     >
       <Card>
