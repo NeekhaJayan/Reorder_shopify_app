@@ -272,6 +272,14 @@ export default function SettingsPage() {
       title="Settings"
     >
       <Card>
+      <style>
+          {`
+            .Polaris-Tabs__Tab--active {
+              color:rgb(10, 10, 10); /* Active tab text color */
+              background-color:rgb(211, 136, 140); /* Optional: active tab background color */
+            }
+          `}
+        </style>
         <Tabs tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
           <div style={{ padding: "16px" }}>
             {selectedTab === 0 && (

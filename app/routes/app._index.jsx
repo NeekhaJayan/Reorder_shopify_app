@@ -450,31 +450,33 @@ async function selectProduct() {
             Smart, Automated Reorder Reminders for Repeat Sales Growth!
       </TitleBar>
       <Card roundedAbove="sm" padding="400">
-        <Bleed marginInline="400" marginBlock="400" >
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Image
-              source="../logo.png" // Replace with a valid image URL
-              alt="A placeholder image with purple and orange stripes"
-              style={{height: 70 ,alignItems: 'center',marginTop:"1rem"}}
-            />
+      <Bleed marginInline="400" marginBlock="400" >
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',marginTop:"3rem"}}>
+            <div style={{ display: "flex",flexDirection: "row", alignItems: "center"}}>
+              <Image
+                source="../logo.png" // Replace with a valid image URL
+                alt="A placeholder image with purple and orange stripes"
+                style={{ height: 70, alignSelf: "flex-end",marginLeft:'0.5rem',marginBottom:'1rem'}}
+              />
+              <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center',marginBottom:'1rem' }}>
+                
+                <Text variant="heading2xl" as="h2" alignment="center">
+                  Welcome to ReOrder Reminder Pro
+                </Text>
+                <Text
+                  variant="headingLg"
+                  as="span"
+                  tone="subdued"
+                  fontWeight="regular"
+                  alignment="center"
+                  padding="400"
+                >
+                  Intelligent, Automated Reorder Reminders for Repeat Sales Growth!
+                </Text>
+                
+              </Box>
+            </div>
           </div>
-          <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center',marginBottom:'1rem' }}>
-            
-            <Text variant="heading2xl" as="h2" alignment="center">
-              Welcome to ReOrder Reminder Pro
-            </Text>
-            <Text
-              variant="headingLg"
-              as="span"
-              tone="subdued"
-              fontWeight="regular"
-              alignment="center"
-              padding="400"
-            >
-              Intelligent, Automated Reorder Reminders for Repeat Sales Growth!
-            </Text>
-            
-          </Box>
         </Bleed>
         <BlockStack gap="400" >
           <div style={{paddingLeft:'5rem',paddingRight:'5rem',paddingTop:'1rem',paddingBottom:'1rem',justifyContent:'center'}}>
