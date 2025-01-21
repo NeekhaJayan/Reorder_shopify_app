@@ -212,6 +212,14 @@ async function selectProduct() {
   }, []);
   // Handle the click of the "Edit" button
   const editReorderDay = useCallback((productId) => {
+    setUpdatedProducts((prevProducts) =>
+      prevProducts.map((product) => {
+        if (product.shopify_product_id === productId) {
+          return { ...product, original_reorder_days: product.reorder_days }; // Save the original value
+        }
+        return product;
+      })
+    );
     setEditingProduct(productId); // Only the selected product should be editable
   }, []);
   // Submit updated reorder interval to the API
@@ -241,11 +249,17 @@ async function selectProduct() {
     setActiveModal(false);
   }, [fetcher]);
   
-  // const confirmReset = (productId) => {
-  //   if (window.confirm("Are you sure you want to reset the reorder days?")) {
-  //     resetReorderfield(productId);
-  //   }
-  // };
+  const onCancel = (productId) => {
+    setUpdatedProducts((prevProducts) =>
+      prevProducts.map((product) => {
+        if (product.shopify_product_id === productId) {
+          return { ...product, reorder_days: product.original_reorder_days }; // Revert to original value
+        }
+        return product;
+      })
+    );
+    setEditingProduct(null); // Exit editing mode
+  };
   const saveReorderDay = useCallback(
     (product) => {
       const updatedProduct = updatedProducts.find(
@@ -293,7 +307,7 @@ async function selectProduct() {
   useEffect(() => {
     if (data?.result) {
       const resultArray = Array.isArray(data.result) ? data.result : [data.result]; // Ensure it's an array
-      setUpdatedProducts((prevData) => [...prevData, ...resultArray]);
+      setUpdatedProducts((prevData) => [...resultArray, ...prevData]);
       setFormProductState(initialState);
       setformState('')
 
@@ -368,12 +382,25 @@ async function selectProduct() {
       <IndexTable.Cell>{new Date(product.created_at).toDateString()}</IndexTable.Cell>
       <IndexTable.Cell><div>
         {isEditing ? (
-          <Button onClick={onSave}>Save</Button> // Save only the selected product
+          <>
+          <Button onClick={onSave} primary>
+            Save
+          </Button>
+          <Button primary onClick={() => onCancel(product.shopify_product_id)}>
+            Cancel
+          </Button>
+        </> // Save only the selected product
         ) : (
           <Button variant="plain" onClick={onEdit}>Edit</Button> // Start editing the specific product
         )}
         <div style={{ display: "inline-block", width: "8px" }}></div> {/* Spacer */}
-        <Button variant="plain" onClick={() => confirmReset(product.shopify_product_id)}>Reset</Button><Modal
+        <Button variant="plain" onClick={() => confirmReset(product.shopify_product_id)}>Reset</Button><style>
+        {`
+          .Polaris-Backdrop {
+            background-color: rgba(0, 0, 0, 0.1); /* Custom backdrop color */
+          }
+        `}
+      </style><Modal
                 size="small"
                 open={activeModal}
                 onClose={toggleModal}

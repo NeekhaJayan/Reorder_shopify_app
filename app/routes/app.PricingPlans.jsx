@@ -37,7 +37,7 @@ const PricingPlans = ({ plan } ) => {
     },
     {
       name: 'Pro Plan',
-      price: '$9.99/mo',
+      price: '$14.99/mo',
       priceValue: 9.99,
       url:"/app/upgrade",
       features: ['Unlimited', true, true,'Editable', true,'Email & Whatsapp'],
@@ -79,7 +79,7 @@ const PricingPlans = ({ plan } ) => {
                       ? plan.features[index] // Show the value for specific features
                       : plan.features[index]
                       ? '✔️'
-                      : '-'}
+                      : '❌'}
                   </div>
                 ))}
               </div>
