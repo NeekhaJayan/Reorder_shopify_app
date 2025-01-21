@@ -139,6 +139,7 @@ export default function SettingsPage() {
   const [isChecked, setIsChecked] = useState(settingDetails?.emailTemplateSettings?.isChecked || true);
   const [files, setFiles] = useState([]);
   const [rejectedFiles, setRejectedFiles] = useState([]);
+  const [imageChanged, setImageChanged] = useState(false);
   const hasError = rejectedFiles.length > 0;
   const [loading, setLoading] = useState(true);
   const fetcher = useFetcher();
@@ -206,7 +207,13 @@ export default function SettingsPage() {
   const handleDrop = useCallback((droppedFiles, acceptedFiles, rejectedFiles) => {
     setFiles((files) => [...files, ...acceptedFiles]);
     setRejectedFiles(rejectedFiles);
+    setImageChanged(true);
   }, []);
+  const handleRemoveImage = () => {
+    if (imageChanged) {
+      setFiles([]); 
+    }
+  };
   const fileUpload = !files.length && <DropZone.FileUpload actionHint="We recommend an image which is 600px wide." />;
   const uploadedFiles = files.length > 0 && (
     <LegacyStack vertical>
@@ -293,8 +300,18 @@ export default function SettingsPage() {
                         <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"general-settings"} />
                         <DropZone label="Logo Image"  onDrop={handleDrop}>
-                        {uploadedFiles}
-                        {fileUpload}
+                          {uploadedFiles ? (
+                            <>
+                              <div style={{display:'flex',justifyContent:'space-evenly'}}>{uploadedFiles}
+                              <Button variant="plain" onClick={handleRemoveImage}>
+                                Remove Image
+                              </Button></div>
+                            </>
+                          ) : (
+                            <>
+                              {fileUpload}
+                            </>
+                          )}
                           
                         </DropZone>
                         

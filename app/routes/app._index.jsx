@@ -226,11 +226,7 @@ async function selectProduct() {
   const resetReorderfield = useCallback((productid) => {
     // Update the state to set reorder_days to null
     setUpdatedProducts((prev) =>
-      prev.map((product) =>
-        product.shopify_product_id === productid
-          ? { ...product, reorder_days: null }
-          : product
-      )
+      prev.filter((product) => product.shopify_product_id !== productid)
     );
   
     // Submit the reset value to the backend
