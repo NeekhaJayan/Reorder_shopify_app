@@ -15,6 +15,7 @@ import {
   Link,
   Bleed,
   Image,
+  MediaCard,
   InlineStack,TextContainer,TextField,Thumbnail,InlineError,IndexTable,EmptyState,Banner,SkeletonPage, SkeletonBodyText, SkeletonDisplayText
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
