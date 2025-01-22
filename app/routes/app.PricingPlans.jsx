@@ -30,14 +30,14 @@ const PricingPlans = ({ plan } ) => {
   const plans = [
     {
       name: 'Free Plan',
-      price: '$0.000',
+      price: '$0.00/month',
       priceValue: 0.0,
       url:"/app/upgrade",
       features: ['5', true, false, '5 days',false,'Email'],
     },
     {
       name: 'Pro Plan',
-      price: '$14.99/mo',
+      price: '$14.99/month',
       priceValue: 9.99,
       url:"/app/upgrade",
       features: ['Unlimited', true, true,'Editable', true,'Email & Whatsapp'],

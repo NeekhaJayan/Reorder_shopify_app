@@ -446,7 +446,7 @@ async function selectProduct() {
             Smart, Automated Reorder Reminders for Repeat Sales Growth!
       </TitleBar>
       <Card roundedAbove="sm" padding="400">
-      <Bleed marginInline="400" marginBlock="400" >
+      {/* <Bleed marginInline="400" marginBlock="400" >
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',marginTop:"3rem"}}>
             <div style={{ display: "flex",flexDirection: "row", alignItems: "center"}}>
               <Image
@@ -473,7 +473,32 @@ async function selectProduct() {
               </Box>
             </div>
           </div>
-        </Bleed>
+      </Bleed> */}
+      <div style={{padding:'1rem 3rem',justifyContent:'center'}}>
+          <MediaCard
+            title={<Text
+              variant="headingLg"
+              as="span"
+              tone="subdued"
+              fontWeight="regular"
+              alignment="center"
+              padding="400"
+            >
+              Intelligent, Automated Reorder Reminders for Repeat Sales Growth!
+            </Text>}  
+          >
+            <img
+              alt=""
+              width="50%"
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center',
+                marginLeft:'0.5rem',
+              }}
+              src="../logo.png?width=1850"
+            />
+          </MediaCard>
+        </div>
         <BlockStack gap="400" >
           <div style={{paddingLeft:'5rem',paddingRight:'5rem',paddingTop:'1rem',paddingBottom:'1rem',justifyContent:'center'}}>
             <Card background="bg-surface-info-active">
