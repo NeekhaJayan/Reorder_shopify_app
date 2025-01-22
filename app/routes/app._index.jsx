@@ -379,7 +379,7 @@ async function selectProduct() {
       <IndexTable.Cell><div>
         {isEditing ? (
           <>
-          <Button onClick={onSave} primary>
+          <Button onClick={onSave} primary style={{ marginRight: "0.4rem" }}>
             Save
           </Button>
           <Button primary onClick={() => onCancel(product.shopify_product_id)}>
@@ -561,7 +561,7 @@ async function selectProduct() {
                         <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
                       </div>
                       <div style={{display:'grid' ,justifyContent:'center'}}>
-                        <Button submit disabled={plan === "FREE" && updatedProducts.length >= 5} >Save</Button> 
+                        <Button variant="secondary" submit disabled={plan === "FREE" && updatedProducts.length >= 5} >Save</Button> 
                         
                         
                       </div>
