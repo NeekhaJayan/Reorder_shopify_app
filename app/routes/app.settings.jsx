@@ -82,38 +82,142 @@ export const action = async ({ request }) => {
       const result = await response.json();
       return { success: result };
     }
-    if (Settings.tab === "general-settings"){
-        
-        const tenDaysAgo = new Date();
-        tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
-        const formattedDate = tenDaysAgo.toISOString(); // Convert to ISO 8601 format
-        try {
-          console.log(admin)
-          const response = await admin.graphql(
-            `#graphql
-            query {
-              orders(first: 10) {
-                edges {
-                  node {
+    if (Settings.tab === "general-settings") {
+      try {
+        const specifiedDate = "2025-01-01"; // Replace with your desired date
+        const firstOrdersCount = 10;
+    
+        // Define the GraphQL query with variables
+        const query = `#graphql
+          query getFilteredOrders($first: Int!) {
+            orders(first: $first, query: "created_at:>=${specifiedDate}AND fulfillment_status:fulfilled") {
+              edges {
+                node {
+                  id
+                  createdAt
+                  billingAddress {
+                    phone
+                  }
+                  shippingAddress {
+                    phone
+                  }
+                   lineItems(first: 10) {
+                      edges {
+                        node {
+                          id
+                          quantity
+                          title
+                          variantTitle
+                          variant {
+                            id
+                          }
+                          product {
+                            id
+                          }
+                        }
+                      }
+                    }
+                  customer {
                     id
-                    
+                    firstName
+                    email
+                    phone
                   }
                 }
               }
-            }`,
-          ); // Ensure `admin` is properly initialized
-          const data = await response.json();
-          const orders = data?.orders?.edges || [];
-
-          console.log("Fetched Orders:", data);
-          if (orders.length === 0) {
-            console.log("No orders found.");
+            }
           }
+        `;
+    
+        // Execute the query with variables
+        const response = await admin.graphql(query, {
+          variables: {
+            first: firstOrdersCount,
+            // Use variables to pass dynamic date
+          },
+        });
+        const transformGraphQLResponse = (graphqlData) => {
+          const orders = graphqlData?.data?.orders?.edges || [];
+          
+          return orders.map(({ node }) => {
+            const {
+              id,
+              createdAt,
+              billingAddress,
+              shippingAddress,
+              lineItems,
+              customer
+            } = node;
+        
+            const lineItemsTransformed = lineItems.edges.map(({ node: item }) => ({
+              product_id: parseInt(item?.product?.id?.split("/").pop() || 0),
+              varient_id: item?.variant
+                ? parseInt(item?.variant?.id?.split("/").pop() || 0)
+                : null,
+              quantity: item?.quantity,
+              status: "fulfilled", // Assuming fulfillment status is "fulfilled"
+              price: "0.00" // Adjust based on actual data if available
+            }));
+        
+            return {
+              shop: Settings.shop, // Replace with your shop name
+              shopify_order_id: parseInt(id.split("/").pop() || 0),
+              customer_id: parseInt(customer?.id?.split("/").pop() || 0),
+              customer_email: customer?.email || "",
+              customer_name: `${customer?.firstName || ""}`,
+              customer_phone: customer?.phone || null,
+              shipping_phone: shippingAddress?.phone || null,
+              billing_phone: billingAddress?.phone || null,
+              line_items: lineItemsTransformed,
+              order_date: createdAt
+            };
+            
+          });
+        };
+    
+        // Ensure response is parsed correctly
+        // const jsonResponse = response.data || response; // Adjust based on how admin.graphql works
+        const jsonResponse = await response.json();
+        const payload = transformGraphQLResponse(jsonResponse);
+        console.log(JSON.stringify(payload, null, 2));
 
-          // Handle pagination if there are more pages
-        } catch (error) {
-          console.error("Error fetching orders:", error);
+        // Check for GraphQL errors
+        if (jsonResponse.errors) {
+          console.error("GraphQL Errors:", jsonResponse.errors);
+          return { error: "Failed to fetch orders", details: jsonResponse.errors };
         }
+
+        fetch('https://reorderappapi.onrender.com/auth/orderSync', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Ensure the correct content type
+          },
+          body: JSON.stringify(payload), // Convert object to JSON string
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              const errorDetails = await response.json();
+              throw new Error(`Error from server: ${response.status} - ${errorDetails.message}`);
+            }
+            return response.json(); // Parse the JSON response from the server
+          })
+          .then((data) => {
+            console.log('Data successfully sent to FastAPI:', data);
+            return { success: "Orders Synced To Database." };
+
+          })
+          .catch((error) => {
+            console.error('Error sending data to FastAPI:', error.message);
+          });
+      
+        
+    
+        
+        
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        return { error: "Failed to fetch orders", details: error.message };
+      }
     }
     
 
@@ -173,6 +277,7 @@ export default function SettingsPage() {
   const handleSync = useCallback(() => {
     const formData = new FormData();
     formData.append("tab", "general-settings");
+    formData.append("shop",shop_domain);
   
     fetcher.submit(formData, {
       method: "POST",
