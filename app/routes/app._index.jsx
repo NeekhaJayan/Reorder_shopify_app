@@ -16,7 +16,7 @@ import {
   Bleed,
   Image,
   MediaCard,
-  InlineStack,TextContainer,TextField,Thumbnail,InlineError,IndexTable,EmptyState,Banner,SkeletonPage, SkeletonBodyText, SkeletonDisplayText
+  InlineStack,ButtonGroup,TextContainer,TextField,Thumbnail,InlineError,IndexTable,EmptyState,Banner,SkeletonPage, SkeletonBodyText, SkeletonDisplayText
 } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
@@ -379,14 +379,14 @@ async function selectProduct() {
       <IndexTable.Cell>{new Date(product.created_at).toDateString()}</IndexTable.Cell>
       <IndexTable.Cell><div>
         {isEditing ? (
-          <>
-          <Button onClick={onSave} primary style={{ marginRight: "0.4rem" }}>
-            Save
-          </Button>
-          <Button primary onClick={() => onCancel(product.shopify_product_id)}>
-            Cancel
-          </Button>
-        </> // Save only the selected product
+          <ButtonGroup>
+            <Button onClick={onSave} variant="primary" >
+              Save
+            </Button>
+            <Button primary onClick={() => onCancel(product.shopify_product_id)}>
+              Cancel
+            </Button>
+          </ButtonGroup> // Save only the selected product
         ) : (
           <Button variant="plain" onClick={onEdit}>Edit</Button> // Start editing the specific product
         )}
@@ -490,7 +490,7 @@ async function selectProduct() {
           >
             <img
               alt=""
-              width="50%"
+              width="100%"
               style={{
                 objectFit: 'cover',
                 objectPosition: 'center',
@@ -562,7 +562,7 @@ async function selectProduct() {
                         <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
                       </div>
                       <div style={{display:'grid' ,justifyContent:'center'}}>
-                        <Button variant="secondary" submit disabled={plan === "FREE" && updatedProducts.length >= 5} >Save</Button> 
+                        <Button variant="primary" submit disabled={plan === "FREE" && updatedProducts.length >= 5} >Save</Button> 
                         
                         
                       </div>
