@@ -32,7 +32,7 @@ export const action = async ({ request }) => {
     line_items: Array.isArray(payload.line_items)
       ? payload.line_items.map(item => ({
           product_id: item.product_id || "Unknown Product ID",
-          varient_id:item.variant_id || "Unknown Varient ID",
+          variant_id:item.variant_id || "Unknown Variant ID",
           quantity: item.quantity || 0,
           status:payload.fulfillment_status || "Unknown ",
           price: item.price || "Unknown Price"
