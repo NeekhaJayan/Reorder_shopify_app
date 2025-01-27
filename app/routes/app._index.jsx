@@ -182,7 +182,7 @@ export default function Index() {
         );
   
         if (existingProduct) {
-          const areVariantsSelected = selectedVariants.every(selectedVariant =>
+          const areVariantsSelected = selectedVariants.some(selectedVariant =>
             existingProduct.variantIds.includes(selectedVariant.id)
           );
   
