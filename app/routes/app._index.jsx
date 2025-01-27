@@ -194,9 +194,14 @@ export default function Index() {
         }
   
         // Prepare product and variant information for state
-        const variantDetails = selectedVariants.map(
-          variant => `${title} - ${variant.title}` // Concatenate product title and variant title
-        );
+        const variantDetails = selectedVariants.map(variant => {
+          // Check if variant.title is present
+          if (variant.title && variant.title.trim() !== "") {
+            return `${title} - ${variant.title}`;
+          } else {
+            return title;
+          }
+        });
         setSelectedProductIds(prev => {
           const updatedSelected = prev.filter(
             selected => selected.productId !== Number(selectedId)
