@@ -187,7 +187,7 @@ export default function Index() {
           );
   
           if (areVariantsSelected) {
-            setBannerMessage(`All variants of "${title}" are already selected.`);
+            setBannerMessage(`One or more variants of "${title}" are already selected`);
             setBannerStatus("critical");
             return;
           }
