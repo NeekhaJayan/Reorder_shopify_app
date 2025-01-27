@@ -60,7 +60,7 @@ export const action = async ({ request }) => {
     const Settings = Object.fromEntries(formData); 
     console.log("Settings.tab:", Settings.tab);
     if (Settings.tab === "template-settings") {
-      setLoading(true);
+      
       const data={emailTemplateSettings:Settings}
       console.log(data);
       const response = await fetch(`https://reorderappapi.onrender.com/auth/save-settings`, {
@@ -74,7 +74,7 @@ export const action = async ({ request }) => {
       if (!response.ok) {
         const errorText = await response.text();
         console.log(errorText);
-        setLoading(false);
+        
         throw new Error(`Failed to save the email template. Please check your content and try again. If the problem persists, contact support for assistance.`);
       
       }
