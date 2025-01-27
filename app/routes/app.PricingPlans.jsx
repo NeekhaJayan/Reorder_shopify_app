@@ -1,7 +1,7 @@
 import {
   Page, Layout, Card, ResourceList, ResourceItem, Text, Button
 } from "@shopify/polaris";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 
 import '../styles/PricingTable.css';
@@ -11,6 +11,7 @@ import '../styles/PricingTable.css';
 const PricingPlans = ({ plan } ) => {
   const fetcher = useFetcher();
   const shopify = useAppBridge();
+  const navigate =useNavigate();
   const handleSubscribe = (price) => {
     const formData = new FormData();
     // formData.append("price", price);
@@ -21,23 +22,22 @@ const PricingPlans = ({ plan } ) => {
     //   headers: { "Content-Type": "application/json" },
     // });
   };
-  
-  console.log(plan);
+  console.log(plan)
   const activePlan = plan 
   ? (plan.toUpperCase() === 'FREE' ? 'Free Plan' : 'Pro Plan') 
   : 'Unknown Plan'; // Handles undefined or null plan
-
+  
   const plans = [
     {
       name: 'Free Plan',
-      price: '$0.00/month',
+      price: '$0.000',
       priceValue: 0.0,
       url:"/app/upgrade",
       features: ['5', true, false, '5 days',false,'Email'],
     },
     {
       name: 'Pro Plan',
-      price: '$14.99/month',
+      price: '$14.99/mo',
       priceValue: 9.99,
       url:"/app/upgrade",
       features: ['Unlimited', true, true,'Editable', true,'Email & Whatsapp'],
@@ -98,13 +98,11 @@ const PricingPlans = ({ plan } ) => {
                   disabled={plan.name === activePlan}
                   onClick={() => {
                     if (plan.name === 'Pro Plan') {
-                      // Navigate to the plan's URL only if it's not the active plan
-                      window.location.href = plan.url;
+                      navigate(plan.url);
                     }
                   }}
                 >
-                  {console.log("Active Plan:", activePlan)}
-                  {console.log("Plan Name:", plan.name)}
+                  
                   {plan.name === activePlan ? 'Current Plan' : 'Choose Plan'}
                 </Button>
               </div>

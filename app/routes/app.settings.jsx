@@ -10,7 +10,7 @@ import {
   Button,
   Tabs,
   FormLayout,
-  Checkbox,
+  
   LegacyStack,
   SkeletonPage, SkeletonBodyText, SkeletonDisplayText,
   Form,
@@ -19,9 +19,9 @@ import {
   DropZone,
 } from "@shopify/polaris";
 import { Icon} from "@shopify/polaris";
-import { InfoIcon,AlertTriangleIcon } from "@shopify/polaris-icons";
+import { InfoIcon ,AlertTriangleIcon} from "@shopify/polaris-icons";
 import React, { useState,useCallback,useEffect } from "react";
-import {useFetcher,useLoaderData} from "@remix-run/react";
+import {useFetcher,useLoaderData,useSearchParams} from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import "react-quill/dist/quill.snow.css";
 import ReorderEmailPreview from "./app.ReorderEmailPreview";
@@ -58,7 +58,7 @@ export const action = async ({ request }) => {
   try {
     const formData = await request.formData();
     const Settings = Object.fromEntries(formData); 
-    // console.log(admin)
+    console.log("Settings.tab:", Settings.tab);
     if (Settings.tab === "template-settings") {
       setLoading(true);
       const data={emailTemplateSettings:Settings}
@@ -203,6 +203,7 @@ export const action = async ({ request }) => {
           })
           .then((data) => {
             console.log('Data successfully sent to FastAPI:', data);
+            setSyncStatus(true);
             return { success: "Orders Synced To Database." };
 
           })
@@ -220,8 +221,9 @@ export const action = async ({ request }) => {
       }
     }
     
+    
 
-    return { success: false, error: "Invalid tab identifier" };
+    return {  error: "Invalid tab identifier" };
   } catch (error) {
     console.error("Error in action handler:", error);
     return { error:" Failed to save the email template. Please check your content and try again. If the problem persists, contact support for assistance. " };
@@ -232,7 +234,10 @@ export const action = async ({ request }) => {
 export default function SettingsPage() {
   const { shop_domain, settingDetails } = useLoaderData();
   const { plan } = useOutletContext();
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
+  const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
+  console.log(selectedTab);
   const [bufferTime, setBufferTime] = useState(settingDetails?.emailTemplateSettings?.bufferTime || '');
   const [coupon, setCoupon] = useState(settingDetails?.emailTemplateSettings?.coupon || '');
   const [discountPercent, setDiscountPercent] = useState(settingDetails?.emailTemplateSettings?.discountPercent || '');
@@ -244,11 +249,16 @@ export default function SettingsPage() {
   const [files, setFiles] = useState([]);
   const [rejectedFiles, setRejectedFiles] = useState([]);
   const [imageChanged, setImageChanged] = useState(false);
-  const hasError = rejectedFiles.length > 0;
+  const [hasError, setHasError] = useState(false);
+  
+  // const hasError = rejectedFiles.length > 0;
   const [loading, setLoading] = useState(true);
+  const [syncStatus,setSyncStatus]=useState(false);
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const uploadFile=settingDetails?.general_settings?.bannerImage
+
+
   useEffect(() => {
     // Optional: Handle the case where settingDetails are fetched but not immediately available
     if (settingDetails) {
@@ -277,8 +287,7 @@ export default function SettingsPage() {
   const handleSync = useCallback(() => {
     const formData = new FormData();
     formData.append("tab", "general-settings");
-    formData.append("shop",shop_domain);
-  
+    formData.append("shop",shop_domain)
     fetcher.submit(formData, {
       method: "POST",
     });
@@ -309,32 +318,61 @@ export default function SettingsPage() {
     [],
   );
  
-  const handleDrop = useCallback((droppedFiles, acceptedFiles, rejectedFiles) => {
-    setFiles((files) => [...files, ...acceptedFiles]);
-    setRejectedFiles(rejectedFiles);
-    setImageChanged(true);
-  }, []);
+  // const handleDrop = useCallback((droppedFiles, acceptedFiles, rejectedFiles) => {
+  //   // const MAX_SIZE_MB = 3 * 1024 * 1024; // 3MB in bytes
+  //   // const recommendedWidth = 600;
+  //   // setHasError("");
+  //   // if (acceptedFiles.length > 0) {
+  //   //   const file = acceptedFiles[0]; // Take the first valid file
+
+  //   //   if (file.size > MAX_SIZE_MB) {
+  //   //     setHasError(`"${file.name}" exceeds the 3MB size limit.`);
+  //   //     return;
+  //   //   }
+  //   setFiles((files) => [...files, ...acceptedFiles]);
+  //   setRejectedFiles(rejectedFiles);
+  //   setImageChanged(true);
+  // }, []);
+  const handleDrop = useCallback(
+    (_droppedFiles, acceptedFiles, rejectedFiles) => {
+      setFiles((files) => [...files, ...acceptedFiles]);
+      setRejectedFiles(rejectedFiles);
+    },
+    [],
+  );
   const handleRemoveImage = () => {
     if (imageChanged) {
       setFiles([]); 
     }
   };
-  const fileUpload = !files.length && <DropZone.FileUpload actionHint="We recommend an image which is 600px wide." />;
+  const fileUpload = (<DropZone.FileUpload actionHint="We recommend an image which is 600px wide." />);
   const uploadedFiles = files.length > 0 && (
     <LegacyStack vertical>
       {files.map((file, index) => (
         <LegacyStack alignment="center" key={index}>
-          {file.url ? (
-          // If the file has a URL, directly use it
-          <Image source={file.url} alt={file.name || 'Uploaded Image'} />
-        ) : (
-          // If the file is a File object, create a URL for it
-          <Image source={window.URL.createObjectURL(file)} alt={file.name} />
+          <Image
+          source={file.url ? file.url : window.URL.createObjectURL(file)}
+          alt={file.name}
+        />
+        {!file.url && (
+          <Button variant="plain" onClick={handleRemoveImage}>
+            Remove Image
+          </Button>
         )}
-          
         </LegacyStack>
       ))}
     </LegacyStack>
+  );
+  const errorMessage = hasError && (
+    <Banner title="The following images couldn’t be uploaded:" tone="critical">
+      <List type="bullet">
+        {rejectedFiles.map((file, index) => (
+          <List.Item key={index}>
+            {`"${file.name}" is not supported. File type must be .gif, .jpg, .png or .svg.`}
+          </List.Item>
+        ))}
+      </List>
+    </Banner>
   );
   const imageUrlForPreview = files.length > 0 && files[0].url ? files[0].url : (files.length > 0 && window.URL.createObjectURL(files[0]));
  
@@ -380,11 +418,11 @@ export default function SettingsPage() {
 
   return (
     <Page
-      backAction={{ content: "Settings", url: "/" }}
+      backAction={{ content: "Settings", url: "/app" }}
       title="Settings"
     >
       <Card>
-      <style>
+        <style>
           {`
             .Polaris-Tabs__Tab--active {
               color:rgb(10, 10, 10); /* Active tab text color */
@@ -404,23 +442,11 @@ export default function SettingsPage() {
                         
                         <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"general-settings"} />
-                        <DropZone label="Logo Image"  onDrop={handleDrop}>
-                          {uploadedFiles ? (
-                            <>
-                              <div style={{display:'flex',justifyContent:'space-evenly'}}>{uploadedFiles}
-                              <Button variant="plain" onClick={handleRemoveImage}>
-                                Remove Image
-                              </Button></div>
-                            </>
-                          ) : (
-                            <>
-                              {fileUpload}
-                            </>
-                          )}
-                          
+                        {errorMessage}
+                        <DropZone accept="image/*" maxSize={3000000} type="image"  label="Logo Image"  onDrop={handleDrop} >
+                        {!files.length?fileUpload: uploadedFiles}
                         </DropZone>
                         
-                        {console.log(plan)}
                         <Bleed marginBlockEnd="400" marginInline="400">
                         <Box borderColor="border"  borderWidth="025"  padding="400" borderRadius="100">
                           <BlockStack gap="200">
@@ -428,16 +454,17 @@ export default function SettingsPage() {
                                 <Text as="h2"  variant="headingMd">
                                         Sync Recent Orders
                                       </Text>
-                                <Text as="h2" variant="headingXs" tone="subdued">
+                                <Text as="h2" variant="headingXs" tone="subdued" style={{marginTop:"1rem"}}>
                                         Sync the last month's orders to ensure reminder emails are sent for recent purchases
-                                      </Text>
+                                  </Text>
                                   <div style={{marginTop:"0.5rem"}}>
-                                  <Button variant="primary" disabled={plan!=='PRO'} onClick={handleSync}  >Sync Now</Button>                                 
+                                  <Button variant="primary" disabled={plan!=='PRO' ||!syncStatus} onClick={handleSync}  >Sync Now</Button>                                 
                                   </div>
                               </Box>
                           </BlockStack>
                         </Box>
                       </Bleed>
+                        
                         
                     </FormLayout>
                   
@@ -569,12 +596,7 @@ export default function SettingsPage() {
                                       name="coupon"
                                       value={coupon}
                                       disabled={plan!== 'PRO'}
-                                      helpText={plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                        <Icon source={AlertTriangleIcon} color="success" />
-                                        <Text as="span" fontWeight="bold">
-                                        Coupons Available in Pro Plan
-                                        </Text>
-                                      </div>):null}
+            
                                       onChange={(value) => setCoupon(value)}
                                       autoComplete="off"
                                     />
@@ -590,7 +612,13 @@ export default function SettingsPage() {
                                       name="discountPercent"
                                       value={discountPercent}
                                       disabled={plan!== 'PRO'}
-                                      
+                                      helpText={plan!== 'FREE'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                        <Icon source={AlertTriangleIcon} color="success" />
+                                        <Text as="span" fontWeight="bold">
+                                        Coupons Available in Pro Plan
+                                        <Button variant="plain"  >Upgrade Now</Button> 
+                                        </Text>
+                                      </div>):null}
                                       onChange={(value) => setDiscountPercent(value)}
                                       autoComplete="off"
                                     />
@@ -617,22 +645,18 @@ export default function SettingsPage() {
                                     value={bufferTime}
                                     disabled={plan!== 'PRO'}
                                     helpText={<div><div>
-                                      Set additional time (in days) before a product runs out to trigger the reorder reminder.
-                                    </div>{plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                      <div><Icon source={AlertTriangleIcon} color="success"/></div>
-                                        
-                                        <Text as="span" fontWeight="bold">
-                                          Buffer Time Editable in Pro Plan
-                                        </Text>
-                                      </div>):null}</div>}
+                                    Set additional time (in days) before a product runs out to trigger the reorder reminder.
+                                  </div>{plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                    <div><Icon source={AlertTriangleIcon} color="success"/></div>
+                                      
+                                      <Text as="span" fontWeight="bold">
+                                        Buffer Time Editable in Pro Plan
+                                      </Text>
+                                    </div>):null}</div>}
                                     onChange={(value) => setBufferTime(value)}
                                     autoComplete="off"
                                   />
-                                  <Tooltip dismissOnMouseOut content="Set additional time (in days) before a product runs out to trigger the reorder reminder, accounting .">
-                                    <div style={{ marginRight: "8px" }}>
-                                      <Icon source={InfoIcon} tone="base" />
-                                    </div>
-                                  </Tooltip>
+                                  
                               </div>
                                 
                               </FormLayout.Group>

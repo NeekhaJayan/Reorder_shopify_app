@@ -1,6 +1,6 @@
 import { useEffect,useState, useCallback } from "react";
 import { json } from "@remix-run/node";
-import {  useFetcher,useLoaderData ,Form} from "@remix-run/react";
+import {  useFetcher,useLoaderData ,Form, useNavigate} from "@remix-run/react";
 
 import {
   Page,
@@ -14,18 +14,19 @@ import {
   Modal,
   Link,
   Bleed,
-  Image,
   MediaCard,
-  InlineStack,ButtonGroup,TextContainer,TextField,Thumbnail,InlineError,IndexTable,EmptyState,Banner,SkeletonPage, SkeletonBodyText, SkeletonDisplayText
+  ButtonGroup,
+  InlineStack,TextContainer,TextField,Thumbnail,InlineError,IndexTable,EmptyState,Banner,SkeletonPage, SkeletonBodyText, SkeletonDisplayText
 } from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
+
 import { authenticate } from "../shopify.server";
 import { ImageIcon } from "@shopify/polaris-icons";
 import { useOutletContext } from '@remix-run/react';
+import { useAppBridge } from "@shopify/app-bridge-react";
 
 
 export const loader = async ({ request }) => {
-  const {admin,session }=await authenticate.admin(request);
+  const {session }=await authenticate.admin(request);
   // console.log(admin,session)
   const shop_domain=session.shop
   const shop_response = await fetch(`https://reorderappapi.onrender.com/auth/shops/${shop_domain}`, {
@@ -57,25 +58,14 @@ export const loader = async ({ request }) => {
 
 export const action = async ({ request }) => {
 
+  let inputData,apiUrl;
+
   const formData = await request.formData();
+  console.log(formData);
   const method = request.method;
-  let inputData
-  // Extract common form data
   const productId = formData.get("productId").replace("gid://shopify/Product/", "");
-  const productTitle=formData.get("productTitle");
   const shopid =formData.get("shopid");
-
-  const reorder_days = parseFloat(formData.get("date"));
-
-  // Construct the product data to send
-  inputData = {
-    shop_id: shopid,
-    shopify_product_id: productId,
-    title:productTitle,
-    reorder_days: reorder_days,
-  };
-console.log(inputData);
-  let apiUrl = "https://reorderappapi.onrender.com/auth/products";
+  
   
 
   // If the request is PATCH, handle updating the product
@@ -85,12 +75,30 @@ console.log(inputData);
      // Update the method to PATCH
      inputData={
       shopify_product_id:productId,
+      shopify_variant_id:formData.get("variantId"),
       reorder_days: parseInt(formData.get("reorder_days"), 10),
     }
     console.log(inputData)
   }
+  else{
+    apiUrl = "https://reorderappapi.onrender.com/auth/products";
+    const variantIds = formData.get("productVariantId").split(",");
+    const productTitles=formData.get("productTitle").split(",");
+    const reorder_days = parseFloat(formData.get("date"));
+    inputData = variantIds.map((variantId, index) => {
+      return {
+        shop_id: shopid,
+        shopify_product_id: productId,
+        shopify_variant_id: variantId.replace("gid://shopify/ProductVariant/", ""),
+        title: productTitles[index], // Assign the correct title for each variant
+        reorder_days: reorder_days,
+      };
+    });
+    console.log(inputData)
+  }
   try {
     // Create a new fetch call for each request
+    
     const response = await fetch(apiUrl, {
       method: method,
       headers: {
@@ -118,15 +126,19 @@ console.log(inputData);
 export default function Index() {
   const {reorderDetails,shopID}=useLoaderData();
   const { plan } = useOutletContext();
+  const navigate=useNavigate();
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const [formState, setformState] = useState('');
   const [loading, setLoading] = useState(true);
+  const [spinner,setSpinner]=useState(false);
+  console.log(plan)
   const initialState = {
     productId: "",
-    productVariantId: "",
+    productVariantIds: "",
     productTitle: "",
     productHandle: "",
+    productVariantDetails:"",
     productAlt: "",
     productImage: "",
   };
@@ -137,49 +149,77 @@ export default function Index() {
   const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
   const handleChange = (value)=>setformState({...formState,date:value})
   const [selectedProductIds, setSelectedProductIds] = useState(
-    reorderDetails.map(product => product.shopify_product_id) // Assuming `savedProducts` contains the list of already saved products
+    reorderDetails.map(product => ({
+      productId: product.shopify_product_id,
+      variantIds: product.selected_variant_ids || [],  // Assuming selected_variant_id is available in reorderDetails
+    }))
   );  // Track selected products
   const [bannerMessage, setBannerMessage] = useState(""); // Store banner message
   const [bannerStatus, setBannerStatus] = useState("");
   
-  
-async function selectProduct() {
+  // {console.log(updatedProducts);}
+  async function selectProduct() {
     try {
       // Open the Shopify resource picker
       const products = await window.shopify.resourcePicker({
         type: "product",
-        action: "select", // 'select' action for choosing a product
+        action: "select",
       });
-
-      // Ensure there is at least one product selected
+  
       if (products && Array.isArray(products) && products.length > 0) {
         const product = products[0];
         const { id, title, variants, images, handle } = product;
-        const selectedId =id.replace("gid://shopify/Product/", "");
-        // Check if this product has already been selected
-        const isProductSelected = selectedProductIds.includes(Number(selectedId));
-        if (isProductSelected) {
-          // If product is already selected, show a toast notification
-          setBannerMessage(`Product "${title}" is already selected.`);
-          setBannerStatus("critical");
-          return;  // Exit function to avoid adding the same product
+        const selectedId = id.replace("gid://shopify/Product/", "");
+  
+        // Check if this product with its selected variants has already been selected
+        const selectedVariants = variants.map(variant => ({
+          id: variant.id.replace("gid://shopify/ProductVariant/", ""),
+          title: variant.title,
+        }));
+  
+        const existingProduct = selectedProductIds.find(
+          selected => selected.productId === Number(selectedId)
+        );
+  
+        if (existingProduct) {
+          const areVariantsSelected = selectedVariants.every(selectedVariant =>
+            existingProduct.variantIds.includes(selectedVariant.id)
+          );
+  
+          if (areVariantsSelected) {
+            setBannerMessage(`All variants of "${title}" are already selected.`);
+            setBannerStatus("critical");
+            return;
+          }
         }
-
-        // If product is not a duplicate, add it to the selected products list
-        setSelectedProductIds(prev => [...prev, Number(selectedId)]);
-
-        // Update the form state with selected product details
+  
+        // Prepare product and variant information for state
+        const variantDetails = selectedVariants.map(
+          variant => `${title} - ${variant.title}` // Concatenate product title and variant title
+        );
+        setSelectedProductIds(prev => {
+          const updatedSelected = prev.filter(
+            selected => selected.productId !== Number(selectedId)
+          );
+  
+          return [
+            ...updatedSelected,
+            { productId: Number(selectedId), variantIds: selectedVariants.map(variant => variant.id) },
+          ];
+        });
+  
+        // Update the form state with product title and variant details
         setFormProductState({
           productId: id,
-          productVariantId: variants[0]?.id,
+          productVariantIds: selectedVariants.map(variant => variant.id), // Array of variant IDs
           productTitle: title,
+          productVariantDetails: variantDetails, // Array of "Product Title - Variant Title"
           productHandle: handle,
           productAlt: images[0]?.altText || '',
           productImage: images[0]?.originalSrc || '',
         });
-
-        // Optional: Show a success message if product was added successfully
-        setBannerMessage(`Product "${title}" selected successfully.`);
+  
+        setBannerMessage(`Product "${title}" with variants selected successfully.`);
         setBannerStatus("success");
       } else {
         console.error("No product selected.");
@@ -192,20 +232,24 @@ async function selectProduct() {
       setBannerStatus("critical");
     }
   }
+  
    // Handle change in reorder_days field
   const [activeModal, setActiveModal] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedVariantId, setSelectedVarientId] = useState(null);
+  
   const toggleModal = useCallback(() => {
             setActiveModal((prev) => !prev);
         }, []);
-  const confirmReset = useCallback((productId) => {
+  const confirmReset = useCallback((productId,variantId) => {
           setSelectedProductId(productId);
+          setSelectedVarientId(variantId);
           toggleModal(); // Open the modal
            }, [toggleModal]);
   const handleReorderChange = useCallback((product_id, value) => {
     setUpdatedProducts((prev) =>
       prev.map((product) =>
-        product.shopify_product_id === product_id
+        product.shopify_variant_id === product_id
           ? { ...product, reorder_days: value }
           : product
       )
@@ -215,7 +259,7 @@ async function selectProduct() {
   const editReorderDay = useCallback((productId) => {
     setUpdatedProducts((prevProducts) =>
       prevProducts.map((product) => {
-        if (product.shopify_product_id === productId) {
+        if (product.shopify_variant_id === productId) {
           return { ...product, original_reorder_days: product.reorder_days }; // Save the original value
         }
         return product;
@@ -224,16 +268,16 @@ async function selectProduct() {
     setEditingProduct(productId); // Only the selected product should be editable
   }, []);
   // Submit updated reorder interval to the API
-  const resetReorderfield = useCallback((productid) => {
+  const resetReorderfield = useCallback((productid,variantid) => {
     // Update the state to set reorder_days to null
     setUpdatedProducts((prev) =>
-      prev.filter((product) => product.shopify_product_id !== productid)
+      prev.filter((product) => product.shopify_variant_id !== variantid)
     );
-  
     // Submit the reset value to the backend
     fetcher.submit(
       {
         productId: productid,
+        variantId:variantid,
         reorder_days: null,
       },
       { method: "patch" }
@@ -243,13 +287,14 @@ async function selectProduct() {
     setEditingProduct(null);
     // setResetProduct(null);
     setSelectedProductId(null);
+    setSelectedVarientId(null);
     setActiveModal(false);
   }, [fetcher]);
   
   const onCancel = (productId) => {
     setUpdatedProducts((prevProducts) =>
       prevProducts.map((product) => {
-        if (product.shopify_product_id === productId) {
+        if (product.shopify_variant_id === productId) {
           return { ...product, reorder_days: product.original_reorder_days }; // Revert to original value
         }
         return product;
@@ -260,23 +305,25 @@ async function selectProduct() {
   const saveReorderDay = useCallback(
     (product) => {
       const updatedProduct = updatedProducts.find(
-        (p) => p.shopify_product_id === product.shopify_product_id
+        (p) => p.shopify_variant_id === product.shopify_variant_id
       );
 
       if (updatedProduct) {
-        setLoading(true);
+        setSpinner(true);
         fetcher.submit(
           {
             productId: updatedProduct.shopify_product_id,
+            variantId: updatedProduct.shopify_variant_id,
             reorder_days: updatedProduct.reorder_days,
           },
           { method: "patch" }
         );
 
         // Optimistically update state
+        
         setUpdatedProducts((prev) =>
           prev.map((p) =>
-            p.shopify_product_id === updatedProduct.shopify_product_id
+            p.shopify_variant_id === updatedProduct.shopify_variant_id
               ? updatedProduct
               : p
           )
@@ -297,7 +344,7 @@ async function selectProduct() {
   }, [reorderDetails]);
   useEffect(() => {
     if (fetcher.state === "idle") {
-      setLoading(false); // Stop loading when fetcher is idle
+      setSpinner(false); // Stop loading when fetcher is idle
     }
   }, [fetcher.state]);
 
@@ -324,8 +371,9 @@ async function selectProduct() {
     </EmptyState>
   );
  
-
+ 
   const ProductTable = ({ productData }) => (
+    
     <IndexTable
       resourceName={{
         singular: "Product",
@@ -337,7 +385,7 @@ async function selectProduct() {
         { title: "Estimated Usage Days" },
         { title: "Date created" },
         {
-          title: loading ? (
+          title: spinner ? (
             <div style={{ display: "flex", alignItems: "center" }}>
               <Spinner size="small" accessibilityLabel="Loading data" />
               <Text variant="bodyMd" as="span" style={{ marginLeft: "8px" }}>
@@ -353,11 +401,11 @@ async function selectProduct() {
     >
       {productData.map((product) => (
         <ProductTableRow
-          key={product.shopify_product_id}
+          key={product.shopify_variant_id}
           product={product}
-          isEditing={editingProduct === product.shopify_product_id}
-          onEdit={() => editReorderDay(product.shopify_product_id)}
-          onReset={() => resetReorderfield(product.shopify_product_id)}
+          isEditing={editingProduct === product.shopify_variant_id}
+          onEdit={() => editReorderDay(product.shopify_variant_id)}
+          onReset={() => resetReorderfield(product.shopify_variant_id)}
           onSave={() => saveReorderDay(product)}
           onReorderChange={handleReorderChange}
         />
@@ -365,14 +413,14 @@ async function selectProduct() {
     </IndexTable>
   );
   
-  // {console.log(productData);}
+  
   const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave, onReorderChange }) => (
-    <IndexTable.Row id={product.shopify_product_id} position={product.shopify_product_id}>
+    <IndexTable.Row id={product.shopify_variant_id} position={product.shopify_variant_id}>
       <IndexTable.Cell>{product.title}</IndexTable.Cell>
       <IndexTable.Cell>
         <TextField
           value={product.reorder_days || ''}
-          onChange={(value) => onReorderChange(product.shopify_product_id, value)} // Update only the edited product
+          onChange={(value) => onReorderChange(product.shopify_variant_id, value)} // Update only the edited product
           disabled={!isEditing} // Enable input only for the product being edited
         />
       </IndexTable.Cell>
@@ -380,31 +428,32 @@ async function selectProduct() {
       <IndexTable.Cell><div>
         {isEditing ? (
           <ButtonGroup>
-            <Button onClick={onSave} variant="primary" >
-              Save
-            </Button>
-            <Button primary onClick={() => onCancel(product.shopify_product_id)}>
-              Cancel
-            </Button>
-          </ButtonGroup> // Save only the selected product
+          <Button onClick={onSave} variant="primary" >
+            Save
+          </Button>
+          <Button primary onClick={() => onCancel(product.shopify_variant_id)}>
+            Cancel
+          </Button>
+        </ButtonGroup> // Save only the selected product
         ) : (
           <Button variant="plain" onClick={onEdit}>Edit</Button> // Start editing the specific product
         )}
         <div style={{ display: "inline-block", width: "8px" }}></div> {/* Spacer */}
-        <Button variant="plain" onClick={() => confirmReset(product.shopify_product_id)}>Reset</Button><style>
+        <Button variant="plain" onClick={() => confirmReset(product.shopify_product_id,product.shopify_variant_id)}>Reset</Button><style>
         {`
           .Polaris-Backdrop {
             background-color: rgba(0, 0, 0, 0.1); /* Custom backdrop color */
           }
         `}
       </style><Modal
+                
                 size="small"
                 open={activeModal}
                 onClose={toggleModal}
                 title="Reset Estimated Usage Days"
                 primaryAction={{
                   content: 'Reset',
-                  onAction: () => resetReorderfield(selectedProductId),
+                  onAction: () => resetReorderfield(selectedProductId,selectedVariantId),
                 }}
                 secondaryAction={{
                   content: 'Cancel',
@@ -443,39 +492,9 @@ async function selectProduct() {
   
   return (
     <Page>
-      <TitleBar title="Welcome to ReOrder Reminder Pro">
-            Smart, Automated Reorder Reminders for Repeat Sales Growth!
-      </TitleBar>
+      
       <Card roundedAbove="sm" padding="400">
-      {/* <Bleed marginInline="400" marginBlock="400" >
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',marginTop:"3rem"}}>
-            <div style={{ display: "flex",flexDirection: "row", alignItems: "center"}}>
-              <Image
-                source="../logo.png" // Replace with a valid image URL
-                alt="A placeholder image with purple and orange stripes"
-                style={{ height: 70, alignSelf: "flex-end",marginLeft:'0.5rem',marginBottom:'1rem'}}
-              />
-              <Box background="bg-surface-secondary" padding="400" style={{ alignItems: 'center',marginBottom:'1rem' }}>
-                
-                <Text variant="heading2xl" as="h2" alignment="center">
-                  Welcome to ReOrder Reminder Pro
-                </Text>
-                <Text
-                  variant="headingLg"
-                  as="span"
-                  tone="subdued"
-                  fontWeight="regular"
-                  alignment="center"
-                  padding="400"
-                >
-                  Intelligent, Automated Reorder Reminders for Repeat Sales Growth!
-                </Text>
-                
-              </Box>
-            </div>
-          </div>
-      </Bleed> */}
-      <div style={{padding:'1rem 3rem',justifyContent:'center'}}>
+        <div style={{padding:'1rem 3rem',justifyContent:'center'}}>
           <MediaCard
             title={<Text
               variant="headingLg"
@@ -500,6 +519,7 @@ async function selectProduct() {
             />
           </MediaCard>
         </div>
+        
         <BlockStack gap="400" >
           <div style={{paddingLeft:'5rem',paddingRight:'5rem',paddingTop:'1rem',paddingBottom:'1rem',justifyContent:'center'}}>
             <Card background="bg-surface-info-active">
@@ -554,7 +574,12 @@ async function selectProduct() {
                     <input
                         type="hidden"
                         name="productTitle"
-                        value={formProductState.productTitle || ""}
+                        value={formProductState.productVariantDetails?formProductState.productVariantDetails.join(','):""}
+                      /> 
+                      <input
+                        type="hidden"
+                        name="productVariantId"
+                        value={formProductState.productVariantIds ? formProductState.productVariantIds.join(',') : ""}
                       /> 
                     </BlockStack>
                     <div style={{marginTop:'5px'}}>
@@ -562,8 +587,7 @@ async function selectProduct() {
                         <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
                       </div>
                       <div style={{display:'grid' ,justifyContent:'center'}}>
-                        <Button variant="primary" submit disabled={plan === "FREE" && updatedProducts.length >= 5} >Save</Button> 
-                        
+                        <Button variant="secondary" submit disabled={plan === "FREE" && updatedProducts.length >= 5}  >Save</Button> 
                         
                       </div>
                     </div>
@@ -592,14 +616,17 @@ async function selectProduct() {
               {updatedProducts.length === 0 ? (
                 <EmptyProductState />
               ) : (
+                
                 <ProductTable productData={updatedProducts} />
+                
               )}
               {plan === "FREE" && updatedProducts.length >= 5 && (
                   <TextContainer>
                     <Banner  tone="info">
                       <p>
                       You’ve reached the maximum number of products allowed for your current plan.
-                      <Link to="/app/settings">Upgrade Now</Link>  to add more.
+                      <Button variant="plain" onClick={() => {
+                      navigate("/app/settings?tab=2");}} >Upgrade Now</Button>  to add more.
                       </p>
                     </Banner>
                   </TextContainer>
