@@ -304,21 +304,26 @@ export default function SettingsPage() {
     fetcher.submit(formData, {
       method: "POST",
     });
-    
+    setProgress(0);
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(interval); // Clear interval when progress reaches 100%
-          setBannerMessage(fetcher.data.message); // Update success message
-          setBannerStatus("success");
+          clearInterval(interval); // Clear interval when progress reaches 100% 
           return 100; // Ensure progress doesn't exceed 100
         }
         return prev + 10; // Increment progress
       });
     }, 500); 
-   setProgress(0);
+    return () => clearInterval(interval);
+   
   }, [fetcher,shop_domain]);  // Add dependencies to the useCallback hook
 
+  useEffect(() => {
+    if (fetcher.data?.message) {
+      setBannerMessage(fetcher.data.message);
+      setBannerStatus("success");
+    }
+  }, [fetcher.data]);
 
   const tabs = [
     {
