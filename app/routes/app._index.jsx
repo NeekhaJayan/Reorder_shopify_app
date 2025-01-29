@@ -279,6 +279,7 @@ export default function Index() {
     // Submit the reset value to the backend
     fetcher.submit(
       {
+        shopId:shopID,
         productId: productid,
         variantId:variantid,
         reorder_days: null,
