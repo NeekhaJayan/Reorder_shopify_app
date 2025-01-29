@@ -10,13 +10,14 @@ import {
   Button,
   Tabs,
   FormLayout,
-  
+  ProgressBar,
   LegacyStack,
   SkeletonPage, SkeletonBodyText, SkeletonDisplayText,
   Form,
   TextField,
   Image,
   DropZone,
+  Banner
 } from "@shopify/polaris";
 import { Icon} from "@shopify/polaris";
 import { InfoIcon ,AlertTriangleIcon} from "@shopify/polaris-icons";
@@ -27,6 +28,7 @@ import "react-quill/dist/quill.snow.css";
 import ReorderEmailPreview from "./app.ReorderEmailPreview";
 import PricingPlans from "./app.PricingPlans";
 import { useOutletContext } from '@remix-run/react';
+import {getShopDetails} from '../utils/shopify';
 
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
@@ -84,10 +86,11 @@ export const action = async ({ request }) => {
     }
     if (Settings.tab === "general-settings") {
       try {
-        const specifiedDate = "2025-01-01"; // Replace with your desired date
+        const shopDetail=await getShopDetails(admin);
+        const created_at=new Date(shopDetail.createdAt);
+        const specifiedDate = new Date(created_at);
+        specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
         const firstOrdersCount = 10;
-    
-        // Define the GraphQL query with variables
         const query = `#graphql
           query getFilteredOrders($first: Int!) {
             orders(first: $first, query: "created_at:>=${specifiedDate}AND fulfillment_status:fulfilled") {
@@ -137,8 +140,8 @@ export const action = async ({ request }) => {
           },
         });
         const transformGraphQLResponse = (graphqlData) => {
-          const orders = graphqlData?.data?.orders?.edges || [];
-          
+        const orders = graphqlData?.data?.orders?.edges || [];
+        
           return orders.map(({ node }) => {
             const {
               id,
@@ -156,7 +159,8 @@ export const action = async ({ request }) => {
                 : null,
               quantity: item?.quantity,
               status: "fulfilled", // Assuming fulfillment status is "fulfilled"
-              price: "0.00" // Adjust based on actual data if available
+              price: "0.00" 
+              // Adjust based on actual data if available
             }));
         
             return {
@@ -175,12 +179,13 @@ export const action = async ({ request }) => {
           });
         };
     
-        // Ensure response is parsed correctly
-        // const jsonResponse = response.data || response; // Adjust based on how admin.graphql works
         const jsonResponse = await response.json();
         const payload = transformGraphQLResponse(jsonResponse);
-        console.log(JSON.stringify(payload, null, 2));
+        console.log(JSON.stringify(payload))
 
+        if (payload.length === 0) {
+          return { message: "No previous Orders to sync" };
+        }
         // Check for GraphQL errors
         if (jsonResponse.errors) {
           console.error("GraphQL Errors:", jsonResponse.errors);
@@ -203,8 +208,9 @@ export const action = async ({ request }) => {
           })
           .then((data) => {
             console.log('Data successfully sent to FastAPI:', data);
-            setSyncStatus(true);
-            return { success: "Orders Synced To Database." };
+            
+            
+            return { message: "Your store is up-to-date with 10 new orders.Customers will recieve reminders on time." };
 
           })
           .catch((error) => {
@@ -237,7 +243,8 @@ export default function SettingsPage() {
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
   const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
-  console.log(selectedTab);
+  const [tabKey, setTabKey] = useState(0);
+  console.log(plan);
   const [bufferTime, setBufferTime] = useState(settingDetails?.emailTemplateSettings?.bufferTime || '');
   const [coupon, setCoupon] = useState(settingDetails?.emailTemplateSettings?.coupon || '');
   const [discountPercent, setDiscountPercent] = useState(settingDetails?.emailTemplateSettings?.discountPercent || '');
@@ -253,12 +260,15 @@ export default function SettingsPage() {
   
   // const hasError = rejectedFiles.length > 0;
   const [loading, setLoading] = useState(true);
-  const [syncStatus,setSyncStatus]=useState(false);
+  
   const fetcher = useFetcher();
   const { data, state } = fetcher;
   const uploadFile=settingDetails?.general_settings?.bannerImage
 
-
+  const [bannerMessage, setBannerMessage] = useState(""); // Store banner message
+  const [bannerStatus, setBannerStatus] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [isSyncDisabled, setIsSyncDisabled] = useState(plan === 'FREE');
   useEffect(() => {
     // Optional: Handle the case where settingDetails are fetched but not immediately available
     if (settingDetails) {
@@ -271,6 +281,7 @@ export default function SettingsPage() {
       setMailServer(settingDetails.email_template_settings?.mail_server || '');
       setPort(settingDetails.email_template_settings?.port || '');
       setIsChecked(settingDetails.email_template_settings?.isChecked || true);
+      setIsSyncDisabled(settingDetails.general_settings.syncStatus);
       if (uploadFile) {
         setFiles([{
           name: settingDetails?.general_settings?.bannerImageName , // You can replace this with the actual file name
@@ -285,13 +296,28 @@ export default function SettingsPage() {
 
 
   const handleSync = useCallback(() => {
+    setBannerMessage("Syncing orders...");
+    setBannerStatus("info");
     const formData = new FormData();
     formData.append("tab", "general-settings");
     formData.append("shop",shop_domain)
     fetcher.submit(formData, {
       method: "POST",
     });
-  }, [fetcher]);  // Add dependencies to the useCallback hook
+    
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval); // Clear interval when progress reaches 100%
+          setBannerMessage(fetcher.data.message); // Update success message
+          setBannerStatus("success");
+          return 100; // Ensure progress doesn't exceed 100
+        }
+        return prev + 10; // Increment progress
+      });
+    }, 500); 
+   setProgress(0);
+  }, [fetcher,shop_domain]);  // Add dependencies to the useCallback hook
 
 
   const tabs = [
@@ -313,11 +339,16 @@ export default function SettingsPage() {
     },
   ];
 
-  const handleTabChange = useCallback(
-    (selectedTab) => setSelectedTab(selectedTab),
-    [],
-  );
+  // const handleTabChange = useCallback(
+  //   (selectedTab) => setSelectedTab(selectedTab),
+  //   [],
+  // );
  
+
+  const handleTabChange = useCallback((selectedTabIndex) => {
+    setSelectedTab(selectedTabIndex);
+    setTabKey(tabKey + 1); // Change the key on each selection
+  }, [tabKey]);
   // const handleDrop = useCallback((droppedFiles, acceptedFiles, rejectedFiles) => {
   //   // const MAX_SIZE_MB = 3 * 1024 * 1024; // 3MB in bytes
   //   // const recommendedWidth = 600;
@@ -430,7 +461,7 @@ export default function SettingsPage() {
             }
           `}
         </style>
-        <Tabs tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
+        <Tabs key={tabKey} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
           <div style={{ padding: "16px" }}>
             {selectedTab === 0 && (
               <Layout>
@@ -457,10 +488,20 @@ export default function SettingsPage() {
                                 <Text as="h2" variant="headingXs" tone="subdued" style={{marginTop:"1rem"}}>
                                         Sync the last month's orders to ensure reminder emails are sent for recent purchases
                                   </Text>
+                                  {progress > 0 && (<ProgressBar progress={progress} />)}
+                                  
                                   <div style={{marginTop:"0.5rem"}}>
-                                  <Button variant="primary" disabled={plan!=='PRO' ||!syncStatus} onClick={handleSync}  >Sync Now</Button>                                 
+                                  <Button variant="primary" disabled={isSyncDisabled} onClick={handleSync}  >Sync Now</Button>                                 
                                   </div>
+                                  {bannerMessage && (
+                                                <Banner
+                                                  title={bannerMessage}
+                                                  status={bannerStatus} // 'success', 'critical', or 'warning'
+                                                  onDismiss={() => setBannerMessage("")} // Dismiss the banner
+                                                />
+                                              )}
                               </Box>
+                              
                           </BlockStack>
                         </Box>
                       </Bleed>
@@ -612,7 +653,7 @@ export default function SettingsPage() {
                                       name="discountPercent"
                                       value={discountPercent}
                                       disabled={plan!== 'PRO'}
-                                      helpText={plan!== 'FREE'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                      helpText={plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                         <Icon source={AlertTriangleIcon} color="success" />
                                         <Text as="span" fontWeight="bold">
                                         Coupons Available in Pro Plan

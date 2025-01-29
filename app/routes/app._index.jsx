@@ -22,7 +22,7 @@ import {
 import { authenticate } from "../shopify.server";
 import { ImageIcon } from "@shopify/polaris-icons";
 import { useOutletContext } from '@remix-run/react';
-import { useAppBridge } from "@shopify/app-bridge-react";
+
 
 
 export const loader = async ({ request }) => {
@@ -65,6 +65,7 @@ export const action = async ({ request }) => {
   const method = request.method;
   const productId = formData.get("productId").replace("gid://shopify/Product/", "");
   const shopid =formData.get("shopid");
+  const productImage=formData.get("productImage")
   
   
 
@@ -74,6 +75,7 @@ export const action = async ({ request }) => {
     apiUrl = `https://reorderappapi.onrender.com/auth/products/${productId}`; // Use specific API endpoint for PATCH
      // Update the method to PATCH
      inputData={
+      shop_id:formData.get("shopId"),
       shopify_product_id:productId,
       shopify_variant_id:formData.get("variantId"),
       reorder_days: parseInt(formData.get("reorder_days"), 10),
@@ -90,7 +92,8 @@ export const action = async ({ request }) => {
         shop_id: shopid,
         shopify_product_id: productId,
         shopify_variant_id: variantId.replace("gid://shopify/ProductVariant/", ""),
-        title: productTitles[index], // Assign the correct title for each variant
+        title: productTitles[index],
+        image_url:productImage ,  // Assign the correct title for each variant
         reorder_days: reorder_days,
       };
     });
@@ -182,26 +185,21 @@ export default function Index() {
         );
   
         if (existingProduct) {
-          const areVariantsSelected = selectedVariants.some(selectedVariant =>
+          const areVariantsSelected = selectedVariants.every(selectedVariant =>
             existingProduct.variantIds.includes(selectedVariant.id)
           );
   
           if (areVariantsSelected) {
-            setBannerMessage(`One or more variants of "${title}" are already selected`);
+            setBannerMessage(`All variants of "${title}" are already selected.`);
             setBannerStatus("critical");
             return;
           }
         }
   
         // Prepare product and variant information for state
-        const variantDetails = selectedVariants.map(variant => {
-          // Check if variant.title is present
-          if (variant.title && variant.title.trim() !== "") {
-            return `${title} - ${variant.title}`;
-          } else {
-            return title;
-          }
-        });
+        const variantDetails = selectedVariants.map(
+          variant => `${title} - ${variant.title}` // Concatenate product title and variant title
+        );
         setSelectedProductIds(prev => {
           const updatedSelected = prev.filter(
             selected => selected.productId !== Number(selectedId)
@@ -317,6 +315,7 @@ export default function Index() {
         setSpinner(true);
         fetcher.submit(
           {
+            shopId:shopID,
             productId: updatedProduct.shopify_product_id,
             variantId: updatedProduct.shopify_variant_id,
             reorder_days: updatedProduct.reorder_days,
@@ -585,15 +584,28 @@ export default function Index() {
                         type="hidden"
                         name="productVariantId"
                         value={formProductState.productVariantIds ? formProductState.productVariantIds.join(',') : ""}
+                      />
+                      <input
+                        type="hidden"
+                        name="productImage"
+                        value={formProductState.productImage ||""}
                       /> 
+                      
                     </BlockStack>
                     <div style={{marginTop:'5px'}}>
                       <div style={{ marginBottom: '1rem' }}>
                         <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
                       </div>
-                      <div style={{display:'grid' ,justifyContent:'center'}}>
-                        <Button variant="secondary" submit disabled={plan === "FREE" && updatedProducts.length >= 5}  >Save</Button> 
-                        
+                      <div style={{ display: 'grid', justifyContent: 'center' }}>
+                        {plan === "FREE" && updatedProducts.length >= 5 ? (
+                          <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
+                            Upgrade Now
+                          </Button>
+                        ) : (
+                          <Button variant="secondary" submit>
+                            Save
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

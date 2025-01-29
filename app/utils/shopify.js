@@ -278,6 +278,27 @@ export const deleteMetafieldDefinition = async (admin) => {
 
  
 };
-
+export const getShopDetails = async (admin) =>{
+  const response_shop = await admin.graphql(
+    `#graphql
+      query {
+        shop {
+        name
+        createdAt
+        domains {
+          url
+        }
+        email
+      }
+    }`,
+    );
+  
+    // Destructure the response
+    const shop_body = await response_shop.json();
+    
+    const shop_data = shop_body;
+    return shop_data.data.shop
+  
+}
 
 
