@@ -287,6 +287,8 @@ export default function SettingsPage() {
           name: settingDetails?.general_settings?.bannerImageName , // You can replace this with the actual file name
           url: uploadFile // This can be a URL or path to the image
         }]);
+      }else {
+        setFiles([]); // Ensure it's empty if no uploaded file exists
       }
     }
     
@@ -354,62 +356,40 @@ export default function SettingsPage() {
     setSelectedTab(selectedTabIndex);
     setTabKey(tabKey + 1); // Change the key on each selection
   }, [tabKey]);
-  // const handleDrop = useCallback((droppedFiles, acceptedFiles, rejectedFiles) => {
-  //   // const MAX_SIZE_MB = 3 * 1024 * 1024; // 3MB in bytes
-  //   // const recommendedWidth = 600;
-  //   // setHasError("");
-  //   // if (acceptedFiles.length > 0) {
-  //   //   const file = acceptedFiles[0]; // Take the first valid file
-
-  //   //   if (file.size > MAX_SIZE_MB) {
-  //   //     setHasError(`"${file.name}" exceeds the 3MB size limit.`);
-  //   //     return;
-  //   //   }
-  //   setFiles((files) => [...files, ...acceptedFiles]);
-  //   setRejectedFiles(rejectedFiles);
-  //   setImageChanged(true);
-  // }, []);
-  const handleDrop = useCallback(
-    (_droppedFiles, acceptedFiles, rejectedFiles) => {
-      setFiles((files) => [...files, ...acceptedFiles]);
-      setRejectedFiles(rejectedFiles);
-    },
-    [],
-  );
+  
+  const handleDrop = useCallback((_droppedFiles, acceptedFiles, rejectedFiles) => {
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
+      setFiles((files) => [...files, ...acceptedFiles]); // Store only the latest uploaded file
+    }
+    setRejectedFiles(rejectedFiles);
+    setImageChanged(true);
+  }, []);
   const handleRemoveImage = () => {
     if (imageChanged) {
       setFiles([]); 
+      setHasError("");
     }
   };
   const fileUpload = (<DropZone.FileUpload actionHint="We recommend an image which is 600px wide." />);
-  const uploadedFiles = files.length > 0 && (
+  const uploadedFiles =Array.isArray(files) && files.length > 0 ? (
     <LegacyStack vertical>
       {files.map((file, index) => (
         <LegacyStack alignment="center" key={index}>
           <Image
-          source={file.url ? file.url : window.URL.createObjectURL(file)}
-          alt={file.name}
-        />
-        {!file.url && (
-          <Button variant="plain" onClick={handleRemoveImage}>
-            Remove Image
-          </Button>
-        )}
+            source={file.url ? file.url : window.URL.createObjectURL(file)}
+            alt={file.name || "Uploaded image"}
+          />
+          {!file.url && (
+            <Button variant="plain" onClick={handleRemoveImage}>
+              Remove Upload
+            </Button>
+          )}
         </LegacyStack>
       ))}
     </LegacyStack>
-  );
-  const errorMessage = hasError && (
-    <Banner title="The following images couldn’t be uploaded:" tone="critical">
-      <List type="bullet">
-        {rejectedFiles.map((file, index) => (
-          <List.Item key={index}>
-            {`"${file.name}" is not supported. File type must be .gif, .jpg, .png or .svg.`}
-          </List.Item>
-        ))}
-      </List>
-    </Banner>
-  );
+  ) : null;
+  
   const imageUrlForPreview = files.length > 0 && files[0].url ? files[0].url : (files.length > 0 && window.URL.createObjectURL(files[0]));
  
   
