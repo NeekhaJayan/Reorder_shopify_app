@@ -458,7 +458,7 @@ export default function SettingsPage() {
                         
                         <input type="hidden" name="shop_name" value={shop_domain} />
                         <input type="hidden" name="tab" value={"general-settings"} />
-                        {errorMessage}
+                        
                         <DropZone accept="image/*" maxSize={3000000} type="image"  label="Logo Image"  onDrop={handleDrop} >
                         {!files.length?fileUpload: uploadedFiles}
                         </DropZone>
