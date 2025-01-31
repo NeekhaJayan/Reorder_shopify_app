@@ -4,7 +4,7 @@ export const action = async ({ request }) => {
   const { shop, topic } = await authenticate.webhook(request);
   // const {admin,session }=await authenticate.admin(request);
   console.log(`Received ${topic} webhook for ${shop}`);
-  fetch('https://reorderappapi.onrender.com/auth//webhook/uninstallApp', {
+  fetch('https://reorderappapi.onrender.com/auth/webhook/uninstallApp', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json', // Ensure the correct content type
