@@ -396,22 +396,29 @@ export default function SettingsPage() {
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     setLoading(true);
+  
     const formData = new FormData();
     formData.append("bannerImage", files[0]); // Ensure files is an array
     formData.append("shop_name", shop_domain);
-    const response = await fetcher.submit(formData, {
-      method: "POST", 
-      action: `https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to upload image. Please check your content and try again. If the problem persists, contact support for assistance.
-`);
+  
+    try {
+      const response = await fetch(`https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`, {
+        method: "POST", 
+        body: formData, 
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to upload image. ${errorText}`);
+      }
+  
+      const result = await response.json();
+      console.log("Upload success:", result);
+      setLoading(false);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setLoading(false);
     }
-
-    const result = await response.json();
-    return { success:result };
   };
 
   if (loading) {
