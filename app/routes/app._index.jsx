@@ -24,25 +24,37 @@ import { ImageIcon } from "@shopify/polaris-icons";
 import { useOutletContext } from '@remix-run/react';
 
 
-
 export const loader = async ({ request }) => {
-  const {session }=await authenticate.admin(request);
-  // console.log(admin,session)
-  const shop_domain=session.shop
-  const shop_response = await fetch(`https://reorderappapi.onrender.com/auth/shops/${shop_domain}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const shop = await shop_response.json();
-  console.log(shop.shop_id)
-  
+  const { session } = await authenticate.admin(request);
+  const shop_domain = session.shop;
+
+  let shop;
+  let retries = 3;
+  let delay = 2000; // 2 seconds delay
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const shop_response = await fetch(`https://reorderappapi.onrender.com/auth/shops/${shop_domain}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (shop_response.ok) {
+      shop = await shop_response.json();
+      if (shop.shop_id) break; // Exit loop if shop ID exists
+    }
+
+    console.log(`Retrying shop fetch: Attempt ${attempt}`);
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
+
+  if (!shop || !shop.shop_id) {
+    throw new Error("Shop data not found in FastAPI after retries");
+  }
+
+  // Fetch products after shop data is confirmed
   const response = await fetch(`https://reorderappapi.onrender.com/auth/products/${shop.shop_id}`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
   });
 
   if (!response.ok) {
@@ -50,10 +62,7 @@ export const loader = async ({ request }) => {
   }
 
   const reorderDetails = await response.json();
-
-  return json({ reorderDetails: reorderDetails,shopID:shop.shop_id });
- 
- 
+  return json({ reorderDetails, shopID: shop.shop_id });
 };
 
 export const action = async ({ request }) => {
