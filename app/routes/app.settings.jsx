@@ -192,7 +192,7 @@ export const action = async ({ request }) => {
           return { error: "Failed to fetch orders", details: jsonResponse.errors };
         }
 
-        fetch('https://reorderappapi.onrender.com/auth/orderSync', {
+        await fetch('https://reorderappapi.onrender.com/auth/orderSync', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', // Ensure the correct content type
