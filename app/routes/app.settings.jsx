@@ -392,7 +392,6 @@ export default function SettingsPage() {
   
   const handleSubmit = async (event) => {
     event.preventDefault(); 
-    setLoading(true);
   
     const formData = new FormData();
     formData.append("bannerImage", files[0]); // Ensure files is an array
@@ -411,10 +410,10 @@ export default function SettingsPage() {
   
       const result = await response.json();
       console.log("Upload success:", result);
-      setLoading(false);
+      
     } catch (error) {
       console.error("Upload failed:", error);
-      setLoading(false);
+     
     }
   };
   

@@ -23,8 +23,9 @@ const ReorderEmailPreview = ({ image_path }) =>{
             padding: 0;
             background-color: #f9fafb;
             color: #202223;
-            height: 100%;
-            overflow: auto;
+            height: auto;
+            min-height: 100%;
+            overflow-y: auto !important;
           }
           .email-container {
             max-width: 600px;
@@ -111,8 +112,11 @@ const ReorderEmailPreview = ({ image_path }) =>{
       </html>
     `;
     const newWindow = window.open("", "Preview", "width=800,height=600,scrollbars=yes,resizable=yes");
-    newWindow.document.write(template);
-    newWindow.document.close();
+    setTimeout(() => {
+      newWindow.document.write(template);
+      newWindow.document.close();
+      newWindow.document.body.style.overflowY = "auto"; // Ensure scrollability
+    }, 100);
   };
   return (
     <Button
