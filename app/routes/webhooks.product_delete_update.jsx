@@ -7,7 +7,7 @@ export const action = async ({ request }) => {
   // See: https://shopify.dev/docs/apps/build/privacy-law-compliance
   console.log(`Received ${topic} webhook for ${shop}`);
   console.log(JSON.stringify(payload, null, 2));
-  if (topic === 'PRODUCT_DELETE') {
+  if (topic === 'PRODUCTS_DELETE') {
     const DeletePayload={
       product_id:payload.id,
       shop:shop
@@ -37,6 +37,8 @@ export const action = async ({ request }) => {
   }
   else{
         const payloadVariantIds = payload.variants?.map((variant) => variant.id) || [];
+        console.log(payloadVariantIds)
+        console.log(payload.id)
         await fetch('https://reorderappapi.onrender.com/auth/webhook/product_update', {
           method: 'DELETE',
           headers: {
