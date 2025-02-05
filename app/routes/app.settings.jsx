@@ -245,11 +245,12 @@ export default function SettingsPage() {
   const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
   const [tabKey, setTabKey] = useState(0);
   console.log(plan);
-  const [bufferTime, setBufferTime] = useState(settingDetails?.emailTemplateSettings?.bufferTime || '');
+  const [bufferTime, setBufferTime] = useState(settingDetails?.emailTemplateSettings?.bufferTime || 5);
   const [coupon, setCoupon] = useState(settingDetails?.emailTemplateSettings?.coupon || '');
   const [discountPercent, setDiscountPercent] = useState(settingDetails?.emailTemplateSettings?.discountPercent || '');
   const [subject, setSubject] = useState(settingDetails?.emailTemplateSettings?.subject || '');
   const [fromName, setFromName] = useState(settingDetails?.emailTemplateSettings?.fromName || '');
+  const [fromEmail, setFromEmail] = useState(settingDetails?.emailTemplateSettings?.fromEmail || '');
   const [mailServer, setMailServer] = useState(settingDetails?.emailTemplateSettings?.mailServer || '');
   const [port, setPort] = useState(settingDetails?.emailTemplateSettings?.port || '');
   const [isChecked, setIsChecked] = useState(settingDetails?.emailTemplateSettings?.isChecked || true);
@@ -273,15 +274,16 @@ export default function SettingsPage() {
     // Optional: Handle the case where settingDetails are fetched but not immediately available
     if (settingDetails) {
       
-      setBufferTime(settingDetails.email_template_settings?.bufferTime || '');
+      setBufferTime(settingDetails.email_template_settings?.bufferTime || 5);
       setCoupon(settingDetails.email_template_settings?.coupon || '');
       setDiscountPercent(settingDetails.email_template_settings?.discountPercent || '');
       setSubject(settingDetails.email_template_settings?.subject || '');
       setFromName(settingDetails.email_template_settings?.fromName || '');
+      setFromEmail(settingDetails.email_template_settings?.fromEmail || '');
       setMailServer(settingDetails.email_template_settings?.mail_server || '');
       setPort(settingDetails.email_template_settings?.port || '');
       setIsChecked(settingDetails.email_template_settings?.isChecked || true);
-      setIsSyncDisabled(settingDetails.general_settings.syncStatus);
+      setIsSyncDisabled(!settingDetails.general_settings.syncStatus);
       if (uploadFile) {
         setFiles([{
           name: settingDetails?.general_settings?.bannerImageName , // You can replace this with the actual file name
@@ -310,23 +312,21 @@ export default function SettingsPage() {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(interval); // Clear interval when progress reaches 100% 
+          clearInterval(interval); // Clear interval when progress reaches 100%
           return 100; // Ensure progress doesn't exceed 100
         }
         return prev + 10; // Increment progress
       });
     }, 500); 
     return () => clearInterval(interval);
-   
   }, [fetcher,shop_domain]);  // Add dependencies to the useCallback hook
 
   useEffect(() => {
-    if (fetcher.data?.message) {
-      setBannerMessage(fetcher.data.message);
-      setBannerStatus("success");
-    }
-  }, [fetcher.data]);
-
+        if (fetcher.data?.message) {
+         setBannerMessage(fetcher.data.message);
+          setBannerStatus("success");
+      }  }, [fetcher.data]);
+     
   const tabs = [
     {
       id: 'general-settings',
@@ -346,17 +346,13 @@ export default function SettingsPage() {
     },
   ];
 
-  // const handleTabChange = useCallback(
-  //   (selectedTab) => setSelectedTab(selectedTab),
-  //   [],
-  // );
  
 
   const handleTabChange = useCallback((selectedTabIndex) => {
     setSelectedTab(selectedTabIndex);
     setTabKey(tabKey + 1); // Change the key on each selection
   }, [tabKey]);
-  
+ 
   const handleDrop = useCallback((_droppedFiles, acceptedFiles, rejectedFiles) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
@@ -365,6 +361,7 @@ export default function SettingsPage() {
     setRejectedFiles(rejectedFiles);
     setImageChanged(true);
   }, []);
+  
   const handleRemoveImage = () => {
     if (imageChanged) {
       setFiles([]); 
@@ -420,6 +417,7 @@ export default function SettingsPage() {
       setLoading(false);
     }
   };
+  
 
   if (loading) {
     return (
@@ -598,18 +596,30 @@ export default function SettingsPage() {
                                   <Icon source={InfoIcon} tone="base" />
                                 </div>
                               </Tooltip>
-                              </div>
-                              <div style={{display: "flex", alignItems: "end",marginTop:'1rem' }}>
                                 <TextField
-                                  type="email"
+                                  type="text"
                                   label="From name"
                                   name="fromName"
                                   value={fromName}
                                   onChange={(value) => setFromName(value)}
-                                  autoComplete="email"
+                                  autoComplete="off"
                                   placeholder="Your Store Name"
                                 />
                                 <Tooltip dismissOnMouseOut content="This is the name that customers will see as the sender of the email (e.g., Your Store Name).">
+                                  <div style={{ marginRight: "8px" }}>
+                                    <Icon source={InfoIcon} tone="base" />
+                                  </div>
+                                </Tooltip>
+                                <TextField
+                                  type="email"
+                                  label="From Email"
+                                  name="fromEmail"
+                                  value={fromEmail}
+                                  onChange={(value) => setFromEmail(value)}
+                                  autoComplete="email"
+                                  placeholder="Your Store Email"
+                                />
+                                <Tooltip dismissOnMouseOut content="This is the email that customers will see as the sender email (e.g., Your Store Name).">
                                   <div style={{ marginRight: "8px" }}>
                                     <Icon source={InfoIcon} tone="base" />
                                   </div>

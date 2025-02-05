@@ -6,6 +6,7 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
+import {getShopDetails} from './utils/shopify';
 
 // import { restResources } from "@shopify/shopify-api/rest/admin/2024-07";
 import prisma from "./db.server";
@@ -32,13 +33,16 @@ const shopify = shopifyApp({
     },
   },
   hooks: {
-    afterAuth: async ({ admin, session }) => {
+    afterAuth: async ({ admin,session }) => {
       await shopify.registerWebhooks({ session });
-      
+      // const shopName = session.shop.split(".")[0];
+      const shopDetail=await getShopDetails(admin);
       const shop_payload_details={
-        shopify_domain: session.shop
+        shopify_domain: session.shop,
+        shop_name:shopDetail.name,
+        email:shopDetail.email
       }
-      fetch('https://reorderappapi.onrender.com/auth/shops/', {
+      await fetch('https://reorderappapi.onrender.com/auth/shops/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Ensure the correct content type
