@@ -5,12 +5,11 @@ export const action = async ({ request }) => {
   // const {admin,session }=await authenticate.admin(request);
   console.log(`Received ${topic} webhook for ${shop}`);
   const shop_domain=shop
-  await fetch('https://reorderappapi.onrender.com/auth/webhook/uninstallApp', {
+  await fetch(`https://reorderappapi.onrender.com/auth/webhook/uninstallApp?shop_domain=${shop_domain}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json', // Ensure the correct content type
-    },
-    body: JSON.stringify({ shop_domain: shop_domain }), // Convert object to JSON string
+    }
   })
     .then(async (response) => {
       if (!response.ok) {
