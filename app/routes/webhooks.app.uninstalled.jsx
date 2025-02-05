@@ -10,7 +10,7 @@ export const action = async ({ request }) => {
     headers: {
       'Content-Type': 'application/json', // Ensure the correct content type
     },
-    body: shop_domain, // Convert object to JSON string
+    body: JSON.stringify({ shop_domain: shop_domain }), // Convert object to JSON string
   })
     .then(async (response) => {
       if (!response.ok) {
