@@ -174,7 +174,7 @@ export default function Index() {
     try {
       // Open the Shopify resource picker
       const products = await window.shopify.resourcePicker({
-        type: "product",
+        type: "variant",
         action: "select",
       });
   
@@ -430,13 +430,16 @@ export default function Index() {
   
   const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave, onReorderChange }) => (
     <IndexTable.Row id={product.shopify_variant_id} position={product.shopify_variant_id}>
-      <IndexTable.Cell>{product.title}</IndexTable.Cell>
-      <IndexTable.Cell>
-        <TextField
+      <IndexTable.Cell><div style={{ whiteSpace: "normal", wordWrap: "break-word", maxWidth: "200px" }}>
+    {product.title}
+  </div></IndexTable.Cell>
+  <IndexTable.Cell><div style={{width: "50px",alignItems:"center"}}> 
+        {isEditing?<TextField
           value={product.reorder_days || ''}
           onChange={(value) => onReorderChange(product.shopify_variant_id, value)} // Update only the edited product
           disabled={!isEditing} // Enable input only for the product being edited
-        />
+        />:product.reorder_days || ''}
+        </div>
       </IndexTable.Cell>
       <IndexTable.Cell>{new Date(product.created_at).toDateString()}</IndexTable.Cell>
       <IndexTable.Cell><div>
