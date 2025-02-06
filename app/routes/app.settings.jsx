@@ -485,7 +485,7 @@ export default function SettingsPage() {
                                   {bannerMessage && (
                                                 <Banner
                                                   title={bannerMessage}
-                                                  status={bannerStatus} // 'success', 'critical', or 'warning'
+                                                  tone={bannerStatus} // 'success', 'critical', or 'warning'
                                                   onDismiss={() => setBannerMessage("")} // Dismiss the banner
                                                 />
                                               )}

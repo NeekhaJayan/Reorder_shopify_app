@@ -174,7 +174,7 @@ export default function Index() {
     try {
       // Open the Shopify resource picker
       const products = await window.shopify.resourcePicker({
-        type: "variant",
+        type: "product",
         action: "select",
       });
   
@@ -188,51 +188,48 @@ export default function Index() {
           id: variant.id.replace("gid://shopify/ProductVariant/", ""),
           title: variant.title,
         }));
-  
-        const existingProduct = selectedProductIds.find(
-          selected => selected.productId === Number(selectedId)
-        );
-  
+        console.log(selectedVariants)
+        console.log(selectedProductIds)
+        if (selectedVariants.length > 1) {
+          setBannerMessage(`You can select only one variant at a time. Please try again.`);
+          setBannerStatus("critical");
+          return;
+      }
+      const singleSelectedVariant = selectedVariants[0];
+      const existingProduct = selectedProductIds.find(selected =>
+        selected.variantIds.includes(singleSelectedVariant.id)
+    );
+    const variantDetails = selectedVariants.map(
+      variant => `${title} - ${variant.title}` // Concatenate product title and variant title
+    );
         if (existingProduct) {
-          const areVariantsSelected = selectedVariants.every(selectedVariant =>
-            existingProduct.variantIds.includes(selectedVariant.id)
-          );
-  
-          if (areVariantsSelected) {
-            setBannerMessage(`All variants of "${title}" are already selected.`);
-            setBannerStatus("critical");
-            return;
-          }
-        }
+          setBannerMessage(`Variant "${variantDetails}" is already selected.`);
+          setBannerStatus("critical");
+          return;
+      }
   
         // Prepare product and variant information for state
-        const variantDetails = selectedVariants.map(
-          variant => `${title} - ${variant.title}` // Concatenate product title and variant title
-        );
+        
         setSelectedProductIds(prev => {
-          const updatedSelected = prev.filter(
-            selected => selected.productId !== Number(selectedId)
-          );
-  
           return [
-            ...updatedSelected,
-            { productId: Number(selectedId), variantIds: selectedVariants.map(variant => variant.id) },
+              ...prev,
+              { productId: Number(selectedId), variantIds: [singleSelectedVariant.id] }, // Store only one variant ID
           ];
-        });
+      });
   
         // Update the form state with product title and variant details
         setFormProductState({
           productId: id,
-          productVariantIds: selectedVariants.map(variant => variant.id), // Array of variant IDs
+          productVariantIds: [singleSelectedVariant.id], // Single variant ID
           productTitle: title,
-          productVariantDetails: variantDetails, // Array of "Product Title - Variant Title"
+          productVariantDetails: [variantDetails], // Single variant detail
           productHandle: handle,
           productAlt: images[0]?.altText || '',
           productImage: images[0]?.originalSrc || '',
-        });
+      });
   
-        setBannerMessage(`Product "${title}" with variants selected successfully.`);
-        setBannerStatus("success");
+      setBannerMessage(`Variant "${variantDetails}" selected successfully.`);
+      setBannerStatus("success");
       } else {
         console.error("No product selected.");
         setBannerMessage("No product selected. Please try again.");
@@ -546,7 +543,7 @@ export default function Index() {
                   {bannerMessage && (
                   <Banner
                     title={bannerMessage}
-                    status={bannerStatus} // 'success', 'critical', or 'warning'
+                    tone={bannerStatus} // 'success', 'critical', or 'warning'
                     onDismiss={() => setBannerMessage("")} // Dismiss the banner
                   />
                 )}
