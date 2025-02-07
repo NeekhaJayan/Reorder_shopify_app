@@ -713,12 +713,12 @@ export default function SettingsPage() {
                         <ReactQuill theme="snow"  name="emailContent" value={mailContent} onChange={setMailContent} style={{ height: "150px",marginBottom: "var(--p-space-500)" }}/>
                         <input type="hidden" name="emailContent" value={mailContent} />
                       </Suspense> */}
-                      {imageUrlForPreview && (
+                      
                       <div style={{ marginTop: "var(--p-space-500)" , textAlign: "center"}}>
                           
                           <ReorderEmailPreview image_path={imageUrlForPreview} />
                       </div>
-                      )}
+                     
                       
                     </FormLayout>
                     
