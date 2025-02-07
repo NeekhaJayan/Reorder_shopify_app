@@ -163,7 +163,7 @@ export default function Index() {
   const [selectedProductIds, setSelectedProductIds] = useState(
     reorderDetails.map(product => ({
       productId: product.shopify_product_id,
-      variantIds: product.selected_variant_ids || [],  // Assuming selected_variant_id is available in reorderDetails
+      variantIds: [product.shopify_variant_id],  // Assuming selected_variant_id is available in reorderDetails
     }))
   );  // Track selected products
   const [bannerMessage, setBannerMessage] = useState(""); // Store banner message
