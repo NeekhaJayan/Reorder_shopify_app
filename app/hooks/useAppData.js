@@ -31,7 +31,7 @@ export function useAppData() {
     const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
     useEffect(() => {
         if (message) {
-          setTimeout(() => setShowBanner(false), 5000); // Auto-hide after 5 sec
+          setTimeout(() => setShowBanner(false), 900000); // Auto-hide after 5 sec
         }
       }, [message]);
     const handleChange = (value)=>{
