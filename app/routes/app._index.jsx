@@ -206,14 +206,14 @@ export default function Index() {
             </Card>
             
             <div className="whatsapp-button">
-          <Link
-            href="https://wa.me/9288003430?text=Hello!%20I'm%20interested%20in%20your%20services"
+          <a
+            href="https://wa.me/6282086660?text=Hello!%20I'm%20interested%20in%20your%20services"
             
             target="_blank"
             rel="noopener noreferrer"
           >
             <img src="../whatsapp.gif" alt="Chat with us on WhatsApp" />
-          </Link>
+          </a>
         </div>        
         </BlockStack>
         
