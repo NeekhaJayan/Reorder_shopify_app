@@ -1,6 +1,7 @@
 import {
   Page, Card, Text, Button,Modal,Icon
 } from "@shopify/polaris";
+import { AlertTriangleIcon } from "@shopify/polaris-icons";
 import { useFetcher} from "@remix-run/react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { usePlanSettings } from "../../hooks/usePlanSettings";
