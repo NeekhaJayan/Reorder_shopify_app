@@ -266,7 +266,7 @@ export function useAppData() {
                     const foundProduct = resultArray.find(
                         (newProduct) => Number(newProduct.shopify_variant_id) === product.shopify_variant_id
                     );
-                    return foundProduct ? { ...product, ...foundProduct } : product;
+                    return foundProduct ? { ...product, ...foundProduct,isNew: true } : product;
                 });
                 console.log(updatedProducts)
                 // Check for truly new products

@@ -5,7 +5,9 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
     return(
         <>
 
-           <IndexTable.Row id={product.shopify_variant_id} position={product.shopify_variant_id}>
+           <IndexTable.Row id={product.shopify_variant_id} position={product.shopify_variant_id} style={{
+              backgroundColor: product.isNew ? "#fffacd" : "transparent", // Light yellow for new rows
+            }}>
                  <IndexTable.Cell><div style={{ whiteSpace: "normal", wordWrap: "break-word", maxWidth: "200px" }}>
                {product.title}
              </div></IndexTable.Cell>
