@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@shopify/polaris";
 
 const ReorderEmailPreview = ({ image_path }) =>{
@@ -23,9 +23,6 @@ const ReorderEmailPreview = ({ image_path }) =>{
             padding: 0;
             background-color: #f9fafb;
             color: #202223;
-            height: auto;
-            min-height: 100%;
-            overflow-y: auto !important;
           }
           .email-container {
             max-width: 600px;
@@ -111,12 +108,9 @@ const ReorderEmailPreview = ({ image_path }) =>{
       </body>
       </html>
     `;
-    const newWindow = window.open("", "Preview", "width=800,height=600,scrollbars=yes,resizable=yes");
-    setTimeout(() => {
-      newWindow.document.write(template);
-      newWindow.document.close();
-      newWindow.document.body.style.overflowY = "auto"; // Ensure scrollability
-    }, 100);
+    const newWindow = window.open("", "Preview", "width=800,height=1000");
+    newWindow.document.write(template);
+    newWindow.document.close();
   };
   return (
     <Button

@@ -1,0 +1,30 @@
+.borderless-textfield input {
+    border: none !important; /* Remove border */
+    background: transparent !important; /* Optional: Remove background */
+    outline: none !important; /* Remove focus outline */
+    box-shadow: none !important; /* Remove any shadow */
+  }
+  .whatsapp-button {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 1000;
+    background-color: #f5cc36;
+    border-radius: 50%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .whatsapp-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .whatsapp-button img {
+    width: 40px; /* Adjust size */
+    height: 40px; /* Adjust size */
+  }
+  

@@ -25,7 +25,7 @@ const shopify = shopifyApp({
     [MONTHLY_PLAN]: {
       lineItems: [
         {
-          amount: 5,
+          amount: 14.99,
           currencyCode: 'USD',
           interval: BillingInterval.Every30Days,
         }

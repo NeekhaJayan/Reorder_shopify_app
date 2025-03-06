@@ -6,7 +6,7 @@ export const action = async ({ request }) => {
   // Implement handling of mandatory compliance topics
   // See: https://shopify.dev/docs/apps/build/privacy-law-compliance
   console.log(`Received ${topic} webhook for ${shop}`);
-  console.log(JSON.stringify(payload, null, 2));
+  // console.log(JSON.stringify(payload, null, 2));
   if (topic === 'PRODUCTS_DELETE') {
     const DeletePayload={
       product_id:payload.id,
@@ -36,6 +36,17 @@ export const action = async ({ request }) => {
       return new Response("Webhook received", { status: 200 });
   }
   else{
+        const previousAttributes = payload.previous_attributes || {};
+        const changedKeys = Object.keys(previousAttributes);
+
+        const isInventoryOnlyUpdate = changedKeys.every(
+          (key) => key.startsWith("variants") && key.includes("inventory_quantity")
+        );
+
+        if (isInventoryOnlyUpdate) {
+          console.log("Ignoring product update triggered only by inventory change.");
+          return new Response("Inventory update ignored", { status: 200 });
+        }
         const payloadVariantIds = payload.variants?.map((variant) => variant.id) || [];
         console.log(payloadVariantIds)
         console.log(payload.id)
