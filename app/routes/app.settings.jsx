@@ -60,7 +60,7 @@ export const action = async ({ request }) => {
 
 export default function SettingsPage() {
   const { shop_domain} = useLoaderData();
-  const { files,progress,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
+  const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
   const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } = useEmailSettings();
   const {selectedTab,tabKey,tabs,handleTabChange,fetcher}=useSettings();
   const { plan } = useOutletContext();
