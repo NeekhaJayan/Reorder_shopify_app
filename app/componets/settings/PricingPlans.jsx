@@ -73,9 +73,9 @@ const PricingPlans = ({ plan } ) => {
         open={activeModal}
         onClose={() => setActiveModal(false)}
         title={
-          <>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Icon source={AlertTriangleIcon} color="warning" /> Confirm Downgrade Subscription
-          </>
+          </div>
         }
         primaryAction={{
           content: "Downgrade to Free Plan",
@@ -93,8 +93,8 @@ const PricingPlans = ({ plan } ) => {
         You're about to downgrade to the Free plan. Your Pro features will remain active until [End Date], after which they will be disabled.
         </p>
         <ul>
-          <li>🔹 No refunds will be issued for the remaining subscription period.</li>
-          <li>🔹 You will lose access to Pro features like .</li>
+          <li>No refunds will be issued for the remaining subscription period.</li>
+          <li>You will lose access to Pro features like .</li>
         </ul>
         <p>Are you sure you want to continue?</p>
         </Modal.Section>
