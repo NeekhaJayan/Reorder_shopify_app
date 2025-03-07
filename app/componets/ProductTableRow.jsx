@@ -6,7 +6,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
         <>
 
            <IndexTable.Row id={product.shopify_variant_id} position={product.shopify_variant_id} style={{
-              backgroundColor: product.isNew ? "#fffacd" : "transparent", // Light yellow for new rows
+              background: product.isNew ?"rgb(241, 230, 126)" : "transparent", // Light yellow for new rows
             }}>
                 <IndexTable.Cell><Thumbnail
                   source={product.image_url}
