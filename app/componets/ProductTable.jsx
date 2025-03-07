@@ -16,9 +16,9 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                 }}
                 itemCount={productData.length}
                 headings={[
+                    { title: "Product Image" },
                     { title: "Product Name" },
                     { title: "Estimated Usage Days" },
-                    { title: "Date created" },
                     {
                     title: spinner ? (
                         <div style={{ display: "flex", alignItems: "center" }}>

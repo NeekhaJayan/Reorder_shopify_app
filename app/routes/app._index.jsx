@@ -39,7 +39,6 @@ export const loader = async ({ request }) => {
     throw new Error("Shop data not found in FastAPI after retries");
   }
   const reorderDetails = await productInstance.getAllProductDetails(shop.shop_id);
-  console.log(shop.buffer_time);
   return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time }); 
  
 };
@@ -212,7 +211,7 @@ export default function Index() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src="../whatsapp.gif" alt="Chat with us on WhatsApp" />
+            <img src="../help.png" alt="Chat with us on WhatsApp" />
           </a>
         </div>        
         </BlockStack>

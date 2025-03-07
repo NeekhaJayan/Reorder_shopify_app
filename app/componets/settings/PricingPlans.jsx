@@ -90,7 +90,7 @@ const PricingPlans = ({ plan } ) => {
       >
         <Modal.Section>
         <p>
-        You're about to downgrade to the Free plan. Your Pro features will remain active until [End Date], after which they will be disabled.
+        You're about to downgrade to the Free plan. Your Pro features will remain active until the end of your current billing cycle, after which they will be disabled.
         </p>
         <ul>
           <li>No refunds will be issued for the remaining subscription period.</li>

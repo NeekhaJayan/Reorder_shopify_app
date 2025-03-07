@@ -70,7 +70,7 @@ export  function useGeneralSettings() {
     
         img.onload = () => {
           if (img.width > 500 || img.height > 500) {
-            setDropzonebanner("Image dimensions should not exceed 500px in width or height.");
+            setDropzonebanner("Please ensure your image dimensions do not exceed 500px in width or height.");
           } else {
             setFiles([file]); // Store only the latest uploaded file// 
           }

@@ -1,4 +1,4 @@
-import {IndexTable,ButtonGroup,Button,Modal,TextField} from "@shopify/polaris";
+import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail} from "@shopify/polaris";
 
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId}) => {
 
@@ -8,6 +8,10 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
            <IndexTable.Row id={product.shopify_variant_id} position={product.shopify_variant_id} style={{
               backgroundColor: product.isNew ? "#fffacd" : "transparent", // Light yellow for new rows
             }}>
+                <IndexTable.Cell><Thumbnail
+                  source={product.image_url}
+                  alt={product.title}
+                /></IndexTable.Cell>
                  <IndexTable.Cell><div style={{ whiteSpace: "normal", wordWrap: "break-word", maxWidth: "200px" }}>
                {product.title}
              </div></IndexTable.Cell>
@@ -19,7 +23,6 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                    />:product.reorder_days || ''}
                    </div>
                  </IndexTable.Cell>
-                 <IndexTable.Cell>{new Date(product.created_at).toDateString()}</IndexTable.Cell>
                  <IndexTable.Cell><div>
                    {isEditing ? (
                      <ButtonGroup>

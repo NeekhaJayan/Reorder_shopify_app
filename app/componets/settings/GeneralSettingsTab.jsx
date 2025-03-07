@@ -17,7 +17,7 @@ import {
 
 const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,loading,setDropzonebanner,setBannerMessage,handleSync,handleSubmit,handleDrop,handleRemoveImage} ) => {
 
-    const fileUpload = (<DropZone.FileUpload actionHint="We recommend an image which is 600px wide." />);
+    const fileUpload = (<DropZone.FileUpload actionHint="We recommend an image which is 500px wide." />);
     const uploadedFiles =Array.isArray(files) && files.length > 0 ? (
         <LegacyStack vertical>
           {files.map((file, index) => (
@@ -29,7 +29,13 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
                 <Button variant="plain" onClick={handleRemoveImage}>
                   Remove Upload
                 </Button>
-              
+                {dropzonebanner && (
+                                                <Banner
+                                                  title={dropzonebanner}
+                                                  tone="Warning" // 'success', 'critical', or 'warning'
+                                                  onDismiss={() => setDropzonebanner("")} // Dismiss the banner
+                                                />
+                                              )}
             </LegacyStack>
           ))}
         </LegacyStack>
@@ -50,13 +56,7 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
                         <DropZone accept="image/*" maxSize={3000000} type="image"  label="Logo Image"  onDrop={handleDrop} >
                         {!files.length?fileUpload: uploadedFiles}
                         </DropZone>
-                        {dropzonebanner && (
-                                                <Banner
-                                                  title={dropzonebanner}
-                                                  tone="Warning" // 'success', 'critical', or 'warning'
-                                                  onDismiss={() => setDropzonebanner("")} // Dismiss the banner
-                                                />
-                                              )}
+                        
                         <Bleed marginBlockEnd="400" marginInline="400">
                         <Box borderColor="border"  borderWidth="025"  padding="400" borderRadius="100">
                           <BlockStack gap="200">

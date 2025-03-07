@@ -125,6 +125,16 @@ export default function SettingsPage() {
           </div>
         </Tabs>
       </Card>
+      <div className="whatsapp-button">
+          <a
+            href="https://wa.me/6282086660?text=Hello!%20I'm%20interested%20in%20your%20services"
+            
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="../help.png" alt="Chat with us on WhatsApp" />
+          </a>
+        </div>      
     </Page>)}
     </>
   );
