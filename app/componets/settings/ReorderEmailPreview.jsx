@@ -18,14 +18,16 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
       <head>
         <title>Reorder Reminder</title>
         <style>
-          body {
+          body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f9fafb;
             color: #202223;
-          }
-          .email-container {
+            height: 100%;
+            overflow: auto;
+          }}
+          .email-container {{
             max-width: 600px;
             margin: 40px auto;
             background: #ffffff;
@@ -33,36 +35,36 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          }
-          .header {
+          }}
+          .header {{
             background-color: #007ace;
             text-align: center;
             padding: 20px;
             color: white;
-          }
-          .header img {
+          }}
+          .header img {{
             max-width: 100px; 
             height: auto;     
-          }
-          .content {
+          }}
+          .content {{
             padding: 20px;
-          }
-          .product-section {
+          }}
+          .product-section {{
             text-align: center;
             margin: 20px 0;
-          }
-          .cta {
+          }}
+          .cta {{
             text-align: center;
             margin: 20px 0;
-          }
-          .cta a {
+          }}
+          .cta a {{
             text-decoration: none;
             color: white;
             background-color: #007ace;
             padding: 10px 20px;
             border-radius: 4px;
-          }
-          .coupon {
+          }}
+          .coupon {{
             text-align: center;
             margin: 10px 0;
             font-size: 14px;
@@ -70,13 +72,13 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
             color: #007ace;
             padding: 10px;
             border-radius: 4px;
-          }
-          .footer {
+          }}
+          .footer {{
             text-align: center;
             padding: 10px;
             font-size: 12px;
             color: #8c9196;
-          }
+          }}
         </style>
       </head>
       <body>
@@ -88,12 +90,22 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
           <div class="content">
             <p>Hello ${placeholders.first_name},</p>
             <p>Your <strong>${placeholders.product_name}</strong> might be running low. Don't worry – you can reorder with just one click!</p>
-            <div class="product-section">
-              <img src="${placeholders.product_Image}" alt="${placeholders.product_name}" />
-              <p><strong>Product Name:</strong> ${placeholders.product_name}</p>
-              <p><strong>Quantity Ordered:</strong> ${placeholders.quantity}</p>
-              <p><strong>Estimated Days Remaining:</strong> ${placeholders.remaining_days}</p>
-            </div>
+            <table class="product-section" align="center" width="100%" cellspacing="0" cellpadding="10" border="0">
+              <tr>
+                <td align="center">
+                  <img src="${placeholders.product_Image}" 
+                      alt="${placeholders.product_name}" 
+                      width="200" height="auto"
+                      style="display: block; max-width: 200px; height: auto; border-radius: 4px;" />
+                </td>
+                <td align="left" width="70%">
+                        <p><strong>Product Name:</strong> ${placeholders.product_name}</p>
+                        <p><strong>Quantity Ordered:</strong>${placeholders.quantity}</p>
+                        <p><strong>Estimated Days Remaining:</strong> ${placeholders.remaining_days}</p>
+                </td>
+                
+              </tr>
+            </table>
             <div class="cta">
               <a href="${placeholders.reorder_url}" target="_blank">Reorder Now and Save 10%</a>
             </div>
