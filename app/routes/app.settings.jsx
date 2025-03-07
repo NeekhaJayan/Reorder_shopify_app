@@ -18,10 +18,11 @@ import '../styles/index.css';
 
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
+
   const shop_domain = session.shop;
   const shop_email=session.email;
   const settingDetails =await settingsInstance.getSettingData(shop_domain);
-  console.log(settingDetails)
+  console.log(session)
   return {shop_domain,settingDetails,shop_email};  
 };
 
