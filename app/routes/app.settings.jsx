@@ -13,6 +13,7 @@ import EmailSettingsTab from "../componets/settings/EmailSettingsTab";
 import GeneralSettingsTab from "../componets/settings/GeneralSettingsTab";
 import {settingsInstance} from "../services/api/SettingService";
 import { orderInstance } from "../services/api/OrderService";
+import { shopInstance } from "../services/api/ShopService";
 import '../styles/index.css';
 
 
