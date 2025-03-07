@@ -10,7 +10,9 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <Thumbnail source={product.image_url} alt={product.title} />
                   </div>
-                  {product.isNew && <Badge tone="attention">New</Badge>}
+                  {product.isNew && (<span style={{ marginLeft: "8px", padding: "2px 6px", backgroundColor: "#f0c040", color: "#000", fontSize: "12px", borderRadius: "5px" }}>
+        New
+      </span>)}
                 </IndexTable.Cell>
                  <IndexTable.Cell><div style={{ whiteSpace: "normal", wordWrap: "break-word", maxWidth: "200px" }}>
                {product.title}
