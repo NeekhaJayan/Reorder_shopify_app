@@ -1,4 +1,4 @@
-import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail} from "@shopify/polaris";
+import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge} from "@shopify/polaris";
 
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId}) => {
 
