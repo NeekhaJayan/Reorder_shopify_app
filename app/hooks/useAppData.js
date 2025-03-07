@@ -48,9 +48,10 @@ export function useAppData() {
             return;
         }
     
-        if (formState.date < 5) {
+        if (formState.date <= bufferTime) {
             setBannerMessage("Estimated Usage Days should be greater than BufferTime!!!");
             setBannerStatus("critical");
+            return;
         } else {
             setBannerMessage(""); // Clear the error if input is valid
             setBannerStatus("");

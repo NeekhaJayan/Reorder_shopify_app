@@ -46,6 +46,7 @@ export const loader = async ({ request }) => {
 export const action = async ({ request }) => {
 
   const formData = await request.formData();
+  const reorderdays = Number(formData.get("date")); 
   const method = request.method;
   let result;
   try{
@@ -54,8 +55,13 @@ export const action = async ({ request }) => {
       console.log(result);
       return {success:"",result:result};
     } else {
-      result = await productInstance.saveProductData(formData);
-      return {success:"Estimated Usage Days saved successfully!",result:result};
+      if (!reorderdays || reorderdays < 5) {
+        return { success: "Estimated Usage Days should be greater than BufferTime!!!" };
+      }
+      
+      const result = await productInstance.saveProductData(formData);
+      return { success: "Estimated Usage Days saved successfully!", result };
+      
     } 
   }catch (error) {
     console.error("Error:", error);
