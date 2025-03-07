@@ -32,7 +32,7 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
                 {dropzonebanner && (
                                                 <Banner
                                                   title={dropzonebanner}
-                                                  tone="Warning" // 'success', 'critical', or 'warning'
+                                                  tone='critical' // 'success', 'critical', or 'warning'
                                                   onDismiss={() => setDropzonebanner("")} // Dismiss the banner
                                                 />
                                               )}

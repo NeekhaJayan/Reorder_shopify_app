@@ -17,9 +17,10 @@ import { orderInstance } from "../services/api/OrderService";
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const shop_domain = session.shop;
+  const shop_email=session.email;
   const settingDetails =await settingsInstance.getSettingData(shop_domain);
   console.log(settingDetails)
-  return {shop_domain,settingDetails};  
+  return {shop_domain,settingDetails,shop_email};  
 };
 
 
@@ -59,7 +60,7 @@ export const action = async ({ request }) => {
 
 
 export default function SettingsPage() {
-  const { shop_domain} = useLoaderData();
+  const { shop_domain,shop_email} = useLoaderData();
   const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
   const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } = useEmailSettings();
   const {selectedTab,tabKey,tabs,handleTabChange,fetcher}=useSettings();
@@ -103,6 +104,7 @@ export default function SettingsPage() {
             )}
             {selectedTab === 1 && (
               <EmailSettingsTab  shop_domain={shop_domain} 
+              shop_email={shop_email}
               plan={plan} 
               fetcher={fetcher} 
               imageUrlForPreview={imageUrlForPreview}

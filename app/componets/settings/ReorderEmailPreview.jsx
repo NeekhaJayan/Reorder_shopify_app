@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Button } from "@shopify/polaris";
 
-const ReorderEmailPreview = ({ image_path }) =>{
+const ReorderEmailPreview = ({ image_path,mail_id }) =>{
     const [placeholders, setPlaceholders] = useState({
       first_name: "John Doe",
-      product_name: "Premium Coffee Beans",
+      product_name: "Swisse Ultiboost Liver Detox Supplement ",
+      product_Image:"https://cdn.shopify.com/s/files/1/0599/1304/4077/files/61nT4LnOLNL._SX679_200x200.jpg?v=1738369571",
       quantity: "2 Bags",
       remaining_days: "5",
       reorder_url: "https://yourstore.com/reorder",
@@ -88,7 +89,7 @@ const ReorderEmailPreview = ({ image_path }) =>{
             <p>Hello ${placeholders.first_name},</p>
             <p>Your <strong>${placeholders.product_name}</strong> might be running low. Don't worry – you can reorder with just one click!</p>
             <div class="product-section">
-              <img src="https://via.placeholder.com/150x150.png?text=Product+Image" alt="${placeholders.product_name}" />
+              <img src="https://via.placeholder.com/150x150.png?text=Product+Image" alt="${placeholders.product_Image}" />
               <p><strong>Product Name:</strong> ${placeholders.product_name}</p>
               <p><strong>Quantity Ordered:</strong> ${placeholders.quantity}</p>
               <p><strong>Estimated Days Remaining:</strong> ${placeholders.remaining_days}</p>
@@ -102,7 +103,7 @@ const ReorderEmailPreview = ({ image_path }) =>{
           </div>
           <div class="footer">
             <p>Powered by ReOrder Reminder Pro</p>
-            <p>Need help? <a href="mailto:support@yourstore.com">support@yourstore.com</a></p>
+            <p>Need help? <a href="mailto:${mail_id}">support@yourstore.com</a></p>
           </div>
         </div>
       </body>
