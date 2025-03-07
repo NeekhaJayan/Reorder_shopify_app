@@ -5,7 +5,7 @@ import { ImageIcon } from "@shopify/polaris-icons";
 
 
 
-const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID} ) => {
+const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleBlur,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID} ) => {
     const navigate =useNavigate();
     const [errors, setErrors] = useState({});
 
@@ -80,7 +80,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
                         </BlockStack>
                         <div style={{marginTop:'5px'}}>
                         <div style={{ marginBottom: '1rem' }}>
-                            <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} autoComplete="off" />                    
+                            <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} onBlur={handleBlur} autoComplete="off" />                    
                         </div>
                         <div style={{ display: 'grid', justifyContent: 'center' }}>
                             {plan === "FREE" && updatedProducts.length >= 5 ? (

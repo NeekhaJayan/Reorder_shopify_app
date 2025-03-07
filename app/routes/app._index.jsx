@@ -90,7 +90,7 @@ export default function Index() {
     toggleModal,
     selectedProductId,
     selectedVariantId,
-    handleChange,plan,showBanner,message,setShowBanner}=useAppData();
+    handleChange,handleBlur,plan,showBanner,message,setShowBanner}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -141,6 +141,7 @@ export default function Index() {
             bannerStatus={bannerStatus}
             setBannerMessage={setBannerMessage}
             handleChange={handleChange}
+            handleBlur={handleBlur}
             formState={formState}
             formProductState={formProductState}
             selectProduct={selectProduct} 

@@ -6,10 +6,9 @@ export const loader = async ({ request }) => {
   let {shop}=session
   let myShop=shop.replace(".myshopify.com","")
   const message = encodeURIComponent(`
-    You're about to downgrade to the Free plan. Your Pro features will remain active until the end of your current billing cycle, after which they will be disabled.
+    Your plan has been downgraded to the Free plan. Your Pro features will remain active until the end of your current billing cycle, after which they will be disabled.
     Please note that no refunds are issued for the remaining subscription period.
     If you ever want to regain access to Pro features, you can upgrade anytime!
-    [Upgrade to Pro]
   `);
   try {
     const billingCheck = await billing.require({

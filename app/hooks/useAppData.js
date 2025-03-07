@@ -34,17 +34,28 @@ export function useAppData() {
           setTimeout(() => setShowBanner(false), 900000); // Auto-hide after 5 sec
         }
       }, [message]);
-    const handleChange = (value)=>{
-        if (!value){
+      const handleChange = (value) => {
+        // Allow only positive numbers
+        if (value < 0) return;
+    
+        setformState((prevState) => ({ ...prevState, date: value }));
+    };
+    
+    const handleBlur = () => {
+        if (!formState.date) {
             setBannerMessage("Should Enter Estimated Usage Days!!!");
             setBannerStatus("critical");
-            return
+            return;
         }
-        if(value<bufferTime){
+    
+        if (formState.date < 5) {
             setBannerMessage("Estimated Usage Days should be greater than BufferTime!!!");
             setBannerStatus("critical");
-            return}
-        setformState({...formState,date:value})}
+        } else {
+            setBannerMessage(""); // Clear the error if input is valid
+            setBannerStatus("");
+        }
+    };
     const [selectedProductIds, setSelectedProductIds] = useState(
         reorderDetails.map(product => ({
         productId: product.shopify_product_id,
@@ -312,7 +323,7 @@ export function useAppData() {
         toggleModal,
         selectedProductId,
         selectedVariantId,
-        handleChange,plan
+        handleChange,handleBlur,plan
         ,showBanner,message,setShowBanner
       };
 };
