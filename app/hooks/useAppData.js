@@ -271,7 +271,7 @@ export function useAppData() {
                 console.log(updatedProducts)
                 // Check for truly new products
                 const existingIds = new Set(prevData.map((p) => Number(p.shopify_variant_id)));
-                const newProducts = resultArray.filter((p) => !existingIds.has(Number(p.shopify_variant_id)));
+                const newProducts = resultArray.filter((p) => !existingIds.has(Number(p.shopify_variant_id))).map((p) => ({ ...p, isNew: true }));
                 console.log(existingIds)
                 console.log(newProducts)
                 return [...newProducts,...updatedProducts]; // Merge updated and new products correctly
