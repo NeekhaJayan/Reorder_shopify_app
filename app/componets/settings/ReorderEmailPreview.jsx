@@ -115,7 +115,7 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
           </div>
           <div class="footer">
             <p>Powered by ReOrder Reminder Pro</p>
-            <p>Need help? <a href="mailto:${mail_id}">support@yourstore.com</a></p>
+            <p>Need help? <a href="mailto:${mail_id}">${mail_id}</a></p>
           </div>
         </div>
       </body>
