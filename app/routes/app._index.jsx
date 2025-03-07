@@ -129,8 +129,8 @@ export default function Index() {
           </MediaCard>
         </div>
         {showBanner && (
-          <Banner status="success" onDismiss={() => setShowBanner(false)}>
-            <p>{message.replace("[End Date]", "your subscription end date here")}</p>
+          <Banner tone="success" onDismiss={() => setShowBanner(false)}>
+            <p>{message}</p>
             <Button variant="plain" onClick={() => {
                       navigate("/app/settings?tab=2");}}>Upgrade to Pro</Button>
           </Banner>
