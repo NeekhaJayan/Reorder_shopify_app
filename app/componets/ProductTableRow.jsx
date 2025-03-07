@@ -7,9 +7,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
 
            <IndexTable.Row id={product.shopify_variant_id} position={product.shopify_variant_id}>
                 <IndexTable.Cell>{product.isNew && (
-                      <span style={{ marginLeft: "8px", padding: "2px 6px", backgroundColor: "#f0c040", color: "#000", fontSize: "12px", borderRadius: "4px" }}>
-                        New
-                      </span>)}
+                      <Badge tone="attention">New</Badge>)}
                       <Thumbnail source={product.image_url} alt={product.title}/>
                 </IndexTable.Cell>
                  <IndexTable.Cell><div style={{ whiteSpace: "normal", wordWrap: "break-word", maxWidth: "200px" }}>
