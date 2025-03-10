@@ -21,16 +21,18 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
             margin: 0;
             padding: 0;
             background-color: #f9fafb;
-            color:rgb(3, 3, 3);
+            color: rgb(3, 3, 3);
+            overflow: auto;
+            height: 100%;
           }
           .email-container {
-            max-width: 600px;
             margin: 40px auto;
             background: #ffffff;
             border: 1px solid #dbe1e6;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            min-height: 1200px; 
           }
           .header {
             background-color: #efeee7;
@@ -93,47 +95,52 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
         </style>
       </head>
       <body>
-        <div class="email-container">
-          <div class="header">
-            <img src=${image_path} alt="Shop Logo" />
-            <h1>${shop}</h1>
-          </div>
-          <div class="content">
-            <p>Hello ${placeholders.first_name},</p>
-            <p>Your <strong>${placeholders.product_name}</strong> might be running low. Don't worry – you can reorder with just one click!</p>
-            <table class="product-section" align="center" width="100%" cellspacing="0" cellpadding="10" border="0">
-              <tr>
-                <td align="center">
-                  <img src="${placeholders.product_Image}" 
-                      alt="${placeholders.product_name}" 
-                      width="200" height="auto"
-                      style="display: block; max-width: 200px; height: auto; border-radius: 4px;" />
-                </td>
-                <td align="left" width="70%">
-                        <p><strong>Product Name:</strong> ${placeholders.product_name}</p>
-                        <p><strong>Quantity Ordered:</strong>${placeholders.quantity}</p>
-                </td>
-                
-              </tr>
-            </table>
-            <div class="cta">
-              <a href="#" target="_blank">Reorder Now and Save 10%</a>
+        <div style="height: 1500px;"> 
+          <div class="email-container">
+            <div class="header">
+              <img src=${image_path} alt="Shop Logo" />
+              <h1>${shop}</h1>
             </div>
-            <div class="coupon">
-              Use code <strong>RESTOCK10</strong> at checkout to save 10% on your reorder.
+            <div class="content">
+              <p>Hello ${placeholders.first_name},</p>
+              <p>Your <strong>${placeholders.product_name}</strong> might be running low. Don't worry – you can reorder with just one click!</p>
+              <table class="product-section" align="center" width="100%" cellspacing="0" cellpadding="10" border="0">
+                <tr>
+                  <td align="center">
+                    <img src="${placeholders.product_Image}" 
+                        alt="${placeholders.product_name}" 
+                        width="200" height="auto"
+                        style="display: block; max-width: 200px; height: auto; border-radius: 4px;" />
+                  </td>
+                  <td align="left" width="70%">
+                          <p><strong>Product Name:</strong> ${placeholders.product_name}</p>
+                          <p><strong>Quantity Ordered:</strong>${placeholders.quantity}</p>
+                  </td>
+                  
+                </tr>
+              </table>
+              <div class="cta">
+                <a href="#" target="_blank">Reorder Now and Save 10%</a>
+              </div>
+              <div class="coupon">
+                Use code <strong>RESTOCK10</strong> at checkout to save 10% on your reorder.
+              </div>
             </div>
-          </div>
-          <div class="footer">
-            <p>Powered by ReOrder Reminder Pro</p>
-            <p>Need help? <a href="mailto:${mail_id}">${mail_id}</a></p>
+            <div class="footer">
+              <p>Powered by ReOrder Reminder Pro</p>
+              <p>Need help? <a href="mailto:${mail_id}">${mail_id}</a></p>
+            </div>
           </div>
         </div>
       </body>
       </html>
     `;
-    const newWindow = window.open("", "Preview", "width=800,height=1000");
-    newWindow.document.write(template);
-    newWindow.document.close();
+    const newWindow = window.open("", "Preview", "width=800,height=1000,scrollbars=yes");
+
+    setTimeout(() => {
+        newWindow.document.write(template);
+        newWindow.document.close();
+    }, 100);
   };
   return (
     <Button
