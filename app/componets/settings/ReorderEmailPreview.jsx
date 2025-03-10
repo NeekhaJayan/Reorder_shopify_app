@@ -56,7 +56,7 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
           .cta a {
             text-decoration: none;
             color: white;
-            background-color: #007ace;
+            background-color: black;
             padding: 10px 20px;
             border-radius: 4px;
           }
@@ -64,11 +64,11 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
               text-align: center;
               margin: 10px 0;
               font-size: 14px;
-              background-color: #eef4fb;
+              background-color:white;
               color:black;
               padding: 10px;
               border-radius: 4px;
-              border: 2px dotted #007ace; /* Dotted border */
+              border: 2px dotted #efeee7; /* Dotted border */
               position: relative;
           }
             
@@ -78,8 +78,8 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
               top: -10px;
               left: 50%;
               transform: translateX(-50%);
-              background-color: #007ace;
-              color: white;
+              background-color:transparent;
+              color: black;
               font-size: 12px;
               padding: 2px 6px;
               border-radius: 4px;

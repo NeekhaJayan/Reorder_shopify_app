@@ -7,6 +7,7 @@ import { useState } from "react";
 const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPreview,subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } ) => {
     const { data, state } = fetcher;
     const [loading, setLoading] = useState(true);
+    const shopname=shop_domain.replace(".myshopify.com","")
     return (
         <>
             <Layout>
@@ -165,7 +166,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
         
                       <div style={{ marginTop: "var(--p-space-500)" , textAlign: "center"}}>
                           
-                          <ReorderEmailPreview image_path={imageUrlForPreview} mail_id={shop_email} shop={shop_domain}/>
+                          <ReorderEmailPreview image_path={imageUrlForPreview} mail_id={shop_email} shop={shopname}/>
                       </div>
                       
                       
