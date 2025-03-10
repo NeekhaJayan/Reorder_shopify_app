@@ -27,7 +27,7 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
                 alt={file.name || "Uploaded image"}
               />
                 <Button variant="plain" onClick={handleRemoveImage}>
-                  Remove Upload
+                  Upload a new logo to update
                 </Button>
                 {dropzonebanner && (
                                                 <Banner

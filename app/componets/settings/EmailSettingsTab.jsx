@@ -52,7 +52,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                               </Tooltip>
                                 <TextField
                                   type="text"
-                                  label="From name"
+                                  label="From Name"
                                   name="fromName"
                                   value={fromName}
                                   onChange={(value) => setFromName(value)}
@@ -165,7 +165,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
         
                       <div style={{ marginTop: "var(--p-space-500)" , textAlign: "center"}}>
                           
-                          <ReorderEmailPreview image_path={imageUrlForPreview} mail_id={shop_email}/>
+                          <ReorderEmailPreview image_path={imageUrlForPreview} mail_id={shop_email} shop={shop_name}/>
                       </div>
                       
                       

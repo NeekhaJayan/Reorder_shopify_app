@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Button } from "@shopify/polaris";
 
-const ReorderEmailPreview = ({ image_path,mail_id }) =>{
+const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
     const [placeholders, setPlaceholders] = useState({
       first_name: "John Doe",
       product_name: "Swisse Ultiboost Liver Detox Supplement ",
       product_Image:"https://cdn.shopify.com/s/files/1/0599/1304/4077/files/61nT4LnOLNL._SX679_200x200.jpg?v=1738369571",
       quantity: "2 Bags",
-      remaining_days: "5",
-      reorder_url: "https://yourstore.com/reorder",
     });
 
     const generatePreview = () => {
@@ -23,7 +21,7 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
             margin: 0;
             padding: 0;
             background-color: #f9fafb;
-            color: #202223;
+            color:rgb(3, 3, 3);
           }
           .email-container {
             max-width: 600px;
@@ -35,10 +33,10 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
           }
           .header {
-            background-color: #007ace;
+            background-color: #efeee7;
             text-align: center;
             padding: 20px;
-            color: white;
+            color: black;
           }
           .header img {
             max-width: 100px; 
@@ -63,13 +61,28 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
             border-radius: 4px;
           }
           .coupon {
-            text-align: center;
-            margin: 10px 0;
-            font-size: 14px;
-            background-color: #eef4fb;
-            color: #007ace;
-            padding: 10px;
-            border-radius: 4px;
+              text-align: center;
+              margin: 10px 0;
+              font-size: 14px;
+              background-color: #eef4fb;
+              color:black;
+              padding: 10px;
+              border-radius: 4px;
+              border: 2px dotted #007ace; /* Dotted border */
+              position: relative;
+          }
+            
+          .coupon::before {
+              content: "Pro Plan Only";
+              position: absolute;
+              top: -10px;
+              left: 50%;
+              transform: translateX(-50%);
+              background-color: #007ace;
+              color: white;
+              font-size: 12px;
+              padding: 2px 6px;
+              border-radius: 4px;
           }
           .footer {
             text-align: center;
@@ -83,7 +96,7 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
         <div class="email-container">
           <div class="header">
             <img src=${image_path} alt="Shop Logo" />
-            <h1>Your Shop</h1>
+            <h1>${shop}</h1>
           </div>
           <div class="content">
             <p>Hello ${placeholders.first_name},</p>
@@ -99,13 +112,12 @@ const ReorderEmailPreview = ({ image_path,mail_id }) =>{
                 <td align="left" width="70%">
                         <p><strong>Product Name:</strong> ${placeholders.product_name}</p>
                         <p><strong>Quantity Ordered:</strong>${placeholders.quantity}</p>
-                        <p><strong>Estimated Days Remaining:</strong>${placeholders.remaining_days}</p>
                 </td>
                 
               </tr>
             </table>
             <div class="cta">
-              <a href="${placeholders.reorder_url}" target="_blank">Reorder Now and Save 10%</a>
+              <a href="#" target="_blank">Reorder Now and Save 10%</a>
             </div>
             <div class="coupon">
               Use code <strong>RESTOCK10</strong> at checkout to save 10% on your reorder.
