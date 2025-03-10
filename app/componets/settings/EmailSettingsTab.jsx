@@ -165,7 +165,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
         
                       <div style={{ marginTop: "var(--p-space-500)" , textAlign: "center"}}>
                           
-                          <ReorderEmailPreview image_path={imageUrlForPreview} mail_id={shop_email} shop={shop_name}/>
+                          <ReorderEmailPreview image_path={imageUrlForPreview} mail_id={shop_email} shop={shop_domain}/>
                       </div>
                       
                       
