@@ -185,7 +185,7 @@ export default function Index() {
                             selected_productId={selectedProductId}
                             selected_variantId={selectedVariantId}/>
               )}
-              {plan === "FREE" && updatedProducts.length >= 5 && (
+              {plan === "FREE" && updatedProducts.length >= 2 && (
                   <TextContainer>
                     <Banner  tone="info">
                       <p>
