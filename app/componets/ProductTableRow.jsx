@@ -24,13 +24,13 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                  </IndexTable.Cell>
                  <IndexTable.Cell>
                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        
+                        <Button onClick={() => showEmailCount(product.shopify_product_id, product.shopify_variant_id)}>
                         <img 
                             src="../email-icon.png" // Replace with your actual image path 
                             alt="Email Icon"
                             style={{ width: "20px", height: "20px" }}
-                        />
-                        <Button onClick={() => showEmailCount(product.shopify_product_id, product.shopify_variant_id)}>
-                            No Of Emails Scheduled
+                        />No Of Emails Scheduled
                         </Button>
                         <Modal size="small" open={activeModal} onClose={toggleModal} title="Emails Scheduled">
                           <Modal.Section>
