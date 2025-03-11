@@ -340,7 +340,6 @@ export function useAppData() {
         confirmReset,
         activeModal,
         toggleModal,
-        emailCount,
         selectedProductId,
         selectedVariantId,
         handleChange,handleBlur,plan
