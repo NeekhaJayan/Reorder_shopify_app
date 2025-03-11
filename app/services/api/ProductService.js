@@ -106,9 +106,15 @@ class Product{
     async fetchEmailCount(product_id,variant_id,shop_id){
         try {
             const url = `https://reorderappapi.onrender.com/auth/email-status_count?product_id=${encodeURIComponent(product_id)}&variant_id=${encodeURIComponent(variant_id)}&shop_id=${encodeURIComponent(shop_id)}`;
-            const response = await fetch(url); // Replace with your actual API endpoint
-            const data = await response.json();
-            return data
+             const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+                
+            });
+            
+            return await response.json();
           } catch (error) {
             console.error("Error fetching email count:", error);
             
