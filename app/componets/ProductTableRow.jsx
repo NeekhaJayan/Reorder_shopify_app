@@ -32,6 +32,11 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                         <Button onClick={() => showEmailCount(product.shopify_product_id, product.shopify_variant_id)}>
                             No Of Emails Scheduled
                         </Button>
+                        <Modal size="small" open={activeModal} onClose={toggleModal} title="Emails Scheduled">
+                          <Modal.Section>
+                            <Text>No of Emails Scheduled: {scheduleEmailCount !== null ? scheduleEmailCount : "Loading..."}/{dispatchEmailCount !== null ? dispatchEmailCount : "Loading..."}</Text>
+                          </Modal.Section>
+                        </Modal>
                     </div>
                  </IndexTable.Cell>
                  <IndexTable.Cell><div>
@@ -78,11 +83,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                  </IndexTable.Cell>
                  
                </IndexTable.Row>
-               <Modal size="small" open={activeModal} onClose={toggleModal} title="Emails Scheduled">
-                  <Modal.Section>
-                    <Text>No of Emails Scheduled: {scheduleEmailCount !== null ? scheduleEmailCount : "Loading..."}/{dispatchEmailCount !== null ? dispatchEmailCount : "Loading..."}</Text>
-                  </Modal.Section>
-                </Modal>
+               
         </>
     );
 };
