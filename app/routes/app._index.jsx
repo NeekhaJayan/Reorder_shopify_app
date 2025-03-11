@@ -181,7 +181,6 @@ export default function Index() {
                             handleReorderChange={handleReorderChange} 
                             activeModal={activeModal} 
                             toggleModal={toggleModal}
-                            emailCount={emailCount}
                             confirmReset={confirmReset}
                             selected_productId={selectedProductId}
                             selected_variantId={selectedVariantId}
