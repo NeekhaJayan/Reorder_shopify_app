@@ -26,7 +26,7 @@ export function usePlanSettings(){
           price: '$0.00/month',
           priceValue: 0.00,
           url:"/app/cancel",
-          features: ['5', true, false, '5 days',false,'Email'],
+          features: ['2', true, false, '5 days',false,'Email'],
         },
         {
           name: 'Pro Plan',

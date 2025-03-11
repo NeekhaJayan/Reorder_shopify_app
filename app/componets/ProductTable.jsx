@@ -2,7 +2,7 @@ import {IndexTable,Spinner,Text} from "@shopify/polaris";
 import ProductTableRow from "./ProductTableRow";
 import SkeletonLoad from "../componets/SkeletonLoad";
 
-const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId}) => {
+const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,showEmailCount,scheduleEmailCount,dispatchEmailCount}) => {
 
     return(
         <>
@@ -19,6 +19,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     { title: "Product Image" },
                     { title: "Product Name" },
                     { title: "Estimated Usage Days" },
+                    {title:"No Of Scheduled Emails"},
                     {
                     title: spinner ? (
                         <div style={{ display: "flex", alignItems: "center" }}>
@@ -49,6 +50,9 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     confirmReset={confirmReset}
                     selectedProductId={selected_productId}
                     selectedVariantId={selected_variantId}
+                    showEmailCount={showEmailCount}
+                    scheduleEmailCount={scheduleEmailCount}
+                    dispatchEmailCount={dispatchEmailCount}
                     />
                 ))}
             </IndexTable>

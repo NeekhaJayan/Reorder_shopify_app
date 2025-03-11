@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback,useLayoutEffect } from "react";
 import { useFetcher, useLoaderData ,useSearchParams} from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
+import { productInstance } from "../services/api/ProductService";
 
 export function useAppData() {
     const {reorderDetails,shopID,bufferTime}=useLoaderData();
@@ -138,6 +139,8 @@ export function useAppData() {
   
    // Handle change in reorder_days field
     const [activeModal, setActiveModal] = useState(false);
+    const [scheduleEmailCount, setScheduleEmailCount] = useState(null);
+    const [dispatchEmailCount, setDispatchEmailCount] = useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [selectedVariantId, setSelectedVarientId] = useState(null);
     
@@ -247,6 +250,21 @@ export function useAppData() {
         },
         [fetcher, updatedProducts]
     );
+    const showEmailCount = async (product_id,variant_id) => {
+        try {
+            const data = await productInstance.fetchEmailCount(product_id,variant_id,shopID); // Ensure this function returns an object with `{ count: number }`
+            console.log("Email count data:", data); // Debugging output
+            setScheduleEmailCount(data["Scheduled Email Count"]);
+            setDispatchEmailCount(data["Dispatched Email Count"]);
+            toggleModal();
+        } catch (error) {
+            console.error("Error fetching email count:", error);
+            setScheduleEmailCount(0);
+            setDispatchEmailCount(0);
+            toggleModal();
+        }
+    };
+    
     useEffect(() => {
         // Simulate loading when index page loads
         if (reorderDetails) {
@@ -322,10 +340,11 @@ export function useAppData() {
         confirmReset,
         activeModal,
         toggleModal,
+        emailCount,
         selectedProductId,
         selectedVariantId,
         handleChange,handleBlur,plan
-        ,showBanner,message,setShowBanner
+        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount
       };
 };
 

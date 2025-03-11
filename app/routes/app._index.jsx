@@ -96,7 +96,7 @@ export default function Index() {
     toggleModal,
     selectedProductId,
     selectedVariantId,
-    handleChange,handleBlur,plan,showBanner,message,setShowBanner}=useAppData();
+    handleChange,handleBlur,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -181,9 +181,13 @@ export default function Index() {
                             handleReorderChange={handleReorderChange} 
                             activeModal={activeModal} 
                             toggleModal={toggleModal}
+                            emailCount={emailCount}
                             confirmReset={confirmReset}
                             selected_productId={selectedProductId}
-                            selected_variantId={selectedVariantId}/>
+                            selected_variantId={selectedVariantId}
+                            showEmailCount={showEmailCount}
+                            scheduleEmailCount={scheduleEmailCount}
+                            dispatchEmailCount={dispatchEmailCount}/>
               )}
               {plan === "FREE" && updatedProducts.length >= 2 && (
                   <TextContainer>

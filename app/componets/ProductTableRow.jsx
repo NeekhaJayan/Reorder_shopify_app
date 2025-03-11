@@ -1,6 +1,6 @@
 import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge} from "@shopify/polaris";
 
-const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId}) => {
+const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,toggleModal,scheduleEmailCount,dispatchEmailCount,showEmailCount,confirmReset,selectedProductId,selectedVariantId}) => {
 
     return(
         <>
@@ -21,6 +21,18 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                      disabled={!isEditing} // Enable input only for the product being edited
                    />:product.reorder_days || ''}
                    </div>
+                 </IndexTable.Cell>
+                 <IndexTable.Cell>
+                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <img 
+                            src="../email-icon.png" // Replace with your actual image path 
+                            alt="Email Icon"
+                            style={{ width: "20px", height: "20px" }}
+                        />
+                        <Button onClick={() => showEmailCount(product.shopify_product_id, product.shopify_variant_id)}>
+                            No Of Emails Scheduled
+                        </Button>
+                    </div>
                  </IndexTable.Cell>
                  <IndexTable.Cell><div>
                    {isEditing ? (
@@ -66,7 +78,11 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                  </IndexTable.Cell>
                  
                </IndexTable.Row>
-              
+               <Modal size="small" open={activeModal} onClose={toggleModal} title="Emails Scheduled">
+                  <Modal.Section>
+                    <Text>No of Emails Scheduled: {scheduleEmailCount !== null ? scheduleEmailCount : "Loading..."}/{dispatchEmailCount !== null ? dispatchEmailCount : "Loading..."}</Text>
+                  </Modal.Section>
+                </Modal>
         </>
     );
 };
