@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback,useLayoutEffect } from "react";
 import { useFetcher, useLoaderData ,useSearchParams} from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
-import { productInstance } from "../services/api/ProductService";
 
 export function useAppData() {
     const {reorderDetails,shopID,bufferTime}=useLoaderData();
@@ -256,12 +255,15 @@ export function useAppData() {
     );
     const showEmailCount = async (product_id,variant_id) => {
         try {
-            const data =await productInstance.fetchEmailCount(product_id,variant_id,shopID); // Ensure this function returns an object with `{ count: number }`
-            console.log("Email count data:", data); // Debugging output
-            console.log(data.Dispatched_Count);
-            setScheduleEmailCount(data.Scheduled_Count);
-            setDispatchEmailCount(data.Dispatched_Count);
-            togglePopoverActive(variant_id)
+            fetcher.submit(
+                {
+                    shopId: shopID,
+                    productId: product_id,
+                    variantId: variant_id,
+                },
+                { method: "post" }
+            );
+            togglePopoverActive(variant_id);
         } catch (error) {
             console.error("Error fetching email count:", error);
             setPopoverActive(null);
@@ -316,7 +318,14 @@ export function useAppData() {
             setformState('');
         }
     }, [data]);
+    useEffect(() => {
+        if (fetcher.data) {
+            console.log("Fetched email count:", fetcher.data);
     
+            setScheduleEmailCount(fetcher.data.Scheduled_Count);
+            setDispatchEmailCount(fetcher.data.Dispatched_Count);
+        }
+    }, [fetcher.data]);
     
     console.log(scheduleEmailCount,dispatchEmailCount)
 

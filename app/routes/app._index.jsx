@@ -54,8 +54,8 @@ export const action = async ({ request }) => {
       result = await productInstance.updateProductData(formData);
       console.log(result);
       return {success:"",result:result};
-    } else {
-      if (!reorderdays || reorderdays < 5) {
+    } else if (method === "POST" && reorderdays) {
+      if (!reorderdays || reorderdays <5 ) {
         return { success: "Estimated Usage Days should be greater than BufferTime!!!" };
       }
       
@@ -63,6 +63,10 @@ export const action = async ({ request }) => {
       return { success: "Estimated Usage Days saved successfully!", result };
       
     } 
+    else{
+      const result_data =await productInstance.fetchEmailCount(product_id,variant_id,shopID);
+      return { success: "", result_data };
+    }
   }catch (error) {
     console.error("Error:", error);
     return { error: "Failed to save Estimated Usage Days. Please check your input and try again. If the issue persists, contact support for assistance" };
