@@ -64,7 +64,7 @@ export const action = async ({ request }) => {
       
     } 
     else{
-      const result_data =await productInstance.fetchEmailCount(product_id,variant_id,shopID);
+      const result_data =await productInstance.fetchEmailCount(formData);
       return { success: "", result_data };
     }
   }catch (error) {

@@ -103,9 +103,12 @@ class Product{
             return { error: error.message }; 
         }
     }
-    async fetchEmailCount(product_id,variant_id,shop_id){
+    async fetchEmailCount(formData){
         try {
-            const url = `https://reorderappapi.onrender.com/auth/email-status_count?product_id=${encodeURIComponent(product_id)}&variant_id=${encodeURIComponent(variant_id)}&shop_id=${encodeURIComponent(shop_id)}`;
+            const product_id=formData.get("productId")
+            const variant_id=formData.get("variantId")
+            const shop_id=formData.get("shopId")
+            const url = `https://reorderappapi.onrender.com/auth/email-status_count?product_id=${product_id}&variant_id=${variant_id}&shop_id=${shop_id}`;
              const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -114,7 +117,8 @@ class Product{
                 
             });
             
-            return await response.json();
+            const data= await response.json();
+            return data
           } catch (error) {
             console.error("Error fetching email count:", error);
             
