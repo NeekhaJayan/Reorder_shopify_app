@@ -65,7 +65,10 @@ export const action = async ({ request }) => {
     } 
     else{
       const result_data =await productInstance.fetchEmailCount(formData);
-      return { success: "", result_data };
+      return json({
+        Scheduled_Count: result_data.Scheduled_Count || 0,
+        Dispatched_Count: result_data.Dispatched_Count || 0
+    });
     }
   }catch (error) {
     console.error("Error:", error);
