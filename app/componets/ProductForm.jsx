@@ -11,7 +11,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
 
     return (
     <>
-        <Card background="bg-surface-info-active">
+        <Card background="text-critical">
                     <fetcher.Form method="post">
                     <input type="hidden" name="shopid" value={shopID} />
                     <BlockStack gap="500" >
