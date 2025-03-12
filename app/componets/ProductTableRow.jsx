@@ -26,7 +26,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         
                         
-                          <Popover
+                 <Popover
                             active={popoverActive === product.shopify_variant_id}
                             activator={
                               <Button onClick={() => {

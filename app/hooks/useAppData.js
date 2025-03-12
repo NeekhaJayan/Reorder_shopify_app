@@ -138,7 +138,8 @@ export function useAppData() {
   
    // Handle change in reorder_days field
     const [activeModal, setActiveModal] = useState(false);
-    const [popoverActive, setPopoverActive] = useState(null);   
+    const [popoverActive, setPopoverActive] = useState(null);  
+    const [isFetchingEmailCount, setIsFetchingEmailCount] = useState(false); 
     const [scheduleEmailCount, setScheduleEmailCount] = useState(null);
     const [dispatchEmailCount, setDispatchEmailCount] = useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
@@ -255,6 +256,7 @@ export function useAppData() {
     );
     const showEmailCount = async (product_id,variant_id) => {
         try {
+            setIsFetchingEmailCount(true);
             fetcher.submit(
                 {
                     shopId: shopID,
@@ -263,9 +265,12 @@ export function useAppData() {
                 },
                 { method: "post" }
             );
-            togglePopoverActive(variant_id);
+            setSelectedProductId(product_id);
+            setSelectedVarientId(variant_id);
+            
         } catch (error) {
             console.error("Error fetching email count:", error);
+            setIsFetchingEmailCount(false);
             setPopoverActive(null);
             
         }
@@ -283,12 +288,13 @@ export function useAppData() {
         }
     }, [fetcher.state]);
     useEffect(() => {
+        if (isFetchingEmailCount) return;
         if (fetcher.state === "submitting" || fetcher.state === "loading") {
             setSpinner(true); // Start loading spinner
         } else {
             setSpinner(false); // Stop spinner when data is ready
         }
-    }, [fetcher.state]);
+    }, [fetcher.state, isFetchingEmailCount]);
     
     useLayoutEffect(() => {
         console.log(data);
@@ -308,8 +314,6 @@ export function useAppData() {
                 // Check for truly new products
                 const existingIds = new Set(prevData.map((p) => Number(p.shopify_variant_id)));
                 const newProducts = resultArray.filter((p) => !existingIds.has(Number(p.shopify_variant_id))).map((p) => ({ ...p, isNew: true }));
-                console.log(existingIds)
-                console.log(newProducts)
                 return [...newProducts,...updatedProducts]; // Merge updated and new products correctly
             });
     
@@ -317,15 +321,18 @@ export function useAppData() {
             setFormProductState(initialState);
             setformState('');
         }
-    }, [data]);
-    useEffect(() => {
         if (fetcher.data) {
             console.log("Fetched email count:", fetcher.data);
-    
+            
             setScheduleEmailCount(fetcher.data.Scheduled_Count);
             setDispatchEmailCount(fetcher.data.Dispatched_Count);
+            togglePopoverActive(selectedVariantId);
+        
+            setSelectedProductId(null);
+            setSelectedVarientId(null);
         }
-    }, [fetcher.data]);
+    }, [data]);
+    
     
     console.log(scheduleEmailCount,dispatchEmailCount)
 
