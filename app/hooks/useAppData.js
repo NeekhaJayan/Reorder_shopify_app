@@ -326,7 +326,9 @@ export function useAppData() {
             
             setScheduleEmailCount(fetcher.data.Scheduled_Count);
             setDispatchEmailCount(fetcher.data.Dispatched_Count);
-            togglePopoverActive(selectedVariantId);
+            if (popoverActive !== selectedVariantId) {
+                togglePopoverActive(selectedVariantId);
+            }
         
             setSelectedProductId(null);
             setSelectedVarientId(null);
