@@ -2,7 +2,7 @@ import {IndexTable,Spinner,Text} from "@shopify/polaris";
 import ProductTableRow from "./ProductTableRow";
 import SkeletonLoad from "../componets/SkeletonLoad";
 
-const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,showEmailCount,scheduleEmailCount,dispatchEmailCount}) => {
+const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,popoverActive,togglePopoverActive,toggleModal,confirmReset,selected_productId,selected_variantId,showEmailCount,scheduleEmailCount,dispatchEmailCount}) => {
 
     return(
         <>
@@ -19,7 +19,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     { title: "Product Image" },
                     { title: "Product Name" },
                     { title: "Estimated Usage Days" },
-                    {title:"No Of Scheduled Emails"},
+                    {title:"Scheduled Emails"},
                     {
                     title: spinner ? (
                         <div style={{ display: "flex", alignItems: "center" }}>
@@ -46,6 +46,8 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     onCancel={()=>cancelReorderDays(product.shopify_variant_id)}
                     onReorderChange={handleReorderChange}
                     activeModal={activeModal}
+                    popoverActive={popoverActive}
+                    togglePopoverActive={togglePopoverActive}
                     toggleModal={toggleModal}
                     confirmReset={confirmReset}
                     selectedProductId={selected_productId}

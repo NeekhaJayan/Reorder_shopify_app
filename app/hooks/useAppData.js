@@ -139,13 +139,17 @@ export function useAppData() {
   
    // Handle change in reorder_days field
     const [activeModal, setActiveModal] = useState(false);
+    const [popoverActive, setPopoverActive] = useState(null);   
     const [scheduleEmailCount, setScheduleEmailCount] = useState(null);
     const [dispatchEmailCount, setDispatchEmailCount] = useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [selectedVariantId, setSelectedVarientId] = useState(null);
-    
+    const togglePopoverActive = (productId) => {
+        setPopoverActive((prevId) => (prevId === productId ? null : productId));
+    };
     const toggleModal = useCallback(() => {
                 setActiveModal((prev) => !prev);
+                
             }, []);
     const confirmReset = useCallback((productId,variantId) => {
             setSelectedProductId(productId);
@@ -252,16 +256,16 @@ export function useAppData() {
     );
     const showEmailCount = async (product_id,variant_id) => {
         try {
-            const data = await productInstance.fetchEmailCount(product_id,variant_id,shopID); // Ensure this function returns an object with `{ count: number }`
+            const data =await productInstance.fetchEmailCount(product_id,variant_id,shopID); // Ensure this function returns an object with `{ count: number }`
             console.log("Email count data:", data); // Debugging output
-            setScheduleEmailCount(data["Scheduled Email Count"]);
-            setDispatchEmailCount(data["Dispatched Email Count"]);
-            toggleModal();
+            console.log(data.Dispatched_Count);
+            setScheduleEmailCount(data.Scheduled_Count);
+            setDispatchEmailCount(data.Dispatched_Count);
+            togglePopoverActive(variant_id)
         } catch (error) {
             console.error("Error fetching email count:", error);
-            setScheduleEmailCount(0);
-            setDispatchEmailCount(0);
-            toggleModal();
+            setPopoverActive(null);
+            
         }
     };
     
@@ -314,7 +318,7 @@ export function useAppData() {
     }, [data]);
     
     
-    
+    console.log(scheduleEmailCount,dispatchEmailCount)
 
     
     return {
@@ -339,6 +343,8 @@ export function useAppData() {
         onCancel,
         confirmReset,
         activeModal,
+        popoverActive,
+        togglePopoverActive,
         toggleModal,
         selectedProductId,
         selectedVariantId,

@@ -1,6 +1,6 @@
-import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge} from "@shopify/polaris";
+import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge, Popover,ActionList} from "@shopify/polaris";
 
-const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,toggleModal,scheduleEmailCount,dispatchEmailCount,showEmailCount,confirmReset,selectedProductId,selectedVariantId}) => {
+const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,popoverActive,togglePopoverActive,toggleModal,confirmReset,selectedProductId,selectedVariantId,showEmailCount,scheduleEmailCount,dispatchEmailCount}) => {
 
     return(
         <>
@@ -25,18 +25,38 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                  <IndexTable.Cell>
                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         
-                        <Button onClick={() => showEmailCount(product.shopify_product_id, product.shopify_variant_id)}>
-                        <img 
-                            src="../email-icon.png" // Replace with your actual image path 
-                            alt="Email Icon"
-                            style={{ width: "20px", height: "20px" }}
-                        />No Of Emails Scheduled
-                        </Button>
-                        <Modal size="small" open={activeModal} onClose={toggleModal} title="Emails Scheduled">
-                          <Modal.Section>
-                            <Text>No of Emails Scheduled: {scheduleEmailCount !== null ? scheduleEmailCount : "Loading..."}/{dispatchEmailCount !== null ? dispatchEmailCount : "Loading..."}</Text>
-                          </Modal.Section>
-                        </Modal>
+                        
+                          <Popover
+                            active={popoverActive === product.shopify_variant_id}
+                            activator={
+                              <Button onClick={() => {
+                                showEmailCount(product.shopify_product_id, product.shopify_variant_id);
+                                togglePopoverActive(product.shopify_variant_id);
+                            }}>
+                                  <img 
+                                      src="../bar-chart.png"  
+                                      alt="Email Icon"
+                                      style={{ width: "20px", height: "20px" }}
+                                  />
+                              </Button>
+                          } 
+                            autofocusTarget="first-node"
+                            onClose={() => togglePopoverActive(product.shopify_variant_id)}
+                          >
+                            <ActionList
+                                items={[
+                                    {
+                                        content: (
+                                            <p>
+                                                Scheduled: {scheduleEmailCount}/{dispatchEmailCount}
+                                            </p>
+                                        )
+                                    }
+                                ]}
+                            />
+                          </Popover>
+                        
+                  
                     </div>
                  </IndexTable.Cell>
                  <IndexTable.Cell><div>

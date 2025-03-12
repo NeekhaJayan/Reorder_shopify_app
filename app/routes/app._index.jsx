@@ -8,7 +8,7 @@ import {
   Button,
   BlockStack,
   MediaCard,
-  TextContainer,Banner,Link
+  TextContainer,Banner
 } from "@shopify/polaris";
 
 import { authenticate } from "../shopify.server";
@@ -93,6 +93,8 @@ export default function Index() {
     onCancel,
     confirmReset,
     activeModal,
+    popoverActive,
+    togglePopoverActive,
     toggleModal,
     selectedProductId,
     selectedVariantId,
@@ -100,7 +102,7 @@ export default function Index() {
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
-  
+
 
   return (
     <>
@@ -180,6 +182,8 @@ export default function Index() {
                             cancelReorderDays={onCancel}
                             handleReorderChange={handleReorderChange} 
                             activeModal={activeModal} 
+                            popoverActive={popoverActive}
+                            togglePopoverActive={togglePopoverActive}
                             toggleModal={toggleModal}
                             confirmReset={confirmReset}
                             selected_productId={selectedProductId}
