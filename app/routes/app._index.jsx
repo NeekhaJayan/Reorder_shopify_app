@@ -100,8 +100,7 @@ export default function Index() {
     onCancel,
     confirmReset,
     activeModal,
-    popoverActive,
-    togglePopoverActive,
+    activeEmailModal,toggleEmailModal,
     toggleModal,
     selectedProductId,
     selectedVariantId,
@@ -189,9 +188,8 @@ export default function Index() {
                             cancelReorderDays={onCancel}
                             handleReorderChange={handleReorderChange} 
                             activeModal={activeModal} 
-                            popoverActive={popoverActive}
-                            togglePopoverActive={togglePopoverActive}
-                            toggleModal={toggleModal}
+                            activeEmailModal={activeEmailModal} 
+                            toggleEmailModal={toggleEmailModal}
                             confirmReset={confirmReset}
                             selected_productId={selectedProductId}
                             selected_variantId={selectedVariantId}

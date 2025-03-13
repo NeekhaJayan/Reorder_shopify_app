@@ -138,15 +138,16 @@ export function useAppData() {
   
    // Handle change in reorder_days field
     const [activeModal, setActiveModal] = useState(false);
-    const [popoverActive, setPopoverActive] = useState(null);  
+    const [activeEmailModal, setActiveEmailModal] = useState(true);  
     const [isFetchingEmailCount, setIsFetchingEmailCount] = useState(false); 
     const [scheduleEmailCount, setScheduleEmailCount] = useState(null);
     const [dispatchEmailCount, setDispatchEmailCount] = useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [selectedVariantId, setSelectedVarientId] = useState(null);
-    const togglePopoverActive = (productId) => {
-        setPopoverActive((prevId) => (prevId === productId ? null : productId));
-    };
+    const toggleEmailModal = useCallback(() => {
+        setActiveEmailModal((prev) => !prev);
+        console.log("toggleEmailModal clicked! New State:", !activeEmailModal);
+    }, []);
     const toggleModal = useCallback(() => {
                 setActiveModal((prev) => !prev);
                 
@@ -265,13 +266,12 @@ export function useAppData() {
                 },
                 { method: "post" }
             );
-            setSelectedProductId(product_id);
-            setSelectedVarientId(variant_id);
             
         } catch (error) {
-            console.error("Error fetching email count:", error);
             setIsFetchingEmailCount(false);
-            setPopoverActive(null);
+            console.error("Error fetching email count:", error);
+            
+            
             
         }
     };
@@ -326,12 +326,12 @@ export function useAppData() {
             
             setScheduleEmailCount(fetcher.data.Scheduled_Count);
             setDispatchEmailCount(fetcher.data.Dispatched_Count);
-            if (popoverActive !== selectedVariantId) {
-                togglePopoverActive(selectedVariantId);
-            }
         
-            setSelectedProductId(null);
-            setSelectedVarientId(null);
+            toggleEmailModal();
+            
+            
+        
+            
         }
     }, [data]);
     
@@ -361,8 +361,7 @@ export function useAppData() {
         onCancel,
         confirmReset,
         activeModal,
-        popoverActive,
-        togglePopoverActive,
+        activeEmailModal,toggleEmailModal,
         toggleModal,
         selectedProductId,
         selectedVariantId,
