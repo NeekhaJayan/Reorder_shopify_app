@@ -56,16 +56,17 @@ export const action = async ({ request }) => {
       return {success:"",result:result};
     } else if (method === "POST" && reorderdays) {
       if (!reorderdays || reorderdays <5 ) {
-        return { success: "Estimated Usage Days should be greater than BufferTime!!!" };
+        return {  type: "updateProduct",success: "Estimated Usage Days should be greater than BufferTime!!!" };
       }
       
       const result = await productInstance.saveProductData(formData);
-      return { success: "Estimated Usage Days saved successfully!", result };
+      return {  type: "updateProduct",success: "Estimated Usage Days saved successfully!", result };
       
     } 
     else{
       const result_data =await productInstance.fetchEmailCount(formData);
       return json({
+        type: "fetchEmailCount",
         Scheduled_Count: result_data.Scheduled_Count || 0,
         Dispatched_Count: result_data.Dispatched_Count || 0
     });

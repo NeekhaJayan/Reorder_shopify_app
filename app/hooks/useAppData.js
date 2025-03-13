@@ -298,7 +298,7 @@ export function useAppData() {
     
     useLayoutEffect(() => {
         console.log(data);
-        if (data?.result) {
+        if (data?.type === "updateProduct" && data?.result) {
             const resultArray = Array.isArray(data.result) ? data.result : [data.result]; // Ensure it's an array
             console.log(resultArray);
     
@@ -321,20 +321,14 @@ export function useAppData() {
             setFormProductState(initialState);
             setformState('');
         }
-        if (fetcher.data) {
+        if (fetcher.data?.type === "fetchEmailCount") {
             console.log("Fetched email count:", fetcher.data);
             
             setScheduleEmailCount(fetcher.data.Scheduled_Count);
             setDispatchEmailCount(fetcher.data.Dispatched_Count);
-        
             toggleEmailModal();
-            
-            
-        
-            
         }
     }, [data]);
-    
     
     console.log(scheduleEmailCount,dispatchEmailCount)
 
