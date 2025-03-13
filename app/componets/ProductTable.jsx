@@ -19,7 +19,6 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     { title: "Product Image" },
                     { title: "Product Name" },
                     { title: "Estimated Usage Days" },
-                    {title:"Scheduled Emails"},
                     {
                     title: spinner ? (
                         <div style={{ display: "flex", alignItems: "center" }}>
@@ -29,7 +28,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                         </Text>
                         </div>
                     ) : (
-                        "Actions"
+                        ""
                     ),
                     },
                 ]}
