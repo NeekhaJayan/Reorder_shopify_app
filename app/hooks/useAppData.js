@@ -138,7 +138,7 @@ export function useAppData() {
   
    // Handle change in reorder_days field
     const [activeModal, setActiveModal] = useState(false);
-    const [activeEmailModal, setActiveEmailModal] = useState(true);  
+    const [activeEmailModal, setActiveEmailModal] = useState(false);  
     const [isFetchingEmailCount, setIsFetchingEmailCount] = useState(false); 
     const [scheduleEmailCount, setScheduleEmailCount] = useState(null);
     const [dispatchEmailCount, setDispatchEmailCount] = useState(null);
