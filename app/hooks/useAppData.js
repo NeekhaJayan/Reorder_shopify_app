@@ -297,10 +297,8 @@ export function useAppData() {
     }, [fetcher.state, isFetchingEmailCount]);
     
     useLayoutEffect(() => {
-        console.log(data);
         if (data?.type === "updateProduct" && data?.result) {
             const resultArray = Array.isArray(data.result) ? data.result : [data.result]; // Ensure it's an array
-            console.log(resultArray);
     
             setUpdatedProducts((prevData) => {
                 // Create a new array with updated products
@@ -310,7 +308,6 @@ export function useAppData() {
                     );
                     return foundProduct ? { ...product, ...foundProduct,isNew: true } : product;
                 });
-                console.log(updatedProducts)
                 // Check for truly new products
                 const existingIds = new Set(prevData.map((p) => Number(p.shopify_variant_id)));
                 const newProducts = resultArray.filter((p) => !existingIds.has(Number(p.shopify_variant_id))).map((p) => ({ ...p, isNew: true }));
@@ -321,17 +318,12 @@ export function useAppData() {
             setFormProductState(initialState);
             setformState('');
         }
-        if (fetcher.data?.type === "fetchEmailCount") {
-            console.log("Fetched email count:", fetcher.data);
-            
+        if (fetcher.data?.type === "fetchEmailCount") {    
             setScheduleEmailCount(fetcher.data.Scheduled_Count);
             setDispatchEmailCount(fetcher.data.Dispatched_Count);
             toggleEmailModal();
         }
     }, [data]);
-    
-    console.log(scheduleEmailCount,dispatchEmailCount)
-
     
     return {
         fetcher,

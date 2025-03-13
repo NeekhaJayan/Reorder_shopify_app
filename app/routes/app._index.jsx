@@ -52,7 +52,6 @@ export const action = async ({ request }) => {
   try{
     if (method === "PATCH") {
       result = await productInstance.updateProductData(formData);
-      console.log(result);
       return {success:"",result:result};
     } else if (method === "POST" && reorderdays) {
       if (!reorderdays || reorderdays <5 ) {
@@ -146,8 +145,11 @@ export default function Index() {
         {showBanner && (
           <Banner tone="success" onDismiss={() => setShowBanner(false)}>
             <p>{message}</p>
-            <Button variant="plain" onClick={() => {
-                      navigate("/app/settings?tab=2");}}>Upgrade to Pro</Button>
+            {plan === "FREE" && (
+            <Button variant="plain" onClick={() => navigate("/app/settings?tab=2")}>
+                Upgrade to Pro
+            </Button>
+            )}
           </Banner>
         )}
         <BlockStack gap="400" >
