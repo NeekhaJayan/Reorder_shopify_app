@@ -42,7 +42,7 @@ class Product{
             };
         });
         console.log(inputData)
-        const response = await fetch("${APP_SETTINGS.API_ENDPOINT}/auth/products", {
+        const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/products`, {
             method:"POST",
             headers: {
             "Content-Type": "application/json",

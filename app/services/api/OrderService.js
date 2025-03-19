@@ -1,4 +1,5 @@
 import { APP_SETTINGS } from "../../constants";
+
 class OrderServices{
 
     transformGraphQLResponse(graphqlData){
@@ -98,7 +99,7 @@ class OrderServices{
     async SyncOrderDetails(){
             const jsonResponse=await this.getPrevOrderDetails()
             const payload = transformGraphQLResponse(jsonResponse);
-            fetch('${APP_SETTINGS.API_ENDPOINT}/auth/orderSync', {
+            fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', // Ensure the correct content type
