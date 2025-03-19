@@ -1,3 +1,4 @@
+import { APP_SETTINGS } from "../../constants";
 class Product{
     async getAllProductDetails(shop_id)
     {

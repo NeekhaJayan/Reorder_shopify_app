@@ -1,3 +1,4 @@
+import { APP_SETTINGS } from "../../constants";
 class Shop{
    async getShopDetails(shop_domain){
         try{

@@ -1,3 +1,4 @@
+import { APP_SETTINGS } from "../../constants";
 class OrderServices{
 
     transformGraphQLResponse(graphqlData){
