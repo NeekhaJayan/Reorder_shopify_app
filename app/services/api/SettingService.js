@@ -47,9 +47,10 @@ class Settings{
     }
 
     async uploadImage(shop_domain,formData){
+      
       const response = await fetch(`https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`, {
-        method: "POST", 
-        body: formData, 
+        method: "POST",
+        body: formData,
       });
   
       if (!response.ok) {
@@ -57,8 +58,8 @@ class Settings{
         throw new Error(`Failed to upload image. ${errorText}`);
       }
   
-      const result = await response.json();
-      return result
+      
+      return await response.json();
     }
 }
 const settingsInstance = new Settings();
