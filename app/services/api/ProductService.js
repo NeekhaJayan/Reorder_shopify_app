@@ -2,7 +2,7 @@ class Product{
     async getAllProductDetails(shop_id)
     {
         try{
-            const response = await fetch(`https://reorderappapi.onrender.com/auth/products/${shop_id}`, {
+            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/products/${shop_id}`, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
@@ -41,7 +41,7 @@ class Product{
             };
         });
         console.log(inputData)
-        const response = await fetch("https://reorderappapi.onrender.com/auth/products", {
+        const response = await fetch("${APP_SETTINGS.API_ENDPOINT}/auth/products", {
             method:"POST",
             headers: {
             "Content-Type": "application/json",
@@ -81,7 +81,7 @@ class Product{
     
             console.log("PATCH Request to API:", inputData);
     
-            const response = await fetch(`https://reorderappapi.onrender.com/auth/products/${productId}`, {
+            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/products/${productId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -108,7 +108,7 @@ class Product{
             const product_id=formData.get("productId")
             const variant_id=formData.get("variantId")
             const shop_id=formData.get("shopId")
-            const url = `https://reorderappapi.onrender.com/auth/email-status_count?product_id=${product_id}&variant_id=${variant_id}&shop_id=${shop_id}`;
+            const url = `${APP_SETTINGS.API_ENDPOINT}/auth/email-status_count?product_id=${product_id}&variant_id=${variant_id}&shop_id=${shop_id}`;
              const response = await fetch(url, {
                 method: "GET",
                 headers: {

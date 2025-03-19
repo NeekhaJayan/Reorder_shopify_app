@@ -97,7 +97,7 @@ class OrderServices{
     async SyncOrderDetails(){
             const jsonResponse=await this.getPrevOrderDetails()
             const payload = transformGraphQLResponse(jsonResponse);
-            fetch('https://reorderappapi.onrender.com/auth/orderSync', {
+            fetch('${APP_SETTINGS.API_ENDPOINT}/auth/orderSync', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', // Ensure the correct content type

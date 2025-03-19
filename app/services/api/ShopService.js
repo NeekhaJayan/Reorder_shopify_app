@@ -1,7 +1,7 @@
 class Shop{
    async getShopDetails(shop_domain){
         try{
-            const response = await fetch(`https://reorderappapi.onrender.com/auth/shops/${shop_domain}`, {
+            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/${shop_domain}`, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",

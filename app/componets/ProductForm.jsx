@@ -2,7 +2,7 @@ import {BlockStack, Banner, Card, InlineStack, Thumbnail, Text, Button,InlineErr
 import { useNavigate } from "@remix-run/react";
 import { useState} from "react";
 import { ImageIcon } from "@shopify/polaris-icons";
-
+import { APP_SETTINGS } from "../constants";
 
 
 const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleBlur,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID} ) => {
@@ -83,7 +83,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
                             <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} onBlur={handleBlur} autoComplete="off" />                    
                         </div>
                         <div style={{ display: 'grid', justifyContent: 'center' }}>
-                            {plan === "FREE" && updatedProducts.length >= 2 ? (
+                            {plan === "FREE" && updatedProducts.length >= FREE_PRODUCT_LIMIT ? (
                             <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
                             </Button>

@@ -20,6 +20,7 @@ import SkeletonLoad from "../componets/SkeletonLoad";
 import { useAppData } from "../hooks/useAppData";
 import { shopInstance } from "../services/api/ShopService";
 import { productInstance } from "../services/api/ProductService";
+import { APP_SETTINGS } from "../constants";
 import '../styles/index.css';
 
 export const loader = async ({ request }) => {
@@ -200,7 +201,7 @@ export default function Index() {
                             scheduleEmailCount={scheduleEmailCount}
                             dispatchEmailCount={dispatchEmailCount}/>
               )}
-              {plan === "FREE" && updatedProducts.length >= 2 && (
+              {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT && (
                   <TextContainer>
                     <Banner  tone="info">
                       <p>

@@ -1,9 +1,10 @@
+import { APP_SETTINGS } from "../../constants";
 class Settings{
     async getSettingData(shop_domain){
 
         try{
             const settingsResponse = await fetch(
-                `https://reorderappapi.onrender.com/auth/get-settings?shop_name=${shop_domain}`,
+                `${APP_SETTINGS.API_ENDPOINT}/auth/get-settings?shop_name=${shop_domain}`,
                 {
                   method: "GET",
                   headers: {
@@ -26,7 +27,7 @@ class Settings{
 
     async saveSettings(data){
         
-      const response = await fetch(`https://reorderappapi.onrender.com/auth/save-settings`, {
+      const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/save-settings`, {
         method: "POST", // Adjust method as per your API
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +49,7 @@ class Settings{
 
     async uploadImage(shop_domain,formData){
       
-      const response = await fetch(`https://reorderappapi.onrender.com/auth/upload_to_aws/${shop_domain}`, {
+      const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/upload_to_aws/${shop_domain}`, {
         method: "POST",
         body: formData,
       });
