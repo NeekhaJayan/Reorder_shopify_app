@@ -289,6 +289,7 @@ export const getShopDetails = async (admin) =>{
           url
         }
         email
+        myshopifyDomain
       }
     }`,
     );
