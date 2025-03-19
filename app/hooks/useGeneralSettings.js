@@ -24,7 +24,14 @@ export  function useGeneralSettings() {
     useEffect(() => {
         // Optional: Handle the case where settingDetails are fetched but not immediately available
         if (settingDetails) {
-          setIsSyncDisabled(!settingDetails.general_settings.syncStatus);
+          if (plan === 'FREE') {
+            setIsSyncDisabled(true);
+          }
+          else
+          {
+            setIsSyncDisabled(settingDetails.general_settings.syncStatus);
+          }
+          
           if (uploadFile) {
             setFiles([{
               name: settingDetails?.general_settings?.bannerImageName , // You can replace this with the actual file name
@@ -94,16 +101,18 @@ export  function useGeneralSettings() {
     
     const handleSubmit = async (event) => {
       event.preventDefault(); 
-      setLoading(true);
-      const formData = new FormData();
-      console.log(formData)
-      formData.append("bannerImage", files[0]); // Ensure files is an array
       
-    
+      const formData = new FormData();
+      formData.append("bannerImage", files[0]);  
       try {
-        const AWS_Upload_func =await settingsInstance.uploadImage(shop_domain,formData);
-        console.log("Upload success:", AWS_Upload_func);
-        setLoading(false);
+        setLoading(true);
+        fetcher.submit(formData, {
+          method: "post",
+          encType: "multipart/form-data"
+        });
+        // const AWS_Upload_func =await settingsInstance.uploadImage(shop_domain,formData);
+        // setLoading(false);
+        // return { success: AWS_Upload_func };
       } catch (error) {
         console.error("Upload failed:", error);
         setLoading(false);

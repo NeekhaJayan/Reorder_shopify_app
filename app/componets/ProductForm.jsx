@@ -83,7 +83,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
                             <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} onBlur={handleBlur} autoComplete="off" />                    
                         </div>
                         <div style={{ display: 'grid', justifyContent: 'center' }}>
-                            {plan === "FREE" && updatedProducts.length >= 5 ? (
+                            {plan === "FREE" && updatedProducts.length >= 2 ? (
                             <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
                             </Button>

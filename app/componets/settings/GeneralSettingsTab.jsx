@@ -70,7 +70,7 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
                                   {progress > 0 && (<ProgressBar progress={progress} />)}
                                   
                                   <div style={{marginTop:"0.5rem"}}>
-                                  <Button variant="primary" disabled={!isSyncDisabled} onClick={handleSync}  >Sync Now</Button>                                 
+                                  <Button variant="primary" disabled={isSyncDisabled} onClick={handleSync}  >Sync Now</Button>                                 
                                   </div>
                                   {bannerMessage && (
                                                 <Banner

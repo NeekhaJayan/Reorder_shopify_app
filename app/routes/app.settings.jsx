@@ -33,16 +33,17 @@ export const action = async ({ request }) => {
   try {
     const formData = await request.formData();
     const Settings = Object.fromEntries(formData); 
+    console.log(Settings)
+    const shopDetail=await getShopDetails(admin);
     console.log("Settings.tab:", Settings.tab);
     if (Settings.tab === "template-settings") {
       
       const result = await settingsInstance.saveSettings(Settings)
-      console.log(result)
       return { success: result };
     }
     if (Settings.tab === "general-settings") {
       try {
-        const shopDetail=await getShopDetails(admin);
+        
         if (!shopDetail?.createdAt) {
           throw new Error("shopDetail.createdAt is missing or undefined");
         }
@@ -53,6 +54,20 @@ export const action = async ({ request }) => {
         console.error("Error fetching orders:", error);
         return { error: "Failed to fetch orders", details: error.message };
       }
+    }
+    else{
+      try{
+      
+        const shopDomainUrl = shopDetail?.myshopifyDomain; 
+          const AWS_Upload_func = await settingsInstance.uploadImage(shopDomainUrl,formData);
+          console.log(AWS_Upload_func[0]);
+          return { success: "Your Logo Image has been uploaded successfully!" };
+      }
+      catch (error) {
+        console.error("Error fetching orders:", error);
+        return { error: "Failed to fetch orders", details: error.message };
+      }
+
     }
     
     return {  error: "Invalid tab identifier" };
