@@ -49,7 +49,12 @@ export const action = async ({ request }) => {
         }
         const created_at=new Date(shopDetail.createdAt);
         const jsonResponse = await orderInstance.SyncOrderDetails(created_at,admin)   
-        
+        if (!jsonResponse || jsonResponse.error) {
+          throw new Error(jsonResponse?.message || "Failed to sync orders");
+      }
+
+      console.log("Order Sync Response:", jsonResponse.message);
+          return { message: jsonResponse.message }; 
       } catch (error) {
         console.error("Error fetching orders:", error);
         return { error: "Failed to fetch orders", details: error };
@@ -65,7 +70,7 @@ export const action = async ({ request }) => {
       }
       catch (error) {
         console.error("Error fetching orders:", error);
-        return { error: "Failed to fetch orders", details: error.message };
+        return { error: "Failed to fetch orders", details: error };
       }
 
     }
