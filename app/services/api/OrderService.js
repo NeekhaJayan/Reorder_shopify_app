@@ -96,8 +96,8 @@ class OrderServices{
         return await response.json();
     }
 
-    async SyncOrderDetails(){
-            const jsonResponse=await this.getPrevOrderDetails()
+    async SyncOrderDetails(created_at,admin){
+            const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
             const payload = transformGraphQLResponse(jsonResponse);
             fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
           method: 'POST',
