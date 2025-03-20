@@ -97,34 +97,31 @@ class OrderServices{
     }
 
     async SyncOrderDetails(created_at,admin){
+      try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
             const payload = this.transformGraphQLResponse(jsonResponse);
-            fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json', // Ensure the correct content type
-          },
-          body: JSON.stringify(payload), // Convert object to JSON string
-        })
-          .then(async (response) => {
+            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(payload),
+          });
+          
             if (!response.ok) {
               const errorDetails = await response.json();
               throw new Error(`Error from server: ${response.status} - ${errorDetails.message}`);
             }
-            return response.json(); // Parse the JSON response from the server
-          })
-          .then((data) => {
+            const data = await response.json();
             console.log('Data successfully sent to FastAPI:', data);
-            
-            
-            return { message: "Your store is up-to-date with 10 new orders.Customers will recieve reminders on time." };
-            }).catch((error) => {
-                console.error('Error sending data to FastAPI:', error.message);
-              });
+
+            return { message: "Your store is up-to-date with 10 new orders. Customers will receive reminders on time." };
+          } catch (error) {
+            console.error('Error sending data to FastAPI:', error.message);
+            return { error: 'Failed to sync orders. Please try again later.' };
+        }
         
     }
-
-     
 
 }
 const orderInstance = new OrderServices();
