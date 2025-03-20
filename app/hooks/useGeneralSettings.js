@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useFetcher,useLoaderData } from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
-import {settingsInstance} from "../services/api/SettingService";
 
 export  function useGeneralSettings() {
   const { shop_domain, settingDetails } = useLoaderData();

@@ -34,7 +34,7 @@ export const action = async ({ request }) => {
     const formData = await request.formData();
     const Settings = Object.fromEntries(formData); 
     console.log(Settings)
-    const shopDetail=await getShopDetails(admin);
+    const shopDetail=await shopInstance.getShopifyShopDetails(admin);
     console.log("Settings.tab:", Settings.tab);
     if (Settings.tab === "template-settings") {
       

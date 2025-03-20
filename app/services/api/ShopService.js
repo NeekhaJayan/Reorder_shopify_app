@@ -31,6 +31,7 @@ class Shop{
                   url
                 }
                 email
+                myshopifyDomain
               }
             }`,
             );

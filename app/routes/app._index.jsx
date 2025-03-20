@@ -27,8 +27,8 @@ export const loader = async ({ request }) => {
   const {session }=await authenticate.admin(request);
   const shop_domain=session.shop
   let shop;
-  let retries = 3;
-  let delay = 2000;
+  let retries = 4;
+  let delay = 3000;
   for (let attempt = 1; attempt <= retries; attempt++) {
      shop = await shopInstance.getShopDetails(shop_domain);
     if (shop && shop.shop_id) break; // Exit loop if shop ID exists

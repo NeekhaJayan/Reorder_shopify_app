@@ -6,7 +6,7 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
-import {getShopDetails} from './utils/shopify';
+import { shopInstance } from "../app/services/api/ShopService";
 
 // import { restResources } from "@shopify/shopify-api/rest/admin/2024-07";
 import prisma from "./db.server";
@@ -36,7 +36,7 @@ const shopify = shopifyApp({
     afterAuth: async ({ admin,session }) => {
       await shopify.registerWebhooks({ session });
       // const shopName = session.shop.split(".")[0];
-      const shopDetail=await getShopDetails(admin);
+      const shopDetail=await shopInstance.getShopifyShopDetails(admin);
       const shop_payload_details={
         shopify_domain: session.shop,
         shop_name:shopDetail.name,
