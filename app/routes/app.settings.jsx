@@ -52,7 +52,7 @@ export const action = async ({ request }) => {
         
       } catch (error) {
         console.error("Error fetching orders:", error);
-        return { error: "Failed to fetch orders", details: error.message };
+        return { error: "Failed to fetch orders", details: error };
       }
     }
     else{
