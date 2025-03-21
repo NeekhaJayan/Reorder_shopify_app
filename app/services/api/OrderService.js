@@ -17,9 +17,7 @@ class OrderServices{
         
             const lineItemsTransformed = lineItems.edges.map(({ node: item }) => ({
               product_id: parseInt(item?.product?.id?.split("/").pop() || 0),
-              varient_id: item?.variant
-                ? parseInt(item?.variant?.id?.split("/").pop() || 0)
-                : null,
+              varient_id: parseInt(item?.variant?.id?.split("/").pop() || 0),
               quantity: item?.quantity,
               status: "fulfilled", // Assuming fulfillment status is "fulfilled"
               price: "0.00" 
@@ -30,11 +28,11 @@ class OrderServices{
               shop: shopName, // Replace with your shop name
               shopify_order_id: parseInt(id.split("/").pop() || 0),
               customer_id: parseInt(customer?.id?.split("/").pop() || 0),
-              customer_email: customer?.email ?? null,
-              customer_name: `${customer?.firstName ?? null}`,
-              customer_phone: customer?.phone??null,
-              shipping_phone: shippingAddress?.phone ?? null,
-              billing_phone: billingAddress?.phone ?? null,
+              customer_email: customer?.email || "Unknown",
+              customer_name: `${customer?.firstName || "Unknown"}`,
+              customer_phone: customer?.phone|| "Unknown",
+              shipping_phone: shippingAddress?.phone || "Unknown",
+              billing_phone: billingAddress?.phone || "Unknown",
               line_items: lineItemsTransformed,
               order_date: createdAt
             };
