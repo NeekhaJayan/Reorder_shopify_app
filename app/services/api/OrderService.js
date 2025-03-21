@@ -103,7 +103,7 @@ class OrderServices{
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
             console.log(jsonResponse)
-            const payload = this.transformGraphQLResponse(jsonRespons,shop);
+            const payload = this.transformGraphQLResponse(jsonResponse,shop);
             console.log(payload);
             const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
               method: 'POST',
