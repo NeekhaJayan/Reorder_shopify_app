@@ -44,12 +44,20 @@ class OrderServices{
     }
 
     async getPrevOrderDetails(created_at,admin){
-        const specifiedDate = new Date(created_at);
-        specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
+        
+      if (!isNaN(created_at)) { // Ensure the date is valid
+        created_at.setDate(created_at.getDate() - 10);
+        console.log("10 days earlier:", created_at);
+        console.log("10 days earlier:", created_at.toISOString());
+    } else {
+        console.error("Invalid date:", shopDetail.createdAt);
+    }
+
+        // specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
         const firstOrdersCount = 10;
         const query = `#graphql
           query getFilteredOrders($first: Int!) {
-            orders(first: $first, query: "created_at:>=${specifiedDate}AND fulfillment_status:fulfilled") {
+            orders(first: $first, query: "created_at:>=${created_at}AND fulfillment_status:fulfilled") {
               edges {
                 node {
                   id
@@ -100,6 +108,7 @@ class OrderServices{
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
             const payload = this.transformGraphQLResponse(jsonResponse);
+            console.log(payload);
             const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
               method: 'POST',
               headers: {
