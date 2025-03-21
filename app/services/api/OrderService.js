@@ -57,7 +57,7 @@ class OrderServices{
         const firstOrdersCount = 10;
         const query = `#graphql
           query getFilteredOrders {
-            orders(first: 10, query: "created_at:>=${created_at}AND fulfillment_status:fulfilled") {
+            orders(first: 10, query: "created_at:>=2024-09-21T06:25:25.000Z AND fulfillment_status:fulfilled") {
               edges {
                 node {
                   id
