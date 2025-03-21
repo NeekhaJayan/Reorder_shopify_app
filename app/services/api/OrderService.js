@@ -41,21 +41,22 @@ class OrderServices{
 
     }
 
-    async getPrevOrderDetails(created_at,admin){
+    async getPrevOrderDetails(specifiedDate,admin){
         
-      if (!isNaN(created_at)) { // Ensure the date is valid
-        created_at.setDate(created_at.getDate() - 10);
-        console.log("10 days earlier:", created_at);
-        console.log("10 days earlier:", created_at.toISOString());
+      if (!isNaN(specifiedDate)) { // Ensure the date is valid
+        specifiedDate.setDate(specifiedDate.getDate() - 10);
+        console.log("10 days earlier:", specifiedDate);
+        console.log("10 days earlier:", specifiedDate.toISOString());
     } else {
-        console.error("Invalid date:", shopDetail.createdAt);
+        console.error("Invalid date:", specifiedDate);
     }
 
         // specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
         const firstOrdersCount = 10;
+        const filterQuery = `created_at:>=${specifiedDate} AND fulfillment_status:fulfilled`;
         const query = `#graphql
-          query getFilteredOrders {
-            orders(first: 10, query: "created_at:>=2024-09-21T06:25:25.000Z AND fulfillment_status:fulfilled") {
+          query getFilteredOrders($first: Int!, $filterQuery: String!) {
+            orders(first: $first, query: $filterQuery) {
               edges {
                 node {
                   id
@@ -66,22 +67,22 @@ class OrderServices{
                   shippingAddress {
                     phone
                   }
-                   lineItems(first: 10) {
-                      edges {
-                        node {
+                  lineItems(first: 10) {
+                    edges {
+                      node {
+                        id
+                        quantity
+                        title
+                        variantTitle
+                        variant {
                           id
-                          quantity
-                          title
-                          variantTitle
-                          variant {
-                            id
-                          }
-                          product {
-                            id
-                          }
+                        }
+                        product {
+                          id
                         }
                       }
                     }
+                  }
                   customer {
                     id
                     firstName
@@ -93,7 +94,15 @@ class OrderServices{
             }
           }
         `;
-        const response = await admin.graphql(query);
+        
+        const response = await admin.graphql(query, {
+          variables: {
+            first: firstOrdersCount,
+            filterQuery: filterQuery, 
+            // Use variables to pass dynamic date
+          },
+        });
+        console.log(query)
         return await response.json();
     }
 
