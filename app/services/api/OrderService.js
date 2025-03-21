@@ -30,11 +30,11 @@ class OrderServices{
               shop: shopName, // Replace with your shop name
               shopify_order_id: parseInt(id.split("/").pop() || 0),
               customer_id: parseInt(customer?.id?.split("/").pop() || 0),
-              customer_email: customer?.email || "",
-              customer_name: `${customer?.firstName || ""}`,
-              customer_phone: customer?.phone || null,
-              shipping_phone: shippingAddress?.phone || null,
-              billing_phone: billingAddress?.phone || null,
+              customer_email: customer?.email ?? null,
+              customer_name: `${customer?.firstName ?? null}`,
+              customer_phone: customer?.phone??null,
+              shipping_phone: shippingAddress?.phone ?? null,
+              billing_phone: billingAddress?.phone ?? null,
               line_items: lineItemsTransformed,
               order_date: createdAt
             };
@@ -102,7 +102,7 @@ class OrderServices{
     async SyncOrderDetails(shop,created_at,admin){
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
-            console.log(jsonResponse)
+            // console.log(jsonResponse)
             const payload = this.transformGraphQLResponse(jsonResponse,shop);
             console.log(payload);
             const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {

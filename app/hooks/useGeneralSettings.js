@@ -58,8 +58,13 @@ export  function useGeneralSettings() {
           setProgress((prev) => {
             if (prev >= 100) {
               clearInterval(interval); // Clear interval when progress reaches 100%
-              setBannerMessage(fetcher.data?.message || "Orders synced successfully!"); // Update success message
-              setBannerStatus("success");
+              if (fetcher.data?.error) {
+                setBannerMessage(fetcher.data.error || "Failed to fetch orders"); // Show error message
+                setBannerStatus("error");
+            } else {
+                setBannerMessage(fetcher.data?.message || "Orders synced successfully!");
+                setBannerStatus("success");
+            }
               return 100; // Ensure progress doesn't exceed 100
             }
             return prev + 10; // Increment progress
