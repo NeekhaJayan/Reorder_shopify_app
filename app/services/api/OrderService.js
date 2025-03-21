@@ -107,6 +107,7 @@ class OrderServices{
     async SyncOrderDetails(created_at,admin){
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
+            print(jsonResponse)
             const payload = this.transformGraphQLResponse(jsonResponse);
             console.log(payload);
             const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
