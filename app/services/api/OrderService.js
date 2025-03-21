@@ -56,8 +56,8 @@ class OrderServices{
         // specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
         const firstOrdersCount = 10;
         const query = `#graphql
-          query getFilteredOrders($first: Int!) {
-            orders(first: $first, query: "created_at:>=${created_at}AND fulfillment_status:fulfilled") {
+          query getFilteredOrders {
+            orders(first: 10, query: "created_at:>=${created_at}AND fulfillment_status:fulfilled") {
               edges {
                 node {
                   id
@@ -95,12 +95,7 @@ class OrderServices{
             }
           }
         `;
-        const response = await admin.graphql(query, {
-            variables: {
-              first: firstOrdersCount,
-              // Use variables to pass dynamic date
-            },
-          });
+        const response = await admin.graphql(query);
         return await response.json();
     }
 
