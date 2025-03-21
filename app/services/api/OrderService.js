@@ -118,7 +118,7 @@ class OrderServices{
             const data = await response.json();
             console.log('Data successfully sent to FastAPI:', data);
 
-            return { message: "Your store is up-to-date with 10 new orders. Customers will receive reminders on time." };
+            return { message: "Your store is up-to-date with new orders. Customers will receive reminders on time." };
           } catch (error) {
             console.error('Error sending data to FastAPI:', error.message);
             return { error: 'Failed to sync orders. Please try again later.' };
