@@ -48,7 +48,7 @@ export const action = async ({ request }) => {
           throw new Error("shopDetail.createdAt is missing or undefined");
         }
         const created_at=shopDetail.createdAt ? new Date(shopDetail.createdAt) : new Date();
-        const jsonResponse = await orderInstance.SyncOrderDetails(created_at,admin)   
+        const jsonResponse = await orderInstance.SyncOrderDetails(Settings.shop,created_at,admin)   
         if (!jsonResponse || jsonResponse.error) {
           throw new Error(jsonResponse?.message || "Failed to sync orders");
       }

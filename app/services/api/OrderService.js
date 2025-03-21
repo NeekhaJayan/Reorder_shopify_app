@@ -2,9 +2,9 @@ import { APP_SETTINGS } from "../../constants";
 
 class OrderServices{
 
-    transformGraphQLResponse(graphqlData){
+    transformGraphQLResponse(graphqlData,shopName){
         const orders = graphqlData?.data?.orders?.edges || [];
-        
+        console.log(orders);
           return orders.map(({ node }) => {
             const {
               id,
@@ -27,7 +27,7 @@ class OrderServices{
             }));
         
             return {
-              shop: Settings.shop, // Replace with your shop name
+              shop: shopName, // Replace with your shop name
               shopify_order_id: parseInt(id.split("/").pop() || 0),
               customer_id: parseInt(customer?.id?.split("/").pop() || 0),
               customer_email: customer?.email || "",
@@ -99,11 +99,11 @@ class OrderServices{
         return await response.json();
     }
 
-    async SyncOrderDetails(created_at,admin){
+    async SyncOrderDetails(shop,created_at,admin){
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
             console.log(jsonResponse)
-            const payload = this.transformGraphQLResponse(jsonResponse);
+            const payload = this.transformGraphQLResponse(jsonRespons,shop);
             console.log(payload);
             const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
               method: 'POST',
