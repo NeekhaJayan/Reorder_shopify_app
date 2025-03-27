@@ -24,12 +24,11 @@ class Shop{
     try{
       const shopId = formData.get("shopId");
       const plan = formData.get("plan");
-      const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/${shopId}`, {
+      const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/${shopId}?plan=${encodeURIComponent(plan)}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body:plan,
         });
         if (!response.ok) {
           throw new Error(`Failed to fetch shop details: ${response.statusText}`);
