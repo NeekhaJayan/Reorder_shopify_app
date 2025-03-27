@@ -14,13 +14,6 @@ export const loader = async ({ request }) => {
       returnUrl: `https://admin.shopify.com/store/${myShop}/apps/${process.env.APP_NAME}/app?message=Subscription Activated successfully`,
     }),
     });
-
-    // return new Response(null, {
-    //   status: 302,  // Temporary redirect
-    //   headers: {
-    //     Location: `https://admin.shopify.com/store/${myShop}/apps/${process.env.APP_NAME}/app?success=pricing_updated`,
-    //   },
-    // });
     return redirect("/app?success=pricing_updated");
 };
 

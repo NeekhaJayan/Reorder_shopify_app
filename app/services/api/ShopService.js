@@ -20,6 +20,29 @@ class Shop{
           }    
     }
 
+  async updateShopDetails(formData){
+    try{
+      const shopId = formData.get("shopId");
+      const plan = formData.get("plan");
+      const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/${shopId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:plan,
+        });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch shop details: ${response.statusText}`);
+        }
+        return await response.json();
+
+  }
+  catch (error) {
+      console.error("Error fetching shop details:", error.message);
+      return null; // Return `null` or handle errors gracefully
+    }    
+  }
+
     async getShopifyShopDetails(admin){
         const response_shop = await admin.graphql(
             `#graphql

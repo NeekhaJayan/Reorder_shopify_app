@@ -31,7 +31,15 @@ export function useAppData() {
     const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
     useEffect(() => {
         if (message) {
-          setTimeout(() => setShowBanner(false), 900000); // Auto-hide after 5 sec
+            fetcher.submit(
+                {
+                  shopId: shopID,
+                  plan:plan,
+                  type:'shop_update'
+                },
+                { method: "patch" }
+              );
+            setTimeout(() => setShowBanner(false), 900000); // Auto-hide after 5 sec
         }
       }, [message]);
       const handleChange = (value) => {
@@ -191,7 +199,8 @@ export function useAppData() {
               shopId: shopID,
               productId: updatedProduct.shopify_product_id,
               variantId: updatedProduct.shopify_variant_id,
-              reorder_days: null, // Reset reorder_days to null
+              reorder_days: null,
+              type:'product_update'
             },
             { method: "patch" }
           );
@@ -234,6 +243,7 @@ export function useAppData() {
                 productId: updatedProduct.shopify_product_id,
                 variantId: updatedProduct.shopify_variant_id,
                 reorder_days: updatedProduct.reorder_days,
+                type:'product_update'
             },
             { method: "patch" }
             );

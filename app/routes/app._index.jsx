@@ -49,11 +49,19 @@ export const action = async ({ request }) => {
   const formData = await request.formData();
   const reorderdays = Number(formData.get("date")); 
   const method = request.method;
+  const type = formData.get("type");
   let result;
   try{
     if (method === "PATCH") {
-      result = await productInstance.updateProductData(formData);
-      return {success:"",result:result};
+      if (type === 'product_update'){
+        result = await productInstance.updateProductData(formData);
+        return {success:"",result:result};
+      }
+      else{
+        result = await shopInstance.updateShopDetails(formData);
+        return {success:"",result};
+      }
+      
     } else if (method === "POST" && reorderdays) {
       if (!reorderdays || reorderdays <5 ) {
         return {  type: "updateProduct",success: "Estimated Usage Days should be greater than BufferTime!!!" };
