@@ -1,55 +1,28 @@
-import { useState } from "react";
+import { json, redirect } from "@remix-run/node";
 
-const ReorderNow = ({ variant_id, quantity ,shop_domain,coupon}) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+export const loader = async ({ request }) => {
+  const url = new URL(request.url);
+  const shopDomain = url.searchParams.get("shop_domain");
+  const variantId = url.searchParams.get("variant_id");
+  const quantity = url.searchParams.get("quantity");
+  const coupon = url.searchParams.get("coupon");
 
-  const handleReorder = async () => {
-    setLoading(true);
-    setError("");
+  if (!shopDomain || !variantId || !quantity) {
+    return json({ error: "Missing parameters" }, { status: 400 });
+  }
 
-    try {
-      const shopifyApiUrl = `https://${shop_domain}/products/${variant_id}.json`;
-      const cartClearUrl = `https://${shop_domain}/cart/clear`;
-      const checkoutUrl = `https://${shop_domain}/cart/add?items[][id]=${variant_id}&items[][quantity]=${quantity}&attributes[ReorderReminderPro]=Email&discount=${coupon}&return_to=/checkout`;
+  // Shopify cart clearing API
+  const checkoutUrl = `https://${shopDomain}/cart/clear.js`;
 
-      // Step 1: Check product stock
-      const productResponse = await fetch(shopifyApiUrl);
-      if (!productResponse.ok) {
-        throw new Error("Failed to check product stock");
-      }
-      
-      const productData = await productResponse.json();
-      const available = productData?.product?.variants[0]?.available;
+  try {
+    // Clear the cart
+    await fetch(checkoutUrl, { method: "POST", credentials: "include" });
 
-      if (!available) {
-        throw new Error("Product is out of stock");
-      }
+    // Redirect to checkout with the product added
+    const finalRedirectUrl = `https://${shopDomain}/cart/${variantId}:${quantity}?discount=${coupon}&checkout`;
 
-      // Step 2: Clear the cart
-      const cartResponse = await fetch(cartClearUrl);
-      if (!cartResponse.ok) {
-        throw new Error("Failed to clear cart");
-      }
-
-      // Step 3: Redirect to checkout
-      window.location.href = checkoutUrl;
-
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={handleReorder} disabled={loading}>
-        {loading ? "Processing..." : "Reorder Now"}
-      </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
-  );
+    return redirect(finalRedirectUrl);
+  } catch (error) {
+    return json({ error: "Error processing request" }, { status: 500 });
+  }
 };
-
-export default ReorderNow;
