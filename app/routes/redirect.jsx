@@ -14,14 +14,14 @@ export const loader = async ({ request }) => {
   }
 
   // Shopify cart clearing API
-  const checkoutUrl = `https://${shopDomain}/cart/clear.js`;
+  const checkoutUrl = `https://${shopDomain}/cart/clear`;
 
   try {
     // Clear the cart
     await fetch(checkoutUrl, { method: "POST", credentials: "include" });
 
     // Redirect to checkout with the product added
-    const finalRedirectUrl = `https://${shopDomain}/cart/${variantId}:${quantity}?discount=${coupon}&checkout`;
+    const finalRedirectUrl = `https://${shopDomain}/cart/add?items[][id]=${variantId}&items[][quantity]=${quantity}&discount=${coupon}&return_to=/checkout?`;
 
     return redirect(finalRedirectUrl);
   } catch (error) {
