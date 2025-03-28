@@ -46,9 +46,10 @@ export default function RedirectPage() {
       return;
     }
 
-    const clearCartUrl = `https://${shopDomain}/cart/clear.js`;
-    const checkoutUrl = `https://${shopDomain}/cart/${variantId}:${quantity}?discount=${coupon}&checkout`;
-
+    const clearCartUrl = `https://${shopDomain}/cart/clear`;
+    const checkoutUrl = `https://${shopDomain}/cart/add?items[][id]=${variantId}&items[][quantity]=${quantity}&discount=${coupon}&return_to=/checkout?`;
+    // https://${shopDomain}/cart/${variantId}:${quantity}?discount=${coupon}&checkout
+    
     // Clear cart and redirect
     fetch(clearCartUrl, { method: "POST", credentials: "include" })
       .then(() => {
