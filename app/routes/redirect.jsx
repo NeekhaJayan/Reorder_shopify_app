@@ -21,7 +21,8 @@ export const loader = async ({ request }) => {
     await fetch(checkoutUrl, { method: "POST", credentials: "include" });
 
     // Redirect to checkout with the product added
-    const finalRedirectUrl = `https://${shopDomain}/cart/add?items[][id]=${variantId}&items[][quantity]=${quantity}&discount=${coupon}&return_to=/checkout?`;
+    const finalRedirectUrl='https://earthrhythm.com/cart/add?items[][id]=39410319228972&items[][quantity]=1&discount=EXTRA5&return_to=/checkout?';
+    // const finalRedirectUrl = `https://${shopDomain}/cart/add?items[][id]=${variantId}&items[][quantity]=${quantity}&discount=${coupon}&return_to=/checkout?`;
 
     return redirect(finalRedirectUrl);
   } catch (error) {
@@ -47,9 +48,10 @@ export default function RedirectPage() {
     }
 
     const clearCartUrl = `https://${shopDomain}/cart/clear`;
-    const checkoutUrl = `https://${shopDomain}/cart/add?items[][id]=${variantId}&items[][quantity]=${quantity}&discount=${coupon}&return_to=/checkout?`;
+    const checkoutUrl='https://earthrhythm.com/cart/add?items[][id]=39410319228972&items[][quantity]=1&discount=EXTRA5&return_to=/checkout?';
+    // const checkoutUrl = `https://${shopDomain}/cart/add?items[][id]=${variantId}&items[][quantity]=${quantity}&discount=${coupon}&return_to=/checkout?`;
     // https://${shopDomain}/cart/${variantId}:${quantity}?discount=${coupon}&checkout
-    
+    console.log(checkoutUrl);
     // Clear cart and redirect
     fetch(clearCartUrl, { method: "POST", credentials: "include" })
       .then(() => {
@@ -60,7 +62,7 @@ export default function RedirectPage() {
         setLoading(false);
       });
   }, []);
-
+console.log(checkoutUrl);
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       {loading ? <p>Processing...</p> : <p>Redirecting to checkout...</p>}
