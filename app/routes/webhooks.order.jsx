@@ -53,7 +53,7 @@ export const action = async ({ request }) => {
   }
   else{
     
-    const orderId = payload.id;
+    const orderId = payload.admin_graphql_api_id;
     const reorderFlag = payload.note_attributes?.some(
       (attr) => attr.name === "ReorderReminderPro" && attr.value === "Email"
     );
