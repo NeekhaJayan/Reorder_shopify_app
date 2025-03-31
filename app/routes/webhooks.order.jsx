@@ -15,8 +15,8 @@ export const action = async ({ request }) => {
         customer_email: payload.customer?.email || "Unknown Email",
         customer_name: payload.customer?.first_name || "Unknown Name",
         customer_phone: payload.customer?.phone || "Unknown Phone",
-        shipping_phone:payload.shipping_address.phone || "Unknown Phone",
-        billing_phone:payload.billing_address.phone || "Unknown Phone", 
+        shipping_phone:payload.shipping_address?.phone || "Unknown Phone",
+        billing_phone:payload.billing_address?.phone || "Unknown Phone", 
         line_items: Array.isArray(payload.line_items)
           ? payload.line_items.map(item => ({
               product_id: item.product_id || "Unknown Product ID",
@@ -52,7 +52,7 @@ export const action = async ({ request }) => {
         });
   }
   else{
-    const payload = await request.json();
+    
     const orderId = payload.id;
     const reorderFlag = payload.note_attributes?.some(
       (attr) => attr.name === "ReorderReminderPro" && attr.value === "Email"
