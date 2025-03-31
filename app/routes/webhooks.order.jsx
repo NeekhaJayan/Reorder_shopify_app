@@ -1,4 +1,4 @@
-import {unauthenticated,authenticate } from "../shopify.server";
+import {unauthenticated,authenticate,shopify  } from "../shopify.server";
 
 export const action = async ({ request }) => {
   const { shop, payload, topic } = await authenticate.webhook(request);
@@ -66,7 +66,7 @@ export const action = async ({ request }) => {
       console.error("No session found for shop:", shop);
       return new Response("Session not found", { status: 401 });
     }
-    const client = new shopifyApi.clients.Graphql({ session });
+    const client = new shopify.clients.Graphql({ session });
 
     const mutation = `
     mutation updateOrderTags($input: OrderInput!) {
