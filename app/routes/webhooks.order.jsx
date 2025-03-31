@@ -61,7 +61,7 @@ export const action = async ({ request }) => {
     // if (!orderId || !reorderFlag) {
     //   return json({ message: "No reorder detected" });
     // }
-    const session = await sessionStorage.load(shop);
+    // const session = await sessionStorage.load(shop);
     if (!session) {
       console.error("No session found for shop:", shop);
       return new Response("Session not found", { status: 401 });
