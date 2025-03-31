@@ -32,18 +32,15 @@ const shopify = shopifyApp({
       ],
     },
   },
+  webhooks: {
+    ORDERS_CREATE: {
+      deliveryMethod: "http",
+      callbackUrl: "/webhooks/order", // Your webhook endpoint
+    },
+  },
   hooks: {
     afterAuth: async ({ admin,session }) => {
-      await shopify.registerWebhooks({
-        session,
-        webhooks: [
-          {
-            topic: "ORDERS_CREATE",
-            deliveryMethod: "http",
-            callbackUrl: "/webhooks/order",
-          },
-        ],
-      });
+      await shopify.registerWebhooks({session});
       // const shopName = session.shop.split(".")[0];
       const shopDetail=await shopInstance.getShopifyShopDetails(admin);
       const shop_payload_details={
