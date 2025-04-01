@@ -2,7 +2,7 @@ import {authenticate} from "../shopify.server";
 
 export const action = async ({ request }) => {
   const { shop, payload, topic } = await authenticate.webhook(request);
-  const { session } = await unauthenticated.admin(shop);
+  
 
   console.log(`Received ${topic} webhook for ${shop}:Payload is:${payload}`);
   console.log(payload);
