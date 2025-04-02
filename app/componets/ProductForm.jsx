@@ -5,7 +5,7 @@ import { ImageIcon } from "@shopify/polaris-icons";
 import { APP_SETTINGS } from "../constants";
 
 
-const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleBlur,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID} ) => {
+const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleBlur,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID,templateId} ) => {
     const navigate =useNavigate();
     const [errors, setErrors] = useState({});
 
@@ -14,6 +14,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
         <Card background="bg-surface-emphasis-active">
                     <fetcher.Form method="post">
                     <input type="hidden" name="shopid" value={shopID} />
+                    <input type="hidden" name="templateId" value={templateId} />
                     <BlockStack gap="500" >
                     {bannerMessage && (
                     <Banner

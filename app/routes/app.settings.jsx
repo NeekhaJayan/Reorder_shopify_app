@@ -87,7 +87,7 @@ export default function SettingsPage() {
   const { shop_domain,shop_email} = useLoaderData();
   const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
   const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } = useEmailSettings();
-  const {selectedTab,tabKey,tabs,handleTabChange,fetcher}=useSettings();
+  const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message}=useSettings();
   const { plan } = useOutletContext();
 
   
@@ -108,6 +108,11 @@ export default function SettingsPage() {
             }
           `}
         </style>
+        {showBanner && (
+          <Banner tone="success" onDismiss={() => setShowBanner(false)}>
+            <p>{message}</p>
+          </Banner>
+        )}
         <Tabs key={tabKey} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
           <div style={{ padding: "16px" }}>
             {selectedTab === 0 && (

@@ -3,7 +3,7 @@ import { useFetcher, useLoaderData ,useSearchParams} from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
 
 export function useAppData() {
-    const {reorderDetails,shopID,bufferTime}=useLoaderData();
+    const {reorderDetails,shopID,bufferTime,templateId}=useLoaderData();
     const { plan } = useOutletContext();
     const fetcher = useFetcher();
     const [formState, setformState] = useState('');
@@ -338,6 +338,7 @@ export function useAppData() {
     return {
         fetcher,
         shopID,
+        templateId,
         formState,
         setformState,
         formProductState,

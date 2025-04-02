@@ -1,5 +1,5 @@
 
-import { json } from "@remix-run/node";
+import { redirect,json } from "@remix-run/node";
 
 import {
   Page,
@@ -40,7 +40,7 @@ export const loader = async ({ request }) => {
     throw new Error("Shop data not found in FastAPI after retries");
   }
   const reorderDetails = await productInstance.getAllProductDetails(shop.shop_id);
-  return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time }); 
+  return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id }); 
  
 };
 
@@ -50,6 +50,8 @@ export const action = async ({ request }) => {
   const reorderdays = Number(formData.get("date")); 
   const method = request.method;
   const type = formData.get("type");
+  const templateId = formData.get("templateId");
+  
   let result;
   try{
     if (method === "PATCH") {
@@ -63,6 +65,9 @@ export const action = async ({ request }) => {
       }
       
     } else if (method === "POST" && reorderdays) {
+      if (!templateId) {
+        return redirect("/app/settings?error=missing_template");
+      }
       if (!reorderdays || reorderdays <5 ) {
         return {  type: "updateProduct",success: "Estimated Usage Days should be greater than BufferTime!!!" };
       }
@@ -89,7 +94,7 @@ export const action = async ({ request }) => {
 
 
 export default function Index() {
-  const {fetcher,shopID,
+  const {fetcher,shopID,templateId,
     formState,
     setformState,
     formProductState,
@@ -174,7 +179,8 @@ export default function Index() {
             plan={plan} 
             updatedProducts={updatedProducts}
             fetcher={fetcher}
-            shopID={shopID}/>
+            shopID={shopID}
+            templateId={templateId}/>
             {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
             {data?.success && <p style={{ color: "darkgreen" }}>{data.success}</p>}
