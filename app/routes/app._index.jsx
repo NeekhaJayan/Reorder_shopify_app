@@ -81,7 +81,8 @@ export const action = async ({ request }) => {
       return json({
         type: "fetchEmailCount",
         Scheduled_Count: result_data.Scheduled_Count || 0,
-        Dispatched_Count: result_data.Dispatched_Count || 0
+        Dispatched_Count: result_data.Dispatched_Count || 0,
+        Reorder_Email_Source:result_data.Reorder_Email_Source || 0,
     });
     }
   }catch (error) {
@@ -118,7 +119,7 @@ export default function Index() {
     toggleModal,
     selectedProductId,
     selectedVariantId,
-    handleChange,handleBlur,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount}=useAppData();
+    handleChange,handleBlur,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -213,7 +214,8 @@ export default function Index() {
                             selected_variantId={selectedVariantId}
                             showEmailCount={showEmailCount}
                             scheduleEmailCount={scheduleEmailCount}
-                            dispatchEmailCount={dispatchEmailCount}/>
+                            dispatchEmailCount={dispatchEmailCount}
+                            orderSource={orderSource}/>
               )}
               {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT && (
                   <TextContainer>

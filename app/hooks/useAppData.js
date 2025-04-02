@@ -150,6 +150,7 @@ export function useAppData() {
     const [isFetchingEmailCount, setIsFetchingEmailCount] = useState(false); 
     const [scheduleEmailCount, setScheduleEmailCount] = useState(null);
     const [dispatchEmailCount, setDispatchEmailCount] = useState(null);
+    const [orderSource, setOrderSource]= useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [selectedVariantId, setSelectedVarientId] = useState(null);
     const toggleEmailModal = useCallback(() => {
@@ -331,6 +332,7 @@ export function useAppData() {
         if (fetcher.data?.type === "fetchEmailCount") {    
             setScheduleEmailCount(fetcher.data.Scheduled_Count);
             setDispatchEmailCount(fetcher.data.Dispatched_Count);
+            setOrderSource(fetcher.data.Reorder_Email_Source);
             toggleEmailModal();
         }
     }, [data]);
@@ -363,7 +365,7 @@ export function useAppData() {
         selectedProductId,
         selectedVariantId,
         handleChange,handleBlur,plan
-        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount
+        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource
       };
 };
 

@@ -1,6 +1,6 @@
 import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge} from "@shopify/polaris";
 
-const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount}) => {
+const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource}) => {
 
     return(
         <>
@@ -85,6 +85,8 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                       <Modal.Section>
                           <p>No of Emails Scheduled: {scheduleEmailCount}</p>
                           <p>No of Emails Send: {dispatchEmailCount}</p>
+                          <p>No of Orders From App Source:{orderSource}</p>
+
                       </Modal.Section>
                         </Modal> 
                     </div>
