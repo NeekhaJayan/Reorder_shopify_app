@@ -48,26 +48,28 @@ const shopify = shopifyApp({
         shop_name:shopDetail.name,
         email:shopDetail.email
       }
-      await fetch('https://reorderappapi.onrender.com/auth/shops/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Ensure the correct content type
-        },
-        body: JSON.stringify(shop_payload_details), // Convert object to JSON string
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            const errorDetails = await response.json();
-            throw new Error(`Error from server: ${response.status} - ${errorDetails.message}`);
+      try{
+
+            const response = await fetch('https://reorderappapi.onrender.com/auth/shops/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json', // Ensure the correct content type
+              },
+              body: JSON.stringify(shop_payload_details), // Convert object to JSON string
+            })
+            if (!response.ok) {
+              const errorDetails = await response.json();
+              throw new Error(`Error from server: ${response.status} - ${errorDetails.message}`);
+            }
+
+            console.log('Data successfully sent to FastAPI:', await response.json());
+
+          } catch (error) {
+            console.error('Error sending data to FastAPI:', error.message);
           }
-          return response.json(); // Parse the JSON response from the server
-        })
-        .then((data) => {
-          console.log('Data successfully sent to FastAPI:', data);
-        })
-        .catch((error) => {
-          console.error('Error sending data to FastAPI:', error.message);
-        });
+          return {
+            redirectUrl: 'app/settings' // Ensure it includes the full app URL
+          };
     },
   },
   future: {
