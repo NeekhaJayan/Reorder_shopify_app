@@ -1,4 +1,4 @@
-import {Card,Page,Tabs} from "@shopify/polaris";
+import {Card,Page,Tabs,Banner} from "@shopify/polaris";
 
 import {useLoaderData} from "@remix-run/react";
 import { authenticate } from "../shopify.server";
