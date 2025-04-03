@@ -111,13 +111,13 @@ export default function SettingsPage() {
         {showBanner && (
           <Banner tone="critical" onDismiss={() => setShowBanner(false)}>
 
-            <p>"Your email settings need an update. Please review and save changes."</p> 
+            <p>Your email settings need an update. Please review and save changes.</p> 
 
-            <p>"Your logo update is pending. Upload a new logo to complete the setup."</p>
+            <p>Your logo update is pending. Upload a new logo to complete the setup.</p>
 
-            <p>"Your coupon details are missing. Add them here to activate discounts for your customers."</p>
+            <p>Your coupon details are missing. Add them here to activate discounts for your customers.</p>
 
-            <p>"Buffer time settings need to be updated. Adjust them here to optimize reorder reminders."</p>
+            <p>Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.</p>
           </Banner>
         )}
         {emailSettingsbanner  && (
