@@ -44,7 +44,7 @@ export function useAppData() {
       }, [message]);
       const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormState((prevState) => ({ ...prevState, [name]: value }));
+        setformState((prevState) => ({ ...prevState, [name]: value }));
     
         if (!value) {
             setBannerMessage("Should Enter Estimated Usage Days!!!");
@@ -62,6 +62,7 @@ export function useAppData() {
             return; // Prevent saving if invalid
         }
         console.log("Saving with value:", formState.date);
+        event.target.closest("form").submit();
     };
     
     const handleBlur = () => {
