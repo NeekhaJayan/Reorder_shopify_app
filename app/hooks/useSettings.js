@@ -52,5 +52,5 @@ export function useSettings(){
         setSelectedTab(selectedTabIndex);
         setTabKey(tabKey + 1); // Change the key on each selection
     }, [tabKey]);
-    return {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner};
+    return {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message};
 };
