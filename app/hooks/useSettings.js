@@ -4,8 +4,13 @@ import {useFetcher,useSearchParams} from "@remix-run/react";
 export function useSettings(){
     const [searchParams] = useSearchParams();
     const tab = searchParams.get("tab");
+
     const rawMessage = searchParams.get("error");
-    // const message = rawMessage ? decodeURIComponent(rawMessage) : null;
+    const errorMessage = `<p>Your email settings need an update. Please review and save changes.</p> 
+    <p>Your logo update is pending. Upload a new logo to complete the setup.</p>
+    <p>Your coupon details are missing. Add them here to activate discounts for your customers.</p>
+    <p>Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.</p>`;
+    const message = rawMessage ? errorMessage : null; 
     const [showBanner, setShowBanner] = useState(!!message);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
     const [tabKey, setTabKey] = useState(0);
