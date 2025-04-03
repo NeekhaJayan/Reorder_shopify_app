@@ -184,7 +184,7 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
                                               <tr>
                                                 <td align="center" style="padding:20px; font-family:Arial, sans-serif; color:#333333;">
                                                   <p style="font-size:16px;">Hello ${placeholders.first_name},</p>
-                                                  <p style="font-size:16px;">We noticed it's been <b>{placeholders["remaining_days"]}</b> days since you purchased <b>${placeholders.product_name}</b>. You might be running low!</p>
+                                                  <p style="font-size:16px;">We noticed it's been <b>30</b> days since you purchased <b>${placeholders.product_name}</b>. You might be running low!</p>
                                                   <p style="font-size:16px;">Don't wait until you run out! Restock now and keep enjoying your favorite products.</p>
                                                 </td>
                                               </tr>
