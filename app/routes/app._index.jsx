@@ -119,7 +119,7 @@ export default function Index() {
     toggleModal,
     selectedProductId,
     selectedVariantId,
-    handleChange,handleBlur,handleSave,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource}=useAppData();
+    handleChange,handleBlur,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -173,7 +173,7 @@ export default function Index() {
             bannerStatus={bannerStatus}
             setBannerMessage={setBannerMessage}
             handleChange={handleChange}
-            handleSave={handleSave}
+            handleBlur={handleBlur}
             formState={formState}
             formProductState={formProductState}
             selectProduct={selectProduct} 
