@@ -135,113 +135,98 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
     //   </body>
     //   </html>
     // `;
+    const coupon_section = `
+    <tr>
+      <td align="center" bgcolor="#f9f1dc" style="padding:15px; border-radius:5px; border: 2px dotted #d67e00; ">
+        <h3 style="color:#d67e00; margin:0;">SPECIAL OFFER</h3>
+        <p style="font-size:16px;">
+          Use code <span style="font-size:18px; font-weight:bold; color:#d67e00; background:#fff; padding:5px 10px; border-radius:4px;">
+            RESTOCK10
+          </span> at checkout
+        </p>
+        <p style="font-size:16px;">Save 10% on your reorder</p>
+      </td>
+    </tr>
+  `;
+
+  const logo_image_section = image_path
+  ? `
+    <tr>
+      <td align="center" bgcolor="#eeeeee" style="padding:20px; border-radius:8px 8px 0 0;">
+        <img src="${image_path}" alt="${shop}" width="120" style="display:block;">
+        <h1 style="font-size:24px; color:#333333; font-family:Arial, sans-serif;">Time to Restock!</h1>
+      </td>
+    </tr>
+  `
+  : `
+    <tr>
+      <td align="center" bgcolor="#eeeeee" style="padding:20px; border-radius:8px 8px 0 0;">
+        <h1 style="font-size:30px; color:#333333; font-family:Arial, sans-serif;">${shop}</h1>
+        <h1 style="font-size:24px; color:#333333; font-family:Arial, sans-serif;">Time to Restock!</h1>
+      </td>
+    </tr>
+  `;
+
     const template=`<!DOCTYPE html>
                                     <html>
                                     <head>
-                                      
-                                      <style>
-                                        table, td {
-                                          mso-table-lspace: 0pt;
-                                          mso-table-rspace: 0pt;
-                                        }
-                                        body {
-                                          font-family: Arial, sans-serif;
-                                          margin: 0;
-                                          padding: 0;
-                                          background-color: #f9f9f9;
-                                        }
-                                        .email-container {
-                                          width: 100%;
-                                          max-width: 600px;
-                                          margin: auto;
-                                          background-color: #ffffff;
-                                          padding: 20px;
-                                        }
-                                        .header img {
-                                          width: 120px;
-                                        }
-                                        .content {
-                                          padding: 20px;
-                                        }
-                                        .cta a {
-                                          display: inline-block;
-                                          padding: 10px 20px;
-                                          background-color: #007bff;
-                                          color: #ffffff;
-                                          text-decoration: none;
-                                          border-radius: 5px;
-                                          font-weight: bold;
-                                        }
-                                        .footer {
-                                          text-align: center;
-                                          font-size: 12px;
-                                          color: #777777;
-                                        }
-                                      </style>
+                                      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                                      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                                     </head>
-                                    <body>
-                                      <table class="email-container" cellspacing="0" cellpadding="0" border="0">
-                                        <!-- Header Section -->
+                                    <body style="margin:0; padding:0; background-color:#f4f4f4;">
+                                      <table role="presentation" width="100%" bgcolor="#f4f4f4" cellpadding="0" cellspacing="0" border="0">
                                         <tr>
                                           <td align="center">
-                                            <img src="${image_path}" alt="${shop}">
-                                            <h1>Time to Restock&#33;</h1>
-                                          </td>
-                                        </tr>
-
-                                        <!-- Content Section -->
-                                        <tr>
-                                          <td class="content">
-                                            <p>Hello ${placeholders.first_name},</p>
-                                            <p>We noticed it&#39;s been 30 days since you purchased <b>${placeholders.product_name}</b>. Based on typical usage, you might be running low about now.</p>
-                                            <p>Don&#39;t wait until you run out&#33; Restock now to keep enjoying your favorite products without interruption.</p>
-
-                                            <!-- Product Section -->
-                                            <table width="100%">
+                                            <table role="presentation" width="600" bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0" style="margin:20px auto; padding:20px; border-radius:8px;">
+                                              
+                                              ${logo_image_section}
+                                              
                                               <tr>
-                                                <td align="center">
-                                                  <img src="${placeholders.product_Image}" alt="${placeholders.product_name}" style="max-width: 150px;">
-                                                </td>
-                                                <td>
-                                                  <h3>${placeholders.product_name}</h3> 
-                                                  <p><b>Quantity&#58;</b>${placeholders.quantity}</p> 
+                                                <td align="center" style="padding:20px; font-family:Arial, sans-serif; color:#333333;">
+                                                  <p style="font-size:16px;">Hello ${placeholders.first_name},</p>
+                                                  <p style="font-size:16px;">We noticed it's been <b>{placeholders["remaining_days"]}</b> days since you purchased <b>${placeholders.product_name}</b>. You might be running low!</p>
+                                                  <p style="font-size:16px;">Don't wait until you run out! Restock now and keep enjoying your favorite products.</p>
                                                 </td>
                                               </tr>
-                                            </table>
 
-                                            <!-- CTA Section -->
-                                            <table align="center">
                                               <tr>
-                                                <td class="cta">
-                                                  <a href="{placeholders["reorder_url"]}" target="_blank">REORDER NOW</a>
+                                                <td align="center" style="padding:10px;">
+                                                  <img src="${placeholders.product_Image}" alt="${placeholders.product_name}" width="150" style="display:block; margin:0 auto; border-radius:5px;">
                                                 </td>
                                               </tr>
-                                            </table>
-
-                                            <!-- Coupon Section -->
-                                            <table align="center">
                                               <tr>
-                                                <td>
-                                                  <h3>SPECIAL OFFER</h3>
-                                                  <p>Use code <b>RESTOCK10</b> at checkout</p>
-                                                  <p>Save 10&#37; on your reorder</p>
-                                                  <p class="expiry">Valid until &#123;&#123;coupon_expiry_date&#125;&#125;</p>
+                                                <td align="center" style="padding:5px 20px; font-family:Arial, sans-serif;">
+                                                  <h3 style="font-size:18px; color:#333333;">${placeholders.product_name}</h3>
+                                                  <p style="font-size:14px;"><b>Quantity:</b> ${placeholders.quantity}</p>
                                                 </td>
                                               </tr>
-                                            </table>
-                                          </td>
-                                        </tr>
 
-                                        <!-- Footer Section -->
-                                        <tr>
-                                          <td class="footer">
-                                            <p>${shop} | ${mail_id}} </p>
-                                            <p>Powered by <b>ReOrder Reminder Pro</b></p>
+                                              <tr>
+                                                <td align="center" style="padding:20px;">
+                                                  <a href="#" target="_blank" style="display:inline-block; padding:12px 20px; background-color:#007bff; color:#ffffff; text-decoration:none; border-radius:5px; font-size:16px; font-weight:bold;">
+                                                    REORDER NOW
+                                                  </a>
+                                                </td>
+                                              </tr>
+
+                                              ${coupon_section}
+
+                                              <tr>
+                                                <td align="center" style="padding:20px; font-size:12px; color:#777777; font-family:Arial, sans-serif;">
+                                                  <p>${shop} | ${mail_id}} </p>
+                                                  <p>Powered by <b>ReOrder Reminder Pro</b></p>
+                                                </td>
+                                              </tr>
+
+                                            </table>
                                           </td>
                                         </tr>
                                       </table>
                                     </body>
-                                    </html>`
+                                    </html>
+
+                                    
+                                     `
     
     const newWindow = window.open("", "Preview", "width=800,height=1000,scrollbars=yes");
 

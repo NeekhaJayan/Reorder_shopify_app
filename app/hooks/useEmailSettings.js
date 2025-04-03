@@ -23,6 +23,27 @@ const [loading, setLoading] = useState(true);
     setTimeout(() => setLoading(false), 2000);
   }, [settingDetails]);
 
+  useEffect(() => {
+    switch (true) {
+        case coupon.trim() === "":
+            setBannerMessage("Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.");
+            break;
+        case subject.trim() === "":
+            setBannerMessage("Subject cannot be empty!");
+            break;
+        case fromEmail.trim() === "":
+            setBannerMessage("Email cannot be empty!");
+            break;
+        case fromName.trim() === "":
+            setBannerMessage("Name cannot be empty!");
+            break;
+        default:
+            setBannerMessage(""); // Clear message when all fields are valid
+            break;
+    }
+}, [coupon, subject, fromEmail, fromName]);
+
+
   return { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent, bufferTime, setBufferTime };
 };
 
