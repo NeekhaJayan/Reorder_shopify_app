@@ -10,6 +10,7 @@ const [discountPercent, setDiscountPercent] = useState(settingDetails?.email_tem
 const [subject, setSubject] = useState(settingDetails?.email_template_settings?.subject || '');
 const [fromName, setFromName] = useState(settingDetails?.email_template_settings?.fromName || '');
 const [fromEmail, setFromEmail] = useState(settingDetails?.email_template_settings?.fromEmail || '');
+const [emailSettingsbanner, setEmailSettingsBanner] = useState("");
 const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (settingDetails?.email_template_settings) {
@@ -26,25 +27,25 @@ const [loading, setLoading] = useState(true);
   useEffect(() => {
     switch (true) {
         case coupon.trim() === "":
-            setBannerMessage("Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.");
+          setEmailSettingsBanner("Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.");
             break;
         case subject.trim() === "":
-            setBannerMessage("Subject cannot be empty!");
+          setEmailSettingsBanner("Subject cannot be empty!");
             break;
         case fromEmail.trim() === "":
-            setBannerMessage("Email cannot be empty!");
+          setEmailSettingsBanner("Email cannot be empty!");
             break;
         case fromName.trim() === "":
-            setBannerMessage("Name cannot be empty!");
+          setEmailSettingsBanner("Name cannot be empty!");
             break;
         default:
-            setBannerMessage(""); // Clear message when all fields are valid
+          setEmailSettingsBanner(""); // Clear message when all fields are valid
             break;
     }
 }, [coupon, subject, fromEmail, fromName]);
 
 
-  return { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent, bufferTime, setBufferTime };
+  return { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent, bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner };
 };
 
 export default useEmailSettings;

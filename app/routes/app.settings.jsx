@@ -86,7 +86,7 @@ export const action = async ({ request }) => {
 export default function SettingsPage() {
   const { shop_domain,shop_email} = useLoaderData();
   const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
-  const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } = useEmailSettings();
+  const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner } = useEmailSettings();
   const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message}=useSettings();
   const { plan } = useOutletContext();
 
@@ -111,6 +111,11 @@ export default function SettingsPage() {
         {showBanner && (
           <Banner tone="success" onDismiss={() => setShowBanner(false)}>
             <p>{message}</p>
+          </Banner>
+        )}
+        {emailSettingsbanner  && (
+          <Banner tone="Critical" onDismiss={() => setEmailSettingsBanner("")}>
+            <p>{emailSettingsbanner}</p>
           </Banner>
         )}
         <Tabs key={tabKey} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
