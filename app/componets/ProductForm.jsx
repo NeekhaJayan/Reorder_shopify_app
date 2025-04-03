@@ -5,7 +5,7 @@ import { ImageIcon } from "@shopify/polaris-icons";
 import { APP_SETTINGS } from "../constants";
 
 
-const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleBlur,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID,templateId} ) => {
+const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleBlur,handleSave,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID,templateId} ) => {
     const navigate =useNavigate();
     const [errors, setErrors] = useState({});
 
@@ -89,7 +89,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
                                 Upgrade
                             </Button>
                             ) : (
-                            <Button variant="secondary" submit>
+                            <Button variant="secondary" onClick={handleSave}>
                                 Save
                             </Button>
                             )}

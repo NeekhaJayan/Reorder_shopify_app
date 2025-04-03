@@ -42,11 +42,26 @@ export function useAppData() {
             setTimeout(() => setShowBanner(false), 900000); // Auto-hide after 5 sec
         }
       }, [message]);
-      const handleChange = (value) => {
-        // Allow only positive numbers
-        if (value < 0) return;
+      const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormState((prevState) => ({ ...prevState, [name]: value }));
     
-        setformState((prevState) => ({ ...prevState, date: value }));
+        if (!value) {
+            setBannerMessage("Should Enter Estimated Usage Days!!!");
+            setBannerStatus("critical");
+        } else if (parseInt(value) <= bufferTime) {
+            setBannerMessage("Estimated Usage Days should be greater than BufferTime!!!");
+            setBannerStatus("critical");
+        } else {
+            setBannerMessage(""); // Clear error if valid
+            setBannerStatus("");
+        }
+    };
+    const handleSave = () => {
+        if (!formState.date || formState.date <= bufferTime) {
+            return; // Prevent saving if invalid
+        }
+        console.log("Saving with value:", formState.date);
     };
     
     const handleBlur = () => {
@@ -364,7 +379,7 @@ export function useAppData() {
         toggleModal,
         selectedProductId,
         selectedVariantId,
-        handleChange,handleBlur,plan
+        handleChange,handleBlur,plan,handleSave
         ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource
       };
 };
