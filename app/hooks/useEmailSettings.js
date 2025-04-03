@@ -3,7 +3,8 @@ import {useLoaderData} from "@remix-run/react";
 
 
 export  function useEmailSettings () {
-const { shop_domain, settingDetails } = useLoaderData();   
+const { shop_domain, settingDetails } = useLoaderData(); 
+const { plan } = useOutletContext();  
 const [bufferTime, setBufferTime] = useState(settingDetails?.email_template_settings?.bufferTime || 5);
 const [coupon, setCoupon] = useState(settingDetails?.email_template_settings?.coupon || '');
 const [discountPercent, setDiscountPercent] = useState(settingDetails?.email_template_settings?.discountPercent || '');
@@ -25,24 +26,15 @@ const [loading, setLoading] = useState(true);
   }, [settingDetails]);
 
   useEffect(() => {
-    switch (true) {
-        case coupon.trim() === "":
-          setEmailSettingsBanner("Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.");
-            break;
-        case subject.trim() === "":
-          setEmailSettingsBanner("Subject cannot be empty!");
-            break;
-        case fromEmail.trim() === "":
-          setEmailSettingsBanner("Email cannot be empty!");
-            break;
-        case fromName.trim() === "":
-          setEmailSettingsBanner("Name cannot be empty!");
-            break;
-        default:
-          setEmailSettingsBanner(""); // Clear message when all fields are valid
-            break;
+    let message = "";
+    if (!subject.trim() || !fromEmail.trim() || !fromName.trim()) {
+      message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
     }
-}, [coupon, subject, fromEmail, fromName]);
+    if (plan === 'PRO' && (!coupon.trim() || !discountPercent.trim() || !bufferTime.trim())) {
+      message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
+    }
+    setEmailSettingsBanner(message);
+}, [coupon, subject, fromEmail, fromName, discountPercent, bufferTime, plan]);
 
 
   return { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent, bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner };
