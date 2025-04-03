@@ -5,7 +5,7 @@ export function useSettings(){
     const [searchParams] = useSearchParams();
     const tab = searchParams.get("tab");
     const rawMessage = searchParams.get("error");
-    const message = rawMessage ? decodeURIComponent(rawMessage) : null;
+    // const message = rawMessage ? decodeURIComponent(rawMessage) : null;
     const [showBanner, setShowBanner] = useState(!!message);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
     const [tabKey, setTabKey] = useState(0);
@@ -40,5 +40,5 @@ export function useSettings(){
         setSelectedTab(selectedTabIndex);
         setTabKey(tabKey + 1); // Change the key on each selection
     }, [tabKey]);
-    return {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message};
+    return {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner};
 };

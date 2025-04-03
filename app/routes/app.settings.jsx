@@ -87,7 +87,7 @@ export default function SettingsPage() {
   const { shop_domain,shop_email} = useLoaderData();
   const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
   const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner } = useEmailSettings();
-  const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message}=useSettings();
+  const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner}=useSettings();
   const { plan } = useOutletContext();
 
   
@@ -109,12 +109,19 @@ export default function SettingsPage() {
           `}
         </style>
         {showBanner && (
-          <Banner tone="success" onDismiss={() => setShowBanner(false)}>
-            <p>{message}</p>
+          <Banner tone="critical" onDismiss={() => setShowBanner(false)}>
+
+            <p>"Your email settings need an update. Please review and save changes."</p> 
+
+            <p>"Your logo update is pending. Upload a new logo to complete the setup."</p>
+
+            <p>"Your coupon details are missing. Add them here to activate discounts for your customers."</p>
+
+            <p>"Buffer time settings need to be updated. Adjust them here to optimize reorder reminders."</p>
           </Banner>
         )}
         {emailSettingsbanner  && (
-          <Banner tone="Critical" onDismiss={() => setEmailSettingsBanner("")}>
+          <Banner tone="critical" onDismiss={() => setEmailSettingsBanner("")}>
             <p>{emailSettingsbanner}</p>
           </Banner>
         )}
