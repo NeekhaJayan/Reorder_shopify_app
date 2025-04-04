@@ -6,17 +6,11 @@ export function useSettings(){
     const tab = searchParams.get("tab");
 
     const rawMessage = searchParams.get("error");
-    const errorMessage = `<p>⚠️ <strong>Action Required:</strong> Please review and update your settings to ensure smooth functionality.</p> 
-  
-  <ul>
-    <li>📧 <strong>Email Settings:</strong> Your email settings need an update. Please review and save the changes.</li>
-    <li>🖼️ <strong>Logo Update:</strong> Your logo is missing. Upload a new logo to complete the setup.</li>
-    <li>💰 <strong>Coupon Details:</strong> No coupon details found! Add them to activate discounts for your customers.</li>
-    <li>⏳ <strong>Buffer Time Settings:</strong> Adjust your buffer time settings to optimize reorder reminders.</li>
-  </ul>
-
-  <p>✅ Once you've made the necessary updates, save your changes to continue.</p>
-  <p>❓ Need help? <a href="support_link" style="color: #007bff;">Contact Support</a></p>`;
+    const errorMessage = `⚠️Your email settings need an update. Please review and save changes. 
+    📧 Your logo update is pending. Upload a new logo to complete the setup.
+    💰 Your coupon details are missing. Add them here to activate discounts for your customers.
+    ⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.
+  </ul>`;
     const message = rawMessage ? errorMessage : null; 
     const [showBanner, setShowBanner] = useState(!!message);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
