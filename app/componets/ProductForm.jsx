@@ -5,14 +5,14 @@ import { ImageIcon } from "@shopify/polaris-icons";
 import { APP_SETTINGS } from "../constants";
 
 
-const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleBlur,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID,templateId} ) => {
+const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,handleSubmit,formState,formProductState,selectProduct,plan,updatedProducts,fetcher,shopID,templateId} ) => {
     const navigate =useNavigate();
     const [errors, setErrors] = useState({});
 
     return (
     <>
         <Card background="bg-surface-emphasis-active">
-                    <fetcher.Form method="post">
+                    <fetcher.Form method="post" onSubmit={handleSubmit}>
                     <input type="hidden" name="shopid" value={shopID} />
                     <input type="hidden" name="templateId" value={templateId} />
                     <BlockStack gap="500" >
@@ -81,7 +81,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
                         </BlockStack>
                         <div style={{marginTop:'5px'}}>
                         <div style={{ marginBottom: '1rem' }}>
-                            <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange} onBlur={handleBlur} autoComplete="off" />                    
+                            <TextField label="Estimated Usage Days " type="number" name="date" value={formState.date} onChange={handleChange}  autoComplete="off" />                    
                         </div>
                         <div style={{ display: 'grid', justifyContent: 'center' }}>
                             {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT ? (

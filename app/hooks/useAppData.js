@@ -65,6 +65,34 @@ export function useAppData() {
             setBannerStatus("");
         }
     };
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    
+        if (!formState.date) {
+            setBannerMessage("Should Enter Estimated Usage Days!!!");
+            setBannerStatus("critical");
+            return;
+        }
+    
+        if (formState.date <= 5) {
+            setBannerMessage("Estimated Usage Days should be greater than 5!!!");
+            setBannerStatus("critical");
+            return;
+        }
+    
+        setBannerMessage("");
+        setBannerStatus("");
+    
+        // If everything is valid, submit the form manually
+        // event.target.submit();
+        const form = event.target;
+        const formData = new FormData(form);
+        fetcher.submit(
+            formData,
+            { method: "post" }
+            );
+
+    };
     const [selectedProductIds, setSelectedProductIds] = useState(
         reorderDetails.map(product => ({
         productId: product.shopify_product_id,
@@ -364,7 +392,7 @@ export function useAppData() {
         toggleModal,
         selectedProductId,
         selectedVariantId,
-        handleChange,handleBlur,plan
+        handleChange,handleSubmit,plan
         ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource
       };
 };
