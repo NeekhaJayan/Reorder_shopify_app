@@ -1,4 +1,4 @@
-import {Card,Page,Tabs,Banner} from "@shopify/polaris";
+import {Card,Page,Tabs,Banner,Tooltip} from "@shopify/polaris";
 
 import {useLoaderData} from "@remix-run/react";
 import { authenticate } from "../shopify.server";
@@ -119,7 +119,12 @@ export default function SettingsPage() {
         )}
         {emailSettingsbanner  && (
           <Banner tone="critical" onDismiss={() => setEmailSettingsBanner("")}>
-            <p>{emailSettingsbanner}</p>
+            <p>{emailSettingsbanner}{"contact "}  
+            <Tooltip active content={shop_email} hasUnderline>
+          <Text variant="bodyLg" fontWeight="bold" as="span">
+          support
+          </Text>
+        </Tooltip>{"for assistance."}</p>
           </Banner>
         )}
         <Tabs key={tabKey} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
