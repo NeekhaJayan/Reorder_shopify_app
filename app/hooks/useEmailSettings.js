@@ -20,6 +20,7 @@ const [subject, setSubject] = useState(settingDetails?.email_template_settings?.
 const [fromName, setFromName] = useState(settingDetails?.email_template_settings?.fromName || '');
 const [fromEmail, setFromEmail] = useState(settingDetails?.email_template_settings?.fromEmail || '');
 const [emailSettingsbanner, setEmailSettingsBanner] = useState("");
+const [isInitialized, setIsInitialized] = useState(false);
 const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (settingDetails?.email_template_settings) {
@@ -38,11 +39,13 @@ const [loading, setLoading] = useState(true);
         discountPercent: settings.discountPercent || "",
         bufferTime: settings.bufferTime || 5
       });
+      setIsInitialized(true); 
     }
     setTimeout(() => setLoading(false), 2000);
   }, [settingDetails]);
 
   useEffect(() => {
+    if (!isInitialized) return; 
     let message = "";
 
   const restoreIfEmpty = (value, setter, original) => {
@@ -69,7 +72,7 @@ const [loading, setLoading] = useState(true);
   }
 
   setEmailSettingsBanner(message);
-}, [coupon, subject, fromEmail, fromName, discountPercent, bufferTime, plan]);
+}, [coupon, subject, fromEmail, fromName, discountPercent, bufferTime, plan,isInitialized]);
 
 
   return { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent, bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner };
