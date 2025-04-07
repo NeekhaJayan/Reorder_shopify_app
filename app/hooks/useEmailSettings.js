@@ -44,11 +44,11 @@ useEffect(() => {
     setBufferTime(initialData.bufferTime);
     setOriginalValues(initialData);
 
-    setIsInitialized(true);
+    
   }
 
   setTimeout(() => setLoading(false), 2000);
-  
+  setIsInitialized(true);
 }, [settingDetails]);
 
   useEffect(() => {
@@ -57,6 +57,7 @@ useEffect(() => {
     
     if (!subject.trim()) {
       setSubject(originalValues.subject);
+      console.log(originalValues.subject)
       message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
     }
     if (!fromEmail.trim()) {
@@ -75,13 +76,14 @@ useEffect(() => {
       }
       if (!discountPercent.trim()) {
         setDiscountPercent(originalValues.discountPercent);
-        message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
+        
       }
       if (!bufferTime) {
         setBufferTime(originalValues.bufferTime);
-        message = "Buffer time was required for PRO and has been restored.";
+        message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";;
       }
     }
+    console.log(message);
     setEmailSettingsBanner(message);
 }, [coupon, subject, fromEmail, fromName, discountPercent, bufferTime, plan,isInitialized]);
 

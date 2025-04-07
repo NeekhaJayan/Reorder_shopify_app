@@ -242,6 +242,7 @@ export default function Index() {
               Order Date + (Ordered Quantity * Estimated Usage Days of the Product) - Buffer Time
               </Text>
             </Card>
+            <div style={{ alignItems:'center'}}>Contact Us : ReOrderReminderPro@decagrowth.com</div>
              {plan === "PRO" &&(<div className="whatsapp-button">
           <a
             href="https://wa.me/6282086660?text=Hello!%20I'm%20interested%20in%20your%20services"
