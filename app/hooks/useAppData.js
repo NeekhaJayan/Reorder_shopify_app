@@ -202,16 +202,7 @@ export function useAppData() {
             toggleModal(); // Open the modal
             }, [toggleModal]);
     const handleReorderChange = useCallback((product_id, value) => {
-        if (!value ) {
-            setEditWarningMessage("Please enter the estimated usage days.");
-            setActiveEditModal(true);
-            return;
-          }
-        if (value <= bufferTime) {
-            setEditWarningMessage("Estimated Usage Days should be greater than BufferTime!!!");
-            setActiveEditModal(true);
-            return;
-          }
+       
         setUpdatedProducts((prev) =>
         prev.map((product) =>
             product.shopify_variant_id === product_id
@@ -281,11 +272,23 @@ export function useAppData() {
     };
     const saveReorderDay = useCallback(
         (product) => {
+            
         const updatedProduct = updatedProducts.find(
             (p) => p.shopify_variant_id === product.shopify_variant_id );
 
+            
         if (updatedProduct) {
             setSpinner(true);
+            if (!updatedProduct.reorder_days ) {
+                setEditWarningMessage("Please enter the estimated usage days.");
+                setActiveEditModal(true);
+                return;
+              }
+            if (updatedProduct.reorder_days <= bufferTime) {
+                setEditWarningMessage("Estimated Usage Days should be greater than BufferTime!!!");
+                setActiveEditModal(true);
+                return;
+              }
             fetcher.submit(
             {
                 shopId:shopID,
