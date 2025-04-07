@@ -108,10 +108,13 @@ export default function SettingsPage() {
             }
           `}
         </style>
-        {showBanner && (
+        {showBanner && message && (
           <Banner tone="critical" onDismiss={() => setShowBanner(false)}>
-
-            {message}
+            <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
+              {message.map((msg, i) => (
+                <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
+              ))}
+            </ul>
           </Banner>
         )}
         {emailSettingsbanner  && (
