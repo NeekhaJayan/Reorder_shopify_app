@@ -278,7 +278,7 @@ export function useAppData() {
 
             
         if (updatedProduct) {
-            setSpinner(true);
+            
             if (!updatedProduct.reorder_days ) {
                 setEditWarningMessage("Please enter the estimated usage days.");
                 setActiveEditModal(true);
@@ -289,6 +289,7 @@ export function useAppData() {
                 setActiveEditModal(true);
                 return;
               }
+            setSpinner(true);
             fetcher.submit(
             {
                 shopId:shopID,
