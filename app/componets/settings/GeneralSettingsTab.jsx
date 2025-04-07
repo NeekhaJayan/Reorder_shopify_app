@@ -10,6 +10,7 @@ import {
     ProgressBar,
     Form,
     Image,
+    Thumbnail,
     DropZone,
     Banner,LegacyStack
   } from "@shopify/polaris";
@@ -22,10 +23,12 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
         <LegacyStack vertical>
           {files.map((file, index) => (
             <LegacyStack alignment="center" key={index}>
-              <Image
-                source={file.url ? file.url : window.URL.createObjectURL(file)}
-                alt={file.name || "Uploaded image"}
-              />
+              <Thumbnail
+            size="small"
+            alt={file.name}
+            source={file.url ? file.url : window.URL.createObjectURL(file)}
+          />
+              
                 <Button variant="plain" onClick={handleRemoveImage}>
                   Upload a new logo to update
                 </Button>

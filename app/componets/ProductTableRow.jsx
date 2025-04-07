@@ -1,4 +1,4 @@
-import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge} from "@shopify/polaris";
+import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Text} from "@shopify/polaris";
 
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
 
@@ -23,9 +23,9 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                 </div>
                 <Modal size="small" open={activeEditModal} onClose={toggleEditModal}>
                             <Modal.Section>
-                              <p>
-                               {editWarningMessage}
-                              </p>
+                              <Text tone="critical">
+                                {editWarningMessage}
+                              </Text>
                             </Modal.Section>
                           </Modal>
               </IndexTable.Cell>
