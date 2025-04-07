@@ -124,7 +124,7 @@ export default function SettingsPage() {
           <Text variant="bodyLg" fontWeight="bold" as="span">
           support
           </Text>
-        </Tooltip>{"for assistance."}</p>
+        </Tooltip>{" for assistance."}</p>
           </Banner>
         )}
         <Tabs key={tabKey} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
