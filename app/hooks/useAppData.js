@@ -174,7 +174,7 @@ export function useAppData() {
   
    // Handle change in reorder_days field
     const [activeModal, setActiveModal] = useState(false);
-    let editWarningMessage;
+    const [editWarningMessage, setEditWarningMessage] = useState("");
     const [activeEditModal, setActiveEditModal] = useState(false);
     const [activeEmailModal, setActiveEmailModal] = useState(false);  
     const [isFetchingEmailCount, setIsFetchingEmailCount] = useState(false); 
@@ -203,12 +203,12 @@ export function useAppData() {
             }, [toggleModal]);
     const handleReorderChange = useCallback((product_id, value) => {
         if (!value ) {
-            editWarningMessage="Please enter the estimated usage days."
+            setEditWarningMessage("Please enter the estimated usage days.");
             setActiveEditModal(true);
             return;
           }
         if (value <= bufferTime) {
-            editWarningMessage="Estimated Usage Days should be greater than BufferTime!!!"
+            setEditWarningMessage("Estimated Usage Days should be greater than BufferTime!!!");
             setActiveEditModal(true);
             return;
           }
