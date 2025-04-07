@@ -255,6 +255,9 @@ export function useAppData() {
           setUpdatedProducts((prev) =>
             prev.filter((product) => product.shopify_variant_id !== variantId)
           );
+          setSelectedProductIds((prev) =>
+            prev.filter((product) => !product.variantIds.includes(variantId))
+          );
         }
     
         setEditingProduct(null);
