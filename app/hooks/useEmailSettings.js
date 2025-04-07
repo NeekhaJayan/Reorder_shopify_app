@@ -5,14 +5,14 @@ import {useLoaderData,useOutletContext} from "@remix-run/react";
 export  function useEmailSettings () {
 const { shop_domain, settingDetails } = useLoaderData(); 
 const { plan } = useOutletContext();  
-const [originalValues, setOriginalValues] = useState({
-  subject: "",
-  fromName: "",
-  fromEmail: "",
-  coupon: "",
-  discountPercent: "",
-  bufferTime: 5,
-});
+// const [originalValues, setOriginalValues] = useState({
+//   subject: "",
+//   fromName: "",
+//   fromEmail: "",
+//   coupon: "",
+//   discountPercent: "",
+//   bufferTime: 5,
+// });
 
 const [bufferTime, setBufferTime] = useState(settingDetails?.email_template_settings?.bufferTime || 5);
 const [coupon, setCoupon] = useState(settingDetails?.email_template_settings?.coupon || '');
@@ -42,7 +42,7 @@ useEffect(() => {
     setCoupon(initialData.coupon);
     setDiscountPercent(initialData.discountPercent);
     setBufferTime(initialData.bufferTime);
-    setOriginalValues(initialData);
+    // setOriginalValues(initialData);
 
     
   }
@@ -54,36 +54,12 @@ useEffect(() => {
   useEffect(() => {
     if (!isInitialized) return;
     let message = "";
-    
-    if (!subject.trim()) {
-      // setSubject(originalValues.subject);
-      console.log(originalValues.subject)
+    if (!subject.trim() || !fromEmail.trim() || !fromName.trim()) {
       message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
     }
-    if (!fromEmail.trim()) {
-      // setFromEmail(originalValues.fromEmail);
+    if (plan === 'PRO' && (!coupon.trim() || !discountPercent.trim() || !bufferTime.trim())) {
       message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
     }
-    if (!fromName.trim()) {
-      // setFromName(originalValues.fromName);
-      message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
-    }
-  
-    if (plan === 'PRO') {
-      if (!coupon.trim()) {
-        setCoupon(originalValues.coupon);
-        message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
-      }
-      if (!discountPercent.trim()) {
-        setDiscountPercent(originalValues.discountPercent);
-        
-      }
-      if (!bufferTime) {
-        setBufferTime(originalValues.bufferTime);
-        message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";;
-      }
-    }
-    console.log(message);
     setEmailSettingsBanner(message);
 }, [coupon, subject, fromEmail, fromName, discountPercent, bufferTime, plan,isInitialized]);
 
