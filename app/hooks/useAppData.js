@@ -204,10 +204,12 @@ export function useAppData() {
     const handleReorderChange = useCallback((product_id, value) => {
         if (!value ) {
             editWarningMessage="Please enter the estimated usage days."
+            setActiveEditModal(true);
             return;
           }
         if (value <= bufferTime) {
             editWarningMessage="Estimated Usage Days should be greater than BufferTime!!!"
+            setActiveEditModal(true);
             return;
           }
         setUpdatedProducts((prev) =>
