@@ -56,16 +56,16 @@ useEffect(() => {
     let message = "";
     
     if (!subject.trim()) {
-      setSubject(originalValues.subject);
+      // setSubject(originalValues.subject);
       console.log(originalValues.subject)
       message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
     }
     if (!fromEmail.trim()) {
-      setFromEmail(originalValues.fromEmail);
+      // setFromEmail(originalValues.fromEmail);
       message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
     }
     if (!fromName.trim()) {
-      setFromName(originalValues.fromName);
+      // setFromName(originalValues.fromName);
       message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
     }
   
