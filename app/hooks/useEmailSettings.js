@@ -32,12 +32,12 @@ const [loading, setLoading] = useState(true);
       setBufferTime(settingDetails.email_template_settings.bufferTime || 5);
 
       setOriginalValues({
-        subject: settings.subject || "",
-        fromName: settings.fromName || "",
-        fromEmail: settings.fromEmail || "",
-        coupon: settings.coupon || "",
-        discountPercent: settings.discountPercent || "",
-        bufferTime: settings.bufferTime || 5
+        subject: settingDetails.email_template_settings.subject || "",
+        fromName: settingDetails.email_template_settings.fromName || "",
+        fromEmail: settingDetails.email_template_settings.fromEmail || "",
+        coupon: settingDetails.email_template_settings.coupon || "",
+        discountPercent: settingDetails.email_template_settings.discountPercent || "",
+        bufferTime: settingDetails.email_template_settings.bufferTime || 5
       });
       setIsInitialized(true); 
     }
