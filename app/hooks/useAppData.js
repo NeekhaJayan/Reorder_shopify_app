@@ -69,7 +69,7 @@ export function useAppData() {
         event.preventDefault();
     
         if (!formState.date) {
-            setBannerMessage("Should Enter Estimated Usage Days!!!");
+            setBannerMessage("Please enter the estimated usage days.");
             setBannerStatus("critical");
             return;
         }

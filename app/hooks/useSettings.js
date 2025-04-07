@@ -1,18 +1,27 @@
 import { useState,useEffect,useCallback } from "react";
 import {useFetcher,useSearchParams} from "@remix-run/react";
+import { useOutletContext } from '@remix-run/react';
 
 export function useSettings(){
     const [searchParams] = useSearchParams();
     const tab = searchParams.get("tab");
+    const { plan } = useOutletContext();
 
     const rawMessage = searchParams.get("error");
-    const errorMessage = `⚠️Your email settings need an update. Please review and save changes. 
-    📧 Your logo update is pending. Upload a new logo to complete the setup.
-    💰 Your coupon details are missing. Add them here to activate discounts for your customers.
-    ⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.
-  </ul>`;
-    const message = rawMessage ? errorMessage : null; 
-    const [showBanner, setShowBanner] = useState(!!message);
+    const baseMessages = [
+        "⚠️Your email settings need an update. Please review and save changes.",
+        "📧 Your logo update is pending. Upload a new logo to complete the setup.",
+      ];
+      
+      const proMessages = [
+        "💰 Your coupon details are missing. Add them here to activate discounts for your customers.",
+        "⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.",
+      ];
+      
+    const errorMessages = plan === "PRO" ? [...baseMessages, ...proMessages] : baseMessages;
+      
+    const message = rawMessage ? errorMessages : null; 
+    const [showBanner, setShowBanner] = useState(!!rawMessage);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
     const [tabKey, setTabKey] = useState(0);
     const fetcher = useFetcher();
