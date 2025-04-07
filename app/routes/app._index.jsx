@@ -115,11 +115,12 @@ export default function Index() {
     onCancel,
     confirmReset,
     activeModal,
+    activeEditModal,toggleEditModal,
     activeEmailModal,toggleEmailModal,
     toggleModal,
     selectedProductId,
     selectedVariantId,
-    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource}=useAppData();
+    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -207,6 +208,9 @@ export default function Index() {
                             cancelReorderDays={onCancel}
                             handleReorderChange={handleReorderChange} 
                             activeModal={activeModal} 
+                            toggleModal={toggleModal}
+                            activeEditModal={activeEditModal}
+                            toggleEditModal={toggleEditModal}
                             activeEmailModal={activeEmailModal} 
                             toggleEmailModal={toggleEmailModal}
                             confirmReset={confirmReset}
@@ -215,7 +219,8 @@ export default function Index() {
                             showEmailCount={showEmailCount}
                             scheduleEmailCount={scheduleEmailCount}
                             dispatchEmailCount={dispatchEmailCount}
-                            orderSource={orderSource}/>
+                            orderSource={orderSource}
+                            editWarningMessage={editWarningMessage}/>
               )}
               {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT && (
                   <TextContainer>

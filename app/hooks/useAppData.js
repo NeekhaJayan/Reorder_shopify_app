@@ -51,7 +51,7 @@ export function useAppData() {
     
     const handleBlur = () => {
         if (!formState.date) {
-            setBannerMessage("Should Enter Estimated Usage Days!!!");
+            setBannerMessage("Please enter the estimated usage days");
             setBannerStatus("critical");
             return;
         }
@@ -174,6 +174,8 @@ export function useAppData() {
   
    // Handle change in reorder_days field
     const [activeModal, setActiveModal] = useState(false);
+    let editWarningMessage;
+    const [activeEditModal, setActiveEditModal] = useState(false);
     const [activeEmailModal, setActiveEmailModal] = useState(false);  
     const [isFetchingEmailCount, setIsFetchingEmailCount] = useState(false); 
     const [scheduleEmailCount, setScheduleEmailCount] = useState(null);
@@ -181,6 +183,11 @@ export function useAppData() {
     const [orderSource, setOrderSource]= useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [selectedVariantId, setSelectedVarientId] = useState(null);
+
+    const toggleEditModal = useCallback(() => {
+        setActiveEditModal((prev) => !prev);
+        
+    }, []);
     const toggleEmailModal = useCallback(() => {
         setActiveEmailModal((prev) => !prev);
         console.log("toggleEmailModal clicked! New State:", !activeEmailModal);
@@ -195,6 +202,14 @@ export function useAppData() {
             toggleModal(); // Open the modal
             }, [toggleModal]);
     const handleReorderChange = useCallback((product_id, value) => {
+        if (!value ) {
+            editWarningMessage="Please enter the estimated usage days."
+            return;
+          }
+        if (value <= bufferTime) {
+            editWarningMessage="Estimated Usage Days should be greater than BufferTime!!!"
+            return;
+          }
         setUpdatedProducts((prev) =>
         prev.map((product) =>
             product.shopify_variant_id === product_id
@@ -389,11 +404,12 @@ export function useAppData() {
         confirmReset,
         activeModal,
         activeEmailModal,toggleEmailModal,
+        activeEditModal,toggleEditModal,
         toggleModal,
         selectedProductId,
         selectedVariantId,
         handleChange,handleSubmit,plan
-        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource
+        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage
       };
 };
 
