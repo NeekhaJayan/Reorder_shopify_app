@@ -16,7 +16,6 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
           </div></IndexTable.Cell>
               <IndexTable.Cell><div style={{width: "50px",alignItems:"center"}}> 
                 {isEditing?<TextField
-                  type="number"
                   value={product.reorder_days}
                   onChange={(value) => onReorderChange(product.shopify_variant_id, value)} // Update only the edited product
                   disabled={!isEditing} // Enable input only for the product being edited

@@ -3,7 +3,7 @@ import {useLoaderData,useOutletContext} from "@remix-run/react";
 
 
 export  function useEmailSettings () {
-const { shop_domain, settingDetails } = useLoaderData(); 
+const { shop_domain, settingDetails ,shop_email} = useLoaderData(); 
 const { plan } = useOutletContext();  
 // const [originalValues, setOriginalValues] = useState({
 //   subject: "",
@@ -55,7 +55,17 @@ useEffect(() => {
     if (!isInitialized) return;
     let message = "";
     if (!subject.trim() || !fromEmail.trim() || !fromName.trim()) {
-      message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
+      message = (
+        <span>
+          Please update the details instead of removing them and try again. If the issue persists, contact{" "}
+          <Tooltip active content={shop_email|| "support@example.com"} hasUnderline>
+            <Text variant="bodyLg" fontWeight="bold" as="span">
+              support
+            </Text>
+          </Tooltip>{" "}
+          for assistance.
+        </span>
+      );
     }
     if (plan === 'PRO' && (!coupon.trim() || !discountPercent.trim() || !bufferTime.trim())) {
       message = "Please update the details instead of removing them and try again. If the issue persists, contact support for assistance.";
