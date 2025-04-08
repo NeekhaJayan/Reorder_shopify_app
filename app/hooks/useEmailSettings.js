@@ -25,7 +25,7 @@ const [isInitialized, setIsInitialized] = useState(false);
 const [loading, setLoading] = useState(true);
 useEffect(() => {
   const emailSettings = settingDetails?.email_template_settings;
-
+  
   if (emailSettings) {
     const initialData = {
       subject: emailSettings.subject || "",
@@ -43,7 +43,12 @@ useEffect(() => {
     setDiscountPercent(initialData.discountPercent);
     setBufferTime(initialData.bufferTime);
     // setOriginalValues(initialData);
-    setIsInitialized(true);
+    const hasInitialValues =
+      initialData.subject.trim() !== "" &&
+      initialData.fromName.trim() !== "" &&
+      initialData.fromEmail.trim() !== "";
+
+    setIsInitialized(hasInitialValues);
     
   }
 
