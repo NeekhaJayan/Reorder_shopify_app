@@ -137,7 +137,27 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
     // `;
     const coupon_section = `
     <tr>
-      <td align="center" bgcolor="#f9f1dc" style="padding:15px; border-radius:5px; border: 2px dotted #d67e00; ">
+  <td align="center" style="padding: 0; position: relative;">
+    <!-- Pro Plan Label -->
+    <div style="position: relative; display: inline-block; margin-top: 20px;">
+      <div style="
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #f9f9f9;
+        color: #444;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        Pro Plan Only
+      </div>
+
+      <!-- Offer Box -->
+      <div style="padding:15px; border-radius:5px; border: 2px dotted #d67e00; background-color:#f9f1dc;">
         <h3 style="color:#d67e00; margin:0;">SPECIAL OFFER</h3>
         <p style="font-size:16px;">
           Use code <span style="font-size:18px; font-weight:bold; color:#d67e00; background:#fff; padding:5px 10px; border-radius:4px;">
@@ -145,8 +165,11 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
           </span> at checkout
         </p>
         <p style="font-size:16px;">Save 10% on your reorder</p>
-      </td>
-    </tr>
+      </div>
+    </div>
+  </td>
+</tr>
+
   `;
 
   const logo_image_section = image_path
