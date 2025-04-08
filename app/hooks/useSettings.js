@@ -6,7 +6,8 @@ export function useSettings(){
     const [searchParams] = useSearchParams();
     const tab = searchParams.get("tab");
     const { plan } = useOutletContext();
-
+    const fetcher = useFetcher();
+    const success = searchParams.get("success") || null;
     const rawMessage = searchParams.get("error");
     const baseMessages = [
         "⚠️Your email settings need an update. Please review and save changes.",
@@ -21,10 +22,11 @@ export function useSettings(){
     const errorMessages = plan === "PRO" ? [...baseMessages, ...proMessages] : baseMessages;
       
     const message = rawMessage ? errorMessages : null; 
+    
     const [showBanner, setShowBanner] = useState(!!rawMessage);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
     const [tabKey, setTabKey] = useState(0);
-    const fetcher = useFetcher();
+    
     
     const tabs = [
         {
@@ -45,11 +47,17 @@ export function useSettings(){
         },
     ];
  
-    // useEffect(() => {
-    //         if (message) {
-    //              setShowBanner(false); // Auto-hide after 5 sec
-    //         }
-    //       }, [message]);
+    useEffect(() => {
+      if (success) {
+        setShowBanner(success); // show banner
+        
+        const timer = setTimeout(() => {
+          setShowBanner(""); // auto-hide after 5s
+        }, 5000);
+    
+        return () => clearTimeout(timer); // cleanup
+      }
+    }, [success]);
 
     const handleTabChange = useCallback((selectedTabIndex) => {
         setSelectedTab(selectedTabIndex);
