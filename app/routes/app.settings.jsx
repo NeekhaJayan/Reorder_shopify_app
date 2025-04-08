@@ -1,5 +1,6 @@
 import {Card,Page,Tabs,Banner,Tooltip,Text} from "@shopify/polaris";
 
+import { redirect} from "@remix-run/node";
 import {useLoaderData} from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import PricingPlans from "../componets/settings/PricingPlans";
