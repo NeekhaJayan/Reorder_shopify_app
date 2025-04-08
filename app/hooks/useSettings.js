@@ -45,11 +45,11 @@ export function useSettings(){
         },
     ];
  
-    useEffect(() => {
-            if (message) {
-                 setShowBanner(false); // Auto-hide after 5 sec
-            }
-          }, [message]);
+    // useEffect(() => {
+    //         if (message) {
+    //              setShowBanner(false); // Auto-hide after 5 sec
+    //         }
+    //       }, [message]);
 
     const handleTabChange = useCallback((selectedTabIndex) => {
         setSelectedTab(selectedTabIndex);
