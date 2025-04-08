@@ -39,6 +39,13 @@ export const action = async ({ request }) => {
     if (Settings.tab === "template-settings") {
       
       const result = await settingsInstance.saveSettings(Settings)
+      const url = new URL(request.url);
+      const errorParam = url.searchParams.get("error");
+      if (errorParam === "missing_template") {
+        
+    
+        return redirect(`/app/settings?tab=2&success=${result}`);
+      }
       return { success: result };
     }
     if (Settings.tab === "general-settings") {
