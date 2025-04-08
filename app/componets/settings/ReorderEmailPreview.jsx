@@ -164,7 +164,7 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
             RESTOCK10
           </span> at checkout
         </p>
-        <p style="font-size:16px;">Save 10% on your reorder</p>
+        <p style="font-size:16px;">Save <b>10%</b> on your reorder</p>
       </div>
     </div>
   </td>
