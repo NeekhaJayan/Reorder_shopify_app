@@ -45,7 +45,7 @@ export const action = async ({ request }) => {
       if (errorParam === "missing_template") {
         
     
-        return redirect(`/app/settings?tab=2&success=${result}`);
+        return redirect(`/app/settings?success=${result}`);
       }
       return { success: result };
     }
