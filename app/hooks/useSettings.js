@@ -47,7 +47,7 @@ export function useSettings(){
  
     useEffect(() => {
             if (message) {
-                setTimeout(() => setShowBanner(false), 9000); // Auto-hide after 5 sec
+                 setShowBanner(false); // Auto-hide after 5 sec
             }
           }, [message]);
 

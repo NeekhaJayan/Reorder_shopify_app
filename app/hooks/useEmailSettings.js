@@ -43,12 +43,12 @@ useEffect(() => {
     setDiscountPercent(initialData.discountPercent);
     setBufferTime(initialData.bufferTime);
     // setOriginalValues(initialData);
-
+    setIsInitialized(true);
     
   }
 
   setTimeout(() => setLoading(false), 2000);
-  setIsInitialized(true);
+  
 }, [settingDetails]);
 
   useEffect(() => {
