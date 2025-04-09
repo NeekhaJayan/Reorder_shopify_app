@@ -14,8 +14,9 @@ const ProductAnalyticsCard = ({ productName, scheduleEmailCount, dispatchEmailCo
     }
 
     .analytics-card {
-      max-width: 420px;
       margin: auto;
+      margin-left: 5px;
+      margin-right: 5px;
       background: #fff;
       border: 1px solid #dcdfe3;
       border-radius: 12px;
