@@ -89,7 +89,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                               />
                         </Button>
                         <Modal 
-                      size="small" 
+                      size="large" 
                       open={activeEmailModal} 
                       onClose={() => {
                           console.log("Closing modal...");
