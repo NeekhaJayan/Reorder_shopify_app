@@ -6,9 +6,9 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
   
   const analyticsHtml = ProductAnalyticsCard({
     productName: product.title,
-    scheduleEmailCount: props.scheduleEmailCount,
-    dispatchEmailCount: props.dispatchEmailCount,
-    orderSource: props.orderSource,
+    scheduleEmailCount: scheduleEmailCount,
+    dispatchEmailCount: dispatchEmailCount,
+    orderSource: orderSource,
   });
     return(
         <>
