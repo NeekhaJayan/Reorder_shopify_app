@@ -21,8 +21,7 @@ export function useSettings(){
       
     const errorMessages = plan === "PRO" ? [...baseMessages, ...proMessages] : baseMessages;
       
-    const message = rawMessage ? errorMessages : null; 
-    
+    const message = success ? success : (rawMessage ? errorMessages : null);
     const [showBanner, setShowBanner] = useState(!!rawMessage);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
     const [tabKey, setTabKey] = useState(0);
@@ -46,18 +45,6 @@ export function useSettings(){
         panelID: 'pricing-fitted-Ccontent-2',
         },
     ];
- 
-    useEffect(() => {
-      if (success) {
-        setShowBanner(success); // show banner
-        
-        const timer = setTimeout(() => {
-          setShowBanner(""); // auto-hide after 5s
-        }, 5000);
-    
-        return () => clearTimeout(timer); // cleanup
-      }
-    }, [success]);
 
     const handleTabChange = useCallback((selectedTabIndex) => {
         setSelectedTab(selectedTabIndex);

@@ -4,7 +4,7 @@ import {useLoaderData,useOutletContext} from "@remix-run/react";
 
 export  function useEmailSettings () {
 const { shop_domain, settingDetails } = useLoaderData(); 
-const { plan } = useOutletContext();  
+const { plan } = useOutletContext(); 
 // const [originalValues, setOriginalValues] = useState({
 //   subject: "",
 //   fromName: "",
@@ -13,7 +13,6 @@ const { plan } = useOutletContext();
 //   discountPercent: "",
 //   bufferTime: 5,
 // });
-
 const [bufferTime, setBufferTime] = useState(settingDetails?.email_template_settings?.bufferTime || 5);
 const [coupon, setCoupon] = useState(settingDetails?.email_template_settings?.coupon || '');
 const [discountPercent, setDiscountPercent] = useState(settingDetails?.email_template_settings?.discountPercent || '');
