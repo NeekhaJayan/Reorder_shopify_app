@@ -118,10 +118,14 @@ export default function SettingsPage() {
         </style>
         {showBanner && message && (
           <Banner tone="critical" onDismiss={() => setShowBanner(false)}>
-            <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
-              {message.map((msg, i) => (
-                <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
-              ))}
+             <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
+              {Array.isArray(message) ? (
+                message.map((msg, i) => (
+                  <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
+                ))
+              ) : (
+                <li style={{ marginBottom: '0.5rem' }}>{message}</li>
+              )}
             </ul>
           </Banner>
         )}
