@@ -1,7 +1,15 @@
 import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Text} from "@shopify/polaris";
+import ProductAnalyticsCard from "./ProductAnalyticsCard";
+
 
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
-
+  
+  const analyticsHtml = ProductAnalyticsCard({
+    productName: product.title,
+    scheduleEmailCount: props.scheduleEmailCount,
+    dispatchEmailCount: props.dispatchEmailCount,
+    orderSource: props.orderSource,
+  });
     return(
         <>
 
@@ -90,9 +98,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                       title="Emails Scheduled"
                     >
                       <Modal.Section>
-                          <p>No of Emails Scheduled: {scheduleEmailCount}</p>
-                          <p>No of Emails Send: {dispatchEmailCount}</p>
-                          <p>No of Orders From App Source:{orderSource}</p>
+                      <div dangerouslySetInnerHTML={{ __html: analyticsHtml }} />
 
                       </Modal.Section>
                         </Modal> 
