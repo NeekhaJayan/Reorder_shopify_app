@@ -28,8 +28,8 @@ const ProductAnalyticsCard = ({ productName, scheduleEmailCount, dispatchEmailCo
     }
 
     .product-name {
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 800;
       margin-bottom: 4px;
       color: #212b36;
     }
@@ -75,7 +75,6 @@ const ProductAnalyticsCard = ({ productName, scheduleEmailCount, dispatchEmailCo
   <div class="analytics-card">
     <div class="card-header">
       <div class="product-name">${productName}</div>
-      <div class="subtitle">Performance via ReOrder Reminder Pro</div>
     </div>
 
     <div class="metric">

@@ -9,7 +9,6 @@ import {
     FormLayout,
     ProgressBar,
     Form,
-    Image,
     Thumbnail,
     DropZone,
     Banner,LegacyStack

@@ -95,7 +95,12 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                           console.log("Closing modal...");
                           toggleEmailModal();
                       }} 
-                      title="Emails Scheduled"
+                      title={
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <img src="../bar-chart.png" alt="Analytics Icon" style={{ width: '20px', height: '20px' }} />
+                          <span>Performance via ReOrder Reminder Pro</span>
+                        </div>
+                      }
                     >
                       <Modal.Section>
                       <div dangerouslySetInnerHTML={{ __html: analyticsHtml }} />
