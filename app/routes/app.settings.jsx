@@ -117,18 +117,22 @@ export default function SettingsPage() {
           `}
         </style>
         {showBanner && message && (
-          <Banner tone="critical" onDismiss={() => setShowBanner(false)}>
-             <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
-              {Array.isArray(message) ? (
-                message.map((msg, i) => (
-                  <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
-                ))
-              ) : (
-                <li style={{ marginBottom: '0.5rem' }}>{message}</li>
-              )}
+        <Banner
+          tone={Array.isArray(message) ? "critical" : "success"}
+          onDismiss={() => setShowBanner(false)}
+        >
+          {Array.isArray(message) ? (
+            <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
+              {message.map((msg, i) => (
+                <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
+              ))}
             </ul>
-          </Banner>
-        )}
+          ) : (
+            <p style={{ margin: 0 }}>{message}</p>
+          )}
+        </Banner>
+      )}
+
         {emailSettingsbanner  && (
           <Banner tone="critical" onDismiss={() => setEmailSettingsBanner("")}>
             <p>{emailSettingsbanner}{"contact "}  
