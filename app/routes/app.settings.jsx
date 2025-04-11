@@ -100,7 +100,7 @@ export const action = async ({ request }) => {
 export default function SettingsPage() {
   const { shop_domain,shop_email} = useLoaderData();
   const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
-  const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } = useEmailSettings();
+  const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime ,emailSettingsbanner,setEmailSettingsBanner} = useEmailSettings();
   const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message}=useSettings();
   const { plan } = useOutletContext();
   const navigate =useNavigate();
@@ -176,7 +176,9 @@ export default function SettingsPage() {
                 discountPercent={discountPercent}
                 setDiscountPercent={setDiscountPercent}
                 bufferTime={bufferTime} 
-                setBufferTime={setBufferTime} />
+                setBufferTime={setBufferTime} 
+                emailSettingsbanner={emailSettingsbanner}
+                setEmailSettingsBanner={setEmailSettingsBanner}/>
             )}
             {selectedTab === 2 && (
               <PricingPlans plan={plan} />
