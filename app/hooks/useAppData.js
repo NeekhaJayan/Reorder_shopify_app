@@ -393,6 +393,7 @@ export function useAppData() {
         fetcher,
         shopID,
         templateId,
+        bufferTime,
         formState,
         setformState,
         formProductState,

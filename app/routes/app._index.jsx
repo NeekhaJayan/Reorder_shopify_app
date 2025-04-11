@@ -95,7 +95,7 @@ export const action = async ({ request }) => {
 
 
 export default function Index() {
-  const {fetcher,shopID,templateId,
+  const {fetcher,shopID,templateId,bufferTime,
     formState,
     setformState,
     formProductState,
