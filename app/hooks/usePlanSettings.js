@@ -26,14 +26,14 @@ export function usePlanSettings(){
           price: '$0.00/month',
           priceValue: 0.00,
           url:"/app/cancel",
-          features: ['2', true, false, '5 days',false,'Email'],
+          features: ['2', true, false, '5 days',false,false,'Email'],
         },
         {
           name: 'Pro Plan',
           price: '$14.99/month',
           priceValue: 14.99,
           url:"/app/upgrade",
-          features: ['Unlimited', true, true,'Editable', true,'Email & Whatsapp'],
+          features: ['Unlimited', true, true,'Editable', true,true,'Email & Whatsapp'],
         },
       ];
     
@@ -42,6 +42,7 @@ export function usePlanSettings(){
         'Automated Reorder Reminders',
         'Coupon Code Integration',
         'Buffer Time for Shipping',
+        'Analytics',
         'Sync Recent Orders',
         'Priority Customer Support',
       ];
