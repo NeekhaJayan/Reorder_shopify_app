@@ -39,7 +39,8 @@ export function useAppData() {
                 },
                 { method: "patch" }
               );
-            setTimeout(() => setShowBanner(false), 10000); // Auto-hide after 5 sec
+            setTimeout(() => setShowBanner(false), 20000); // Auto-hide after 5 sec
+            return () => clearTimeout(timer);
         }
       }, [message]);
       const handleChange = (value) => {
