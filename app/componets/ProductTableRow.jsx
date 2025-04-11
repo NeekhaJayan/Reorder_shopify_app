@@ -1,15 +1,16 @@
 import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Text} from "@shopify/polaris";
 import ProductAnalyticsCard from "./ProductAnalyticsCard";
-
-
+import { useNavigate } from "@remix-run/react";
+import { useAppData } from "../hooks/useAppData";
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
-  
+  const navigate =useNavigate();
   const analyticsHtml = ProductAnalyticsCard({
     productName: product.title,
     scheduleEmailCount: scheduleEmailCount,
     dispatchEmailCount: dispatchEmailCount,
     orderSource: orderSource,
   });
+  const {plan}=useAppData();
     return(
         <>
 
@@ -22,23 +23,23 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
               <IndexTable.Cell><div style={{ whiteSpace: "normal", wordWrap: "break-word", maxWidth: "200px" }}>
             {product.title}
           </div></IndexTable.Cell>
-              <IndexTable.Cell><div style={{width: "50px",alignItems:"center"}}> 
-                {isEditing?<TextField
+              <IndexTable.Cell>
+                {isEditing?(<><div style={{width: "50px",alignItems:"center"}}><TextField
                   value={product.reorder_days}
                   onChange={(value) => onReorderChange(product.shopify_variant_id, value)} // Update only the edited product
                   disabled={!isEditing} // Enable input only for the product being edited
-                />:product.reorder_days || ''}
-                </div>
-                <Modal size="small" open={activeEditModal} onClose={toggleEditModal}>
-                            <Modal.Section>
-                              <Text tone="critical">
-                                {editWarningMessage}
-                              </Text>
-                            </Modal.Section>
-                          </Modal>
+                  error={!!editWarningMessage}
+                /></div>
+                {editWarningMessage && (
+                    <div style={{ color: "red", fontSize: "12px", marginTop: "4px", whiteSpace: "normal",wordWrap: "break-word",maxWidth: "200px" }}>
+                      {editWarningMessage}
+                    </div>
+                  )}
+                </>):product.reorder_days || ''}
+                
               </IndexTable.Cell>
               <IndexTable.Cell>
-                <div style={{ display: "flex", gap:"10px" }}>
+                <div style={{ display: "flex", gap:"10px",alignItems:"baseline" }}>
                     <div>
                     {isEditing ? (
                       <ButtonGroup>
@@ -103,8 +104,12 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                       }
                     >
                       <Modal.Section>
-                      <div dangerouslySetInnerHTML={{ __html: analyticsHtml }} />
-
+                      {plan === "FREE"?<div><p>Analytics Available in Pro Plan.
+                        Upgrade to Pro to unlock product insights and email stats.
+                    👉 <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
+                                Upgrade
+                            </Button></p></div>:<div dangerouslySetInnerHTML={{ __html: analyticsHtml }} />
+                      }
                       </Modal.Section>
                         </Modal> 
                     </div>

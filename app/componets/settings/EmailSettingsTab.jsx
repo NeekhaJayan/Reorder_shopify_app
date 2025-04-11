@@ -3,11 +3,13 @@ import { Card, FormLayout, TextField, Tooltip, Icon, Button,Layout,BlockStack ,T
 import { InfoIcon,AlertTriangleIcon } from "@shopify/polaris-icons";
 import ReorderEmailPreview from "../settings/ReorderEmailPreview";
 import { useState } from "react";
+import { useNavigate } from "@remix-run/react";
 
 const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPreview,subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } ) => {
     const { data, state } = fetcher;
     const [loading, setLoading] = useState(true);
-    const shopname=shop_domain.replace(".myshopify.com","")
+    const shopname=shop_domain.replace(".myshopify.com","");
+    const navigate =useNavigate();
     return (
         <>
             <Layout>

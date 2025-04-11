@@ -5,14 +5,13 @@ const EmptyProductState = () => {
     return (
     <>
         <EmptyState
-              heading="Set the reorder interval for your product."
+              heading="Set the Estimated Usage Days for your product."
               action={{
                 content: "Save Reorder Days",
-                url: 'https://help.shopify.com',
+                url: '#',
               }}
               image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
             >
-              <p>Allow customers to set reorder intervals and buy products using their phones.</p>
         </EmptyState>
     </>
     );
