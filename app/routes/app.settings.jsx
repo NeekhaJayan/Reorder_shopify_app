@@ -15,6 +15,7 @@ import GeneralSettingsTab from "../componets/settings/GeneralSettingsTab";
 import {settingsInstance} from "../services/api/SettingService";
 import { orderInstance } from "../services/api/OrderService";
 import { shopInstance } from "../services/api/ShopService";
+import { useNavigate } from "@remix-run/react";
 import '../styles/index.css';
 
 
@@ -44,8 +45,13 @@ export const action = async ({ request }) => {
       const errorParam = url.searchParams.get("error");
       if (errorParam === "missing_template") {
         
-    
-        return redirect(`/app/settings?success=${result}`);
+        if(result){
+          const successMessage = encodeURIComponent(
+            "You're all set! Now start adding estimated usage days for your products to begin scheduling reminders."
+          );
+          return redirect(`/app/settings?success=${successMessage}`);
+        }
+        
       }
       return { success: result };
     }
@@ -97,7 +103,7 @@ export default function SettingsPage() {
   const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner } = useEmailSettings();
   const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message}=useSettings();
   const { plan } = useOutletContext();
-
+  const navigate =useNavigate();
   
 
   return (
@@ -128,7 +134,8 @@ export default function SettingsPage() {
               ))}
             </ul>
           ) : (
-            <p style={{ margin: 0 }}>{message}</p>
+            <p style={{ margin: 0 }}>{message} <Button variant="plain" onClick={() => {
+              navigate("/app");}} >Home</Button></p>
           )}
         </Banner>
       )}

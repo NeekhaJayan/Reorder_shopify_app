@@ -11,7 +11,7 @@ export const loader = async ({ request }) => {
     onFailure: async () => billing.request({
       plan: MONTHLY_PLAN,
       isTest: true,
-      returnUrl: `https://admin.shopify.com/store/${myShop}/apps/${process.env.APP_NAME}/app?message=Subscription Activated successfully`,
+      returnUrl: `https://admin.shopify.com/store/${myShop}/apps/${process.env.APP_NAME}/app?message=Pro Plan Activated.Premium features are now unlocked!`,
     }),
     });
     return redirect("/app?success=pricing_updated");
