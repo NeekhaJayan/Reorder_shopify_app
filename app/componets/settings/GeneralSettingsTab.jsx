@@ -31,15 +31,16 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
               <Button variant="plain" onClick={handleRemoveImage}>
                 Upload a new logo to update
               </Button>
-              {dropzonebanner && (
+              
+          </LegacyStack>
+        ))}
+        {dropzonebanner && (
                                               <Banner
                                                 title={dropzonebanner}
                                                 tone='critical' // 'success', 'critical', or 'warning'
                                                 onDismiss={() => setDropzonebanner("")} // Dismiss the banner
                                               />
                                             )}
-          </LegacyStack>
-        ))}
       </LegacyStack>
     ) : null;
   const { data, state } = fetcher;

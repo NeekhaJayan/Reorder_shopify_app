@@ -50,22 +50,7 @@ export function useAppData() {
         setformState((prevState) => ({ ...prevState, date: value }));
     };
     
-    const handleBlur = () => {
-        if (!formState.date) {
-            setBannerMessage("Please enter the estimated usage days");
-            setBannerStatus("critical");
-            return;
-        }
     
-        if (formState.date <= bufferTime) {
-            setBannerMessage("Estimated Usage Days should be greater than BufferTime!!!");
-            setBannerStatus("critical");
-            return;
-        } else {
-            setBannerMessage(""); // Clear the error if input is valid
-            setBannerStatus("");
-        }
-    };
     const handleSubmit = (event) => {
         event.preventDefault();
     
