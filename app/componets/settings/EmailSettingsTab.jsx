@@ -4,7 +4,7 @@ import { InfoIcon,AlertTriangleIcon } from "@shopify/polaris-icons";
 import ReorderEmailPreview from "../settings/ReorderEmailPreview";
 import { useState } from "react";
 import { useNavigate } from "@remix-run/react";
-import {useEmailSettings} from "../hooks/useEmailSettings";
+import {useEmailSettings} from "../../hooks/useEmailSettings";
 
 const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPreview,subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } ) => {
     const { data, state } = fetcher;
