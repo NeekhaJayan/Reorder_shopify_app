@@ -113,6 +113,13 @@ const ProductAnalyticsCard = ({ productName, scheduleEmailCount, dispatchEmailCo
       </div>
       <span class="metric-value">${orderSource}</span>
     </div>
+    <div class="Polaris-Box" style=" margin-top:0px; padding-top:0px;padding: 16px; border: 1px solid #dcdfe3; border-radius: 12px; background: #fff;">
+  <div class="Polaris-Text--root Polaris-Text--headingMd Polaris-Text--block Polaris-Text--center" style="margin-bottom: 8px;">
+    <h5>How We Calculate Reminder Timing:</h5>
+  </div>
+  <div class="Polaris-Text--root Polaris-Text--bodyMd Polaris-Text--block Polaris-Text--center" style="color: #434b56;">
+    Order Date + (Ordered Quantity × Estimated Usage Days of the Product) − Buffer Time
+  </div>
   </div>
 </body>
 </html>
