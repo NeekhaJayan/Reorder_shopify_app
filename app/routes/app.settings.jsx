@@ -100,7 +100,7 @@ export const action = async ({ request }) => {
 export default function SettingsPage() {
   const { shop_domain,shop_email} = useLoaderData();
   const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
-  const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner } = useEmailSettings();
+  const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } = useEmailSettings();
   const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message}=useSettings();
   const { plan } = useOutletContext();
   const navigate =useNavigate();
@@ -140,16 +140,7 @@ export default function SettingsPage() {
         </Banner>
       )}
 
-        {emailSettingsbanner  && (
-          <Banner tone="critical" onDismiss={() => setEmailSettingsBanner("")}>
-            <p>{emailSettingsbanner}{"contact "}  
-            <Tooltip active content={shop_email} hasUnderline>
-          <Text variant="bodyLg" fontWeight="bold" as="span">
-          support
-          </Text>
-        </Tooltip>{" for assistance."}</p>
-          </Banner>
-        )}
+       
         <Tabs key={tabKey} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>
           <div style={{ padding: "16px" }}>
             {selectedTab === 0 && (

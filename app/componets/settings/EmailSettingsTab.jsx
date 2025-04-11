@@ -1,18 +1,30 @@
 
-import { Card, FormLayout, TextField, Tooltip, Icon, Button,Layout,BlockStack ,Text,Box,Bleed} from "@shopify/polaris";
+import { Card, FormLayout, TextField, Tooltip, Icon, Button,Layout,BlockStack ,Text,Box,Bleed,Banner} from "@shopify/polaris";
 import { InfoIcon,AlertTriangleIcon } from "@shopify/polaris-icons";
 import ReorderEmailPreview from "../settings/ReorderEmailPreview";
 import { useState } from "react";
 import { useNavigate } from "@remix-run/react";
+import {useEmailSettings} from "../hooks/useEmailSettings";
 
 const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPreview,subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime } ) => {
     const { data, state } = fetcher;
     const [loading, setLoading] = useState(true);
     const shopname=shop_domain.replace(".myshopify.com","");
+    const { emailSettingsbanner,setEmailSettingsBanner } = useEmailSettings();
     const navigate =useNavigate();
     return (
         <>
             <Layout>
+            {emailSettingsbanner  && (
+              <Banner tone="critical" onDismiss={() => setEmailSettingsBanner("")}>
+                <p>{emailSettingsbanner}{"contact "}  
+                <Tooltip active content={shop_email} hasUnderline>
+              <Text variant="bodyLg" fontWeight="bold" as="span">
+              support
+              </Text>
+            </Tooltip>{" for assistance."}</p>
+              </Banner>
+            )}
                 <Layout.Section variant="oneThird">
                   <div style={{ marginTop: "var(--p-space-500)" }}>
                     <BlockStack gap="4" >
