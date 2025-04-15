@@ -60,8 +60,8 @@ export function useAppData() {
             return;
         }
     
-        if (formState.date <= 5) {
-            setBannerMessage("Estimated Usage Days should be greater than 5!!!");
+        if (formState.date <= bufferTime) {
+            setBannerMessage(`Usage days must be more than ${bufferTime}.`);
             setBannerStatus("critical");
             return;
         }
@@ -271,7 +271,7 @@ export function useAppData() {
                 return;
               }
             if (updatedProduct.reorder_days <= bufferTime) {
-                setEditWarningMessage("Estimated Usage Days should be greater than BufferTime!!!");
+                setEditWarningMessage(`Usage days must be more than ${bufferTime}.`);
                 setActiveEditModal(true);
                 return;
               }
