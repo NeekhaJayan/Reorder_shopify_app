@@ -18,16 +18,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
             
                 <Layout.Section variant="oneThird">
                   <div style={{ marginTop: "var(--p-space-500)" }}>
-                  {emailSettingsbanner  && (
-                      <Banner tone="critical" onDismiss={() => setEmailSettingsBanner("")}>
-                        <p>{emailSettingsbanner}{"contact "}  
-                        <Tooltip active content={shop_email} hasUnderline>
-                      <Text variant="bodyLg" fontWeight="bold" as="span">
-                      support
-                      </Text>
-                    </Tooltip>{" for assistance."}</p>
-                      </Banner>
-                    )}
+                  
                     <BlockStack gap="4" >
                       <Text id="emailSettings" variant="headingMd" as="h2">
                         Reminder Email Settings
@@ -39,6 +30,16 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                   </div>
                 </Layout.Section>
                 <Layout.Section>
+                {emailSettingsbanner  && (
+                      <Banner tone="critical" onDismiss={() => setEmailSettingsBanner("")}>
+                        <p>{emailSettingsbanner}{"contact "}  
+                        <Tooltip active content={shop_email} hasUnderline>
+                      <Text variant="bodyLg" fontWeight="bold" as="span">
+                      support
+                      </Text>
+                    </Tooltip>{" for assistance."}</p>
+                      </Banner>
+                    )}
                 <fetcher.Form method="post">
                   <Card sectioned roundedAbove="sm">
                     <FormLayout>
