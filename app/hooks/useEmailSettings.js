@@ -56,6 +56,12 @@ useEffect(() => {
 }, [settingDetails]);
 
   useEffect(() => {
+    const currentTab = Number(tab);
+    if (!isNaN(currentTab) && currentTab >= 0 && currentTab <= 2) {
+      setSelectedTab(currentTab);
+    }
+  }, [tab]);
+  useEffect(() => {
     if (!isInitialized || !template_id) return;
     let message = "";
     if (!subject.trim() || !fromEmail.trim() || !fromName.trim()) {
