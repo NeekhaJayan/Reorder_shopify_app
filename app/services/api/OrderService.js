@@ -109,9 +109,9 @@ class OrderServices{
     async SyncOrderDetails(shop,created_at,admin){
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
-            // console.log(jsonResponse)
+            const count = jsonResponse.length;
             const payload = this.transformGraphQLResponse(jsonResponse,shop);
-            console.log(payload);
+            console.log(count);
             const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {
               method: 'POST',
               headers: {
@@ -127,7 +127,7 @@ class OrderServices{
             const data = await response.json();
             console.log('Data successfully sent to FastAPI:', data);
 
-            return { message: "Your store is up-to-date with new orders. Customers will receive reminders on time." };
+            return { message: `${count} new orders have been updated.Your store is up-to-date with new orders. Customers will receive reminders on time.` };
           } catch (error) {
             console.error('Error sending data to FastAPI:', error.message);
             return { error: 'Failed to sync orders. Please try again later.' };

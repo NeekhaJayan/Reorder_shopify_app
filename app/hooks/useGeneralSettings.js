@@ -62,6 +62,7 @@ export  function useGeneralSettings() {
                 setBannerMessage(fetcher.data.error || "Failed to fetch orders"); // Show error message
                 setBannerStatus("error");
             } else {
+                console.log(fetcher.data)
                 setBannerMessage(fetcher.data?.message || "Orders synced successfully!");
                 setBannerStatus("success");
             }
