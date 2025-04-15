@@ -39,8 +39,9 @@ export const loader = async ({ request }) => {
   if (!shop || !shop.shop_id) {
     throw new Error("Shop data not found in FastAPI after retries");
   }
+  console.log(shop.logo);
   const reorderDetails = await productInstance.getAllProductDetails(shop.shop_id);
-  return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id }); 
+  return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id ,logo:shop.logo,coupon:shop.coupon,discount:shop.discount}); 
  
 };
 
@@ -120,7 +121,7 @@ export default function Index() {
     toggleModal,
     selectedProductId,
     selectedVariantId,
-    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}=useAppData();
+    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -134,6 +135,18 @@ export default function Index() {
       
       <Card roundedAbove="sm" padding="400">
         <div style={{padding:'1rem 3rem',justifyContent:'center'}}>
+        {showSettingsBanner && settingsWarningMessages.length > 0 && (
+          <Banner
+            tone="critical"
+            onDismiss={() => setShowSettingsBanner(false)}
+          >
+            <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
+              {settingsWarningMessages.map((msg, i) => (
+                <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
+              ))}
+            </ul>
+          </Banner>
+        )}
           <MediaCard
             title={<Text
               variant="headingLg"
