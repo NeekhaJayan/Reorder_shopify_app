@@ -84,6 +84,7 @@ export  function useGeneralSettings() {
             setDropzonebanner("Please ensure your image dimensions do not exceed 500px in width or height.");
           } else {
             setFiles([file]); // Store only the latest uploaded file// 
+            setDropzonebanner("");
           }
         };
       }

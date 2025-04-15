@@ -9,24 +9,43 @@ export function useSettings(){
     const fetcher = useFetcher();
     const success = searchParams.get("success") || null;
     const rawMessage = searchParams.get("error");
-    const baseMessages = [
-        "⚠️Your email settings need an update. Please review and save changes.",
-        "📧 Your logo update is pending. Upload a new logo to complete the setup.",
-      ];
+    const [hasError,setHasError] = useState(false);
+
+    const completedSettings = {
+      logoUploaded: Boolean(logo),
+      emailSettingsUpdated: Boolean(template_id),
+      couponDetailsAdded: Boolean(coupon),
+      bufferTimeSet: Boolean(bufferTime),
+    };
+   
+    const filterMessages = () => {
+      const messages = [];
+    
+      if (!completedSettings.emailSettingsUpdated) {
+        messages.push("⚠️ Your email settings need an update. Please review and save changes.");
+      }
+    
+      if (!completedSettings.logoUploaded) {
+        messages.push("📧 Your logo update is pending. Upload a new logo to complete the setup.");
+      }
+    
+      if (plan === "PRO") {
+        if (!completedSettings.couponDetailsAdded) {
+          messages.push("💰 Your coupon details are missing. Add them here to activate discounts for your customers.");
+        }
+    
+        if (!completedSettings.bufferTimeSet) {
+          messages.push("⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.");
+        }
+      }
       
-      const proMessages = [
-        "💰 Your coupon details are missing. Add them here to activate discounts for your customers.",
-        "⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.",
-      ];
-      
-    const errorMessages = plan === "PRO" ? [...baseMessages, ...proMessages] : baseMessages;
-      
-    const message = success ? success : (rawMessage ? errorMessages : null);
+      return messages;
+    };
+    const [settingsWarningMessages, setSettingsWarningMessages] = useState([]);
+    const message = success ? success : ((hasError ? settingsWarningMessages : null));
     const [showBanner, setShowBanner] = useState(!!rawMessage);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
-    const [tabKey, setTabKey] = useState(0);
-    
-    
+    const [tabKey, setTabKey] = useState(0);  
     const tabs = [
         {
         id: 'general-settings',
@@ -45,6 +64,14 @@ export function useSettings(){
         panelID: 'pricing-fitted-Ccontent-2',
         },
     ];
+
+    useEffect(() => {
+      const filteredMessages = filterMessages();
+      // console.log(filteredMessages);
+      setHasError(true);
+      setSettingsWarningMessages(filteredMessages);
+      setShowBanner(filteredMessages.length > 0);
+    }, [rawMessage,logo, template_id, coupon, bufferTime, plan]);
 
     const handleTabChange = useCallback((selectedTabIndex) => {
         setSelectedTab(selectedTabIndex);
