@@ -1,8 +1,9 @@
 import { useState,useEffect,useCallback } from "react";
-import {useFetcher,useSearchParams} from "@remix-run/react";
+import {useFetcher,useSearchParams,useLoaderData} from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
 
 export function useSettings(){
+    const {template_id,logo,coupon,bufferTime} = useLoaderData();
     const [searchParams] = useSearchParams();
     const tab = searchParams.get("tab");
     const { plan } = useOutletContext();
@@ -10,6 +11,7 @@ export function useSettings(){
     const success = searchParams.get("success") || null;
     const rawMessage = searchParams.get("error");
     const [hasError,setHasError] = useState(false);
+
 
     const completedSettings = {
       logoUploaded: Boolean(logo),
@@ -43,9 +45,11 @@ export function useSettings(){
     };
     const [settingsWarningMessages, setSettingsWarningMessages] = useState([]);
     const message = success ? success : ((hasError ? settingsWarningMessages : null));
-    const [showBanner, setShowBanner] = useState(!!rawMessage);
+    const [showBanner, setShowBanner] = useState(!!hasError);
     const [selectedTab, setSelectedTab] = useState(tab!=="" && Number(tab<=2?tab:0));
-    const [tabKey, setTabKey] = useState(0);  
+    const [tabKey, setTabKey] = useState(0);
+    
+    
     const tabs = [
         {
         id: 'general-settings',
@@ -67,7 +71,7 @@ export function useSettings(){
 
     useEffect(() => {
       const filteredMessages = filterMessages();
-      // console.log(filteredMessages);
+      console.log(filteredMessages);
       setHasError(true);
       setSettingsWarningMessages(filteredMessages);
       setShowBanner(filteredMessages.length > 0);

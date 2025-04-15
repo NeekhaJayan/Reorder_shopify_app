@@ -3,7 +3,8 @@ import { useFetcher, useLoaderData ,useSearchParams} from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
 
 export function useAppData() {
-    const {reorderDetails,shopID,bufferTime,templateId}=useLoaderData();
+    const {reorderDetails,shopID,bufferTime,templateId,logo,coupon,discount}=useLoaderData();
+    console.log(logo);
     const { plan } = useOutletContext();
     const fetcher = useFetcher();
     const [formState, setformState] = useState('');
@@ -15,6 +16,41 @@ export function useAppData() {
     const rawMessage = searchParams.get("message");
     const message = rawMessage ? decodeURIComponent(rawMessage) : null;
     const [showBanner, setShowBanner] = useState(!!message);
+    
+    const completedSettings = {
+        logoUploaded: Boolean(logo),
+        emailSettingsUpdated: Boolean(templateId),
+        couponDetailsAdded: Boolean(coupon),
+        bufferTimeSet: Boolean(bufferTime),
+      };
+    //   console.log(completedSettings);
+      const filterMessages = () => {
+        const messages = [];
+      
+        if (!completedSettings.emailSettingsUpdated) {
+          messages.push("⚠️ Your email settings need an update. Please review and save changes.");
+        }
+      
+        if (!completedSettings.logoUploaded) {
+          messages.push("📧 Your logo update is pending. Upload a new logo to complete the setup.");
+        }
+      
+        if (plan === "PRO") {
+          if (!completedSettings.couponDetailsAdded) {
+            messages.push("💰 Your coupon details are missing. Add them here to activate discounts for your customers.");
+          }
+      
+          if (!completedSettings.bufferTimeSet) {
+            messages.push("⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.");
+          }
+        }
+        
+        return messages;
+      };
+      const [settingsWarningMessages, setSettingsWarningMessages] = useState([]);
+      const [showSettingsBanner, setShowSettingsBanner] = useState(false);
+      
+    // const settingsWarningmessage =  showSettingsBanner ? filteredMessages : [];
     const initialState = {
         productId: "",
         productVariantIds: "",
@@ -29,6 +65,14 @@ export function useAppData() {
     const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
     const [resetProduct,setResetProduct]=useState(null);
     const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
+
+    useEffect(() => {
+        const filteredMessages = filterMessages();
+        console.log(filteredMessages);
+        setSettingsWarningMessages(filteredMessages);
+        setShowSettingsBanner(filteredMessages.length > 0);
+      }, [logo, templateId, coupon, bufferTime, plan]);
+
     useEffect(() => {
         if (message) {
             fetcher.submit(
@@ -405,7 +449,7 @@ export function useAppData() {
         selectedProductId,
         selectedVariantId,
         handleChange,handleSubmit,plan
-        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage
+        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages
       };
 };
 
