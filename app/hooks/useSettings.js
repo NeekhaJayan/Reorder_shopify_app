@@ -76,6 +76,12 @@ export function useSettings(){
       setSettingsWarningMessages(filteredMessages);
       setShowBanner(filteredMessages.length > 0);
     }, [rawMessage,logo, template_id, coupon, bufferTime, plan]);
+    useEffect(() => {
+      const currentTab = Number(tab);
+      if (!isNaN(currentTab) && currentTab >= 0 && currentTab <= 2) {
+        setSelectedTab(currentTab);
+      }
+    }, [tab]);
 
     const handleTabChange = useCallback((selectedTabIndex) => {
         setSelectedTab(selectedTabIndex);
