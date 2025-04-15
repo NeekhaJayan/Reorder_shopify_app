@@ -47,7 +47,7 @@ useEffect(() => {
       initialData.fromName.trim() !== "" &&
       initialData.fromEmail.trim() !== "";
 
-    setIsInitialized(hasInitialValues);
+    setIsInitialized(true);
     
   }
 
