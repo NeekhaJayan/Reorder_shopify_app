@@ -25,8 +25,9 @@ export const loader = async ({ request }) => {
   const shop_domain = session.shop;
   const shop = await shopInstance.getShopDetails(shop_domain);
   const shop_email=shop.email;
+  const template_id=shop.template_id
   const settingDetails =await settingsInstance.getSettingData(shop_domain);
-  return {shop_domain,settingDetails,shop_email};  
+  return {shop_domain,settingDetails,shop_email,template_id,logo:shop.logo,coupon:shop.coupon,bufferTime:shop.buffer_time};  
 };
 
 
