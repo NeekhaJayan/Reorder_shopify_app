@@ -206,7 +206,8 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                 {/* {loading && <div className="loader">Loading...</div>} */}
                 {state === "submitting" && <p>Submitting...</p>}
             {data?.error && <p style={{ color: "red" }}>Error: {data.error}</p>}
-            {data?.success && <p style={{ color: "darkgreen" }}>{data.success}</p>}
+            {data?.success && <p style={{ color: "darkgreen" }}>{data.success}<Button variant="plain" onClick={() => {
+              navigate("/app");}} >Home</Button></p>}
                 </Layout.Section>
                 
               </Layout>

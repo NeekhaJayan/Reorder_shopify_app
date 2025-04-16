@@ -34,11 +34,17 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                   error={!!editWarningMessage}
                 /></div>
                 {editWarningMessage && (
-                    <div style={{ color: "red", fontSize: "12px", marginTop: "4px", whiteSpace: "normal",wordWrap: "break-word",maxWidth: "200px" }}>
-                      <span title={`This value is based on 'bufferTime' = ${bufferTime}`}>
-                        {editWarningMessage}
-                      </span> 
-                    </div>
+                    <div
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "4px",
+                      whiteSpace: "normal",
+                      wordWrap: "break-word",
+                      maxWidth: "200px"
+                    }}
+                    dangerouslySetInnerHTML={{ __html: editWarningMessage }}
+                  />
                   )}
                 </>):product.reorder_days || ''}
                 

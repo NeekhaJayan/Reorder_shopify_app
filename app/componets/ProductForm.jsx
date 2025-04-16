@@ -18,7 +18,7 @@ const ProductForm = ({ bannerMessage,bannerStatus,setBannerMessage,handleChange,
                     <BlockStack gap="500" >
                     {bannerMessage && (
                     <Banner
-                        title={bannerMessage}
+                        title={<div dangerouslySetInnerHTML={{ __html: bannerMessage }}/>}
                         tone={bannerStatus} // 'success', 'critical', or 'warning'
                         onDismiss={() => setBannerMessage("")} // Dismiss the banner
                     />

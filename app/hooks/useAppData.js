@@ -28,20 +28,20 @@ export function useAppData() {
         const messages = [];
       
         if (!completedSettings.emailSettingsUpdated) {
-          messages.push("⚠️ Your email settings need an update. Please review and save changes.");
+          messages.push("⚠️ Your email settings need an update. Please review and save changes. ");
         }
       
         if (!completedSettings.logoUploaded) {
-          messages.push("📧 Your logo update is pending. Upload a new logo to complete the setup.");
+          messages.push("📧 Your logo update is pending. Upload a new logo to complete the setup. ");
         }
       
         if (plan === "PRO") {
           if (!completedSettings.couponDetailsAdded) {
-            messages.push("💰 Your coupon details are missing. Add them here to activate discounts for your customers.");
+            messages.push("💰 Your coupon details are missing. Add them here to activate discounts for your customers. ");
           }
       
           if (!completedSettings.bufferTimeSet) {
-            messages.push("⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders.");
+            messages.push("⏳ Buffer time settings need to be updated. Adjust them here to optimize reorder reminders. ");
           }
         }
         
@@ -99,13 +99,13 @@ export function useAppData() {
         event.preventDefault();
     
         if (!formState.date) {
-            setBannerMessage("Please enter the estimated usage days.");
+            setBannerMessage("Please enter the estimated usage days. ");
             setBannerStatus("critical");
             return;
         }
     
         if (formState.date <= bufferTime) {
-            setBannerMessage(`Usage days must be more than ${bufferTime}.`);
+            setBannerMessage(`Usage days must be more than <u>${bufferTime}</u> <sup style="font-size: 7px;">(Buffer Time)</sup>. `);
             setBannerStatus("critical");
             return;
         }
@@ -315,7 +315,7 @@ export function useAppData() {
                 return;
               }
             if (updatedProduct.reorder_days <= bufferTime) {
-                setEditWarningMessage(`Usage days must be more than ${bufferTime}.`);
+                setEditWarningMessage(`Usage days must be more than <u>${bufferTime}</u> <sup style="font-size: 7px;">(Buffer Time)</sup>.`);
                 setActiveEditModal(true);
                 return;
               }

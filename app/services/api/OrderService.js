@@ -34,7 +34,8 @@ class OrderServices{
               shipping_phone: shippingAddress?.phone || "Unknown",
               billing_phone: billingAddress?.phone || "Unknown",
               line_items: lineItemsTransformed,
-              order_date: createdAt
+              order_date: createdAt,
+              order_source:false
             };
             
           });
@@ -42,18 +43,19 @@ class OrderServices{
     }
 
     async getPrevOrderDetails(specifiedDate,admin){
-        
+      let isoDate=''; 
       if (!isNaN(specifiedDate)) { // Ensure the date is valid
         specifiedDate.setDate(specifiedDate.getDate() - 10);
-        console.log("10 days earlier:", specifiedDate);
-        console.log("10 days earlier:", specifiedDate.toISOString());
+        isoDate = specifiedDate.toISOString();
+        // console.log("10 days earlier:", specifiedDate);
+        // console.log("10 days earlier:", specifiedDate.toISOString());
     } else {
         console.error("Invalid date:", specifiedDate);
     }
 
         // specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
         const firstOrdersCount = 10;
-        const filterQuery = `created_at:>=${specifiedDate} AND fulfillment_status:fulfilled`;
+        const filterQuery = `created_at:>=${isoDate} AND fulfillment_status:fulfilled`;
         const query = `#graphql
           query getFilteredOrders($first: Int!, $filterQuery: String!) {
             orders(first: $first, query: $filterQuery) {
@@ -102,14 +104,15 @@ class OrderServices{
             // Use variables to pass dynamic date
           },
         });
-        console.log(query)
+        // console.log(query)
         return await response.json();
     }
 
     async SyncOrderDetails(shop,created_at,admin){
       try{
-            const jsonResponse=await this.getPrevOrderDetails(created_at,admin)
-            const count = jsonResponse.length;
+            const jsonResponse=await this.getPrevOrderDetails(created_at,admin);
+            const orders = jsonResponse?.data?.orders?.edges || [];
+            const count = orders.length;
             const payload = this.transformGraphQLResponse(jsonResponse,shop);
             console.log(count);
             const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/orderSync`, {

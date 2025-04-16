@@ -44,17 +44,13 @@ export const action = async ({ request }) => {
       const result = await settingsInstance.saveSettings(Settings)
       const url = new URL(request.url);
       const errorParam = url.searchParams.get("error");
-      if (errorParam === "missing_template") {
-        
-        if(result){
-          const successMessage = encodeURIComponent(
-            "You're all set! Now start adding estimated usage days for your products to begin scheduling reminders."
-          );
-          return redirect(`/app/settings?success=${successMessage}`);
-        }
-        
+      
+      const successMessage ="You're all set! Now start adding estimated usage days for your products to begin scheduling reminders. ";
+      const queryParam=encodeURIComponent(successMessage);
+      if (errorParam === "missing_template" && result) {
+        return redirect(`/app/settings?success=${queryParam}`);
       }
-      return { success: result };
+      return { success: successMessage };
     }
     if (Settings.tab === "general-settings") {
       try {
@@ -81,7 +77,7 @@ export const action = async ({ request }) => {
         const shopDomainUrl = shopDetail?.myshopifyDomain; 
           const AWS_Upload_func = await settingsInstance.uploadImage(shopDomainUrl,formData);
           console.log(AWS_Upload_func[0]);
-          return { success: "Your Logo Image has been uploaded successfully!" };
+          return { success: "Your Logo Image has been uploaded successfully! " };
       }
       catch (error) {
         console.error("Error fetching orders:", error);
