@@ -66,7 +66,7 @@ useEffect(() => {
       message = "Please update the details instead of removing them and try again. If the issue persists,";
     }
     setEmailSettingsBanner(message);
-}, [coupon, subject, fromEmail, fromName, discountPercent, bufferTime, plan,isInitialized]);
+}, [coupon, subject, fromEmail, fromName, discountPercent, bufferTime, plan,isInitialized,template_id]);
 
 
   return { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent, bufferTime, setBufferTime,emailSettingsbanner,setEmailSettingsBanner };

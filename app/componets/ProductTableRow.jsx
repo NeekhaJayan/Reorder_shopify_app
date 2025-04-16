@@ -35,7 +35,9 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                 /></div>
                 {editWarningMessage && (
                     <div style={{ color: "red", fontSize: "12px", marginTop: "4px", whiteSpace: "normal",wordWrap: "break-word",maxWidth: "200px" }}>
-                      {editWarningMessage}
+                      <span title={`This value is based on 'bufferTime' = ${bufferTime}`}>
+                        {editWarningMessage}
+                      </span> 
                     </div>
                   )}
                 </>):product.reorder_days || ''}

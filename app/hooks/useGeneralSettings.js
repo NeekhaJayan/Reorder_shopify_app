@@ -19,6 +19,7 @@ export  function useGeneralSettings() {
   const [progress, setProgress] = useState(0);
   const [isSyncDisabled, setIsSyncDisabled] = useState(plan === 'FREE');
 
+  
  
     useEffect(() => {
         // Optional: Handle the case where settingDetails are fetched but not immediately available

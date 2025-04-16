@@ -52,15 +52,17 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
                       <DropZone accept="image/*" maxSize={3000000} type="image"  label="Logo Image"  onDrop={handleDrop} >
                       <div  style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
                         {!files.length ? fileUpload : uploadedFiles}
+                      </div>
+                      <div>
                         {dropzonebanner && (
-                            <div style={{ marginTop: "1rem", width: "100%" }}>
-                              <Banner
-                                title={dropzonebanner}
-                                tone="critical"
-                                onDismiss={() => setDropzonebanner("")}
-                              />
-                            </div>
-                          )}
+                              <div style={{ marginTop: "1rem", width: "100%" }}>
+                                <Banner
+                                  title={dropzonebanner}
+                                  tone="critical"
+                                  onDismiss={() => setDropzonebanner("")}
+                                />
+                              </div>
+                            )}
                       </div>
                       </DropZone>
                       
