@@ -62,7 +62,10 @@ useEffect(() => {
     if (!subject.trim() || !fromEmail.trim() || !fromName.trim()) {
       message = "Please update the details instead of removing them and try again. If the issue persists,";
     }
-    if (plan === 'PRO' && (!coupon.trim() || !discountPercent.trim() || !bufferTime.trim())) {
+    if (
+      plan === 'PRO' &&
+      (!coupon.trim() || !discountPercent.trim() || !String(bufferTime).trim())
+    ) {
       message = "Please update the details instead of removing them and try again. If the issue persists,";
     }
     setEmailSettingsBanner(message);
