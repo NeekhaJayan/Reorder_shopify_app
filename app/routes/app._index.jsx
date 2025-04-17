@@ -134,6 +134,7 @@ export default function Index() {
     <Page>
       
       <Card roundedAbove="sm" padding="400">
+      <div style={{paddingLeft:'3rem',paddingRight:'3rem',justifyContent:'center'}}>
       {showSettingsBanner && settingsWarningMessages.length > 0 && (
           <Banner
             tone="critical"
@@ -149,6 +150,8 @@ export default function Index() {
             </Button>
           </Banner>
         )}
+      </div>
+      
         <div style={{padding:'1rem 3rem',justifyContent:'center', marginTop:'2 rem'}}>
         
           <MediaCard
@@ -175,7 +178,7 @@ export default function Index() {
             />
           </MediaCard>
         </div>
-        <div style={{padding:'1rem 3rem',justifyContent:'center', marginTop:'2 rem'}}>
+        <div style={{paddingLeft:'3rem',paddingRight:'3rem',justifyContent:'center'}}>
         {showBanner && (
           <Banner tone="success" onDismiss={() => setShowBanner(false)}>
             <p>{message}</p>
