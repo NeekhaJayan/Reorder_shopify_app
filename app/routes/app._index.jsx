@@ -134,8 +134,7 @@ export default function Index() {
     <Page>
       
       <Card roundedAbove="sm" padding="400">
-        <div style={{padding:'1rem 3rem',justifyContent:'center'}}>
-        {showSettingsBanner && settingsWarningMessages.length > 0 && (
+      {showSettingsBanner && settingsWarningMessages.length > 0 && (
           <Banner
             tone="critical"
             onDismiss={() => setShowSettingsBanner(false)}
@@ -145,8 +144,13 @@ export default function Index() {
                 <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
               ))}
             </ul>
+            <Button variant="plain" onClick={() => navigate("/app/settings")}>
+                Settings
+            </Button>
           </Banner>
         )}
+        <div style={{padding:'1rem 3rem',justifyContent:'center', marginTop:'2 rem'}}>
+        
           <MediaCard
             title={<Text
               variant="headingLg"
@@ -171,6 +175,7 @@ export default function Index() {
             />
           </MediaCard>
         </div>
+        <div style={{padding:'1rem 3rem',justifyContent:'center', marginTop:'2 rem'}}>
         {showBanner && (
           <Banner tone="success" onDismiss={() => setShowBanner(false)}>
             <p>{message}</p>
@@ -181,6 +186,8 @@ export default function Index() {
             )}
           </Banner>
         )}
+        </div>
+        
         <BlockStack gap="400" >
           <div style={{paddingLeft:'5rem',paddingRight:'5rem',paddingTop:'1rem',paddingBottom:'1rem',justifyContent:'center'}}>
             <ProductForm bannerMessage={bannerMessage}

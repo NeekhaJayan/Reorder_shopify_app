@@ -119,23 +119,26 @@ export default function SettingsPage() {
             }
           `}
         </style>
-        {showBanner && message && (
-        <Banner
-          tone={Array.isArray(message) ? "critical" : "success"}
-          onDismiss={() => setShowBanner(false)}
-        >
-          {Array.isArray(message) ? (
-            <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
-              {message.map((msg, i) => (
-                <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
-              ))}
-            </ul>
-          ) : (
-            <p style={{ margin: 0 }}>{message} <Button variant="plain" onClick={() => {
-              navigate("/app");}} >Home</Button></p>
-          )}
-        </Banner>
-      )}
+        <div style={{ padding: "16px" }}> 
+              {showBanner && message && (
+              <Banner
+                tone={Array.isArray(message) ? "critical" : "success"}
+                onDismiss={() => setShowBanner(false)}
+              >
+                {Array.isArray(message) ? (
+                  <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
+                    {message.map((msg, i) => (
+                      <li key={i} style={{ marginBottom: '0.5rem' }}>{msg}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ margin: 0 }}>{message} <Button variant="plain" onClick={() => {
+                    navigate("/app");}} >Home</Button></p>
+                )}
+              </Banner>
+            )}
+        </div>
+        
 
        
         <Tabs key={tabKey} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} fitted>

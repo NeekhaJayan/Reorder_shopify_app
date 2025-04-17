@@ -118,7 +118,7 @@ const ProductAnalyticsCard = ({ productName, scheduleEmailCount, dispatchEmailCo
     <h5>How We Calculate Reminder Timing:</h5>
   </div>
   <div class="Polaris-Text--root Polaris-Text--bodyMd Polaris-Text--block Polaris-Text--center" style="color: #434b56;">
-    Order Date + (Ordered Quantity × ${reorder_days}) − <u>${buffer_Time}</u><sup style="font-size: 7px;">(Buffer Time)</sup>
+    Order Date + (Ordered Quantity × <u>${reorder_days})</u><sup style="font-size: 7px;">(Estimated Usage Days)</sup> − <u>${buffer_Time}</u><sup style="font-size: 7px;">(Buffer Time)</sup>
   </div>
   </div>
 </body>

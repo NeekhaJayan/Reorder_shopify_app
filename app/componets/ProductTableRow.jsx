@@ -37,11 +37,11 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                     <div
                     style={{
                       color: "red",
-                      fontSize: "12px",
+                      fontSize: "11px",
                       marginTop: "4px",
                       whiteSpace: "normal",
                       wordWrap: "break-word",
-                      maxWidth: "200px"
+                      maxWidth: "225px"
                     }}
                     dangerouslySetInnerHTML={{ __html: editWarningMessage }}
                   />
