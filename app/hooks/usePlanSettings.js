@@ -1,5 +1,6 @@
 import { useFetcher, useNavigate} from "@remix-run/react";
 import { useState } from "react";
+import { ProductIcon,NotificationIcon, DiscountIcon,CalendarTimeIcon,ChartVerticalFilledIcon,OrderIcon,QuestionCircleIcon } from "@shopify/polaris-icons";
 
 export function usePlanSettings(){
     const navigate =useNavigate();
@@ -46,6 +47,15 @@ export function usePlanSettings(){
         'Sync Recent Orders',
         'Priority Customer Support',
       ];
+      const iconList = [
+        ProductIcon,
+        NotificationIcon,
+        DiscountIcon,
+        CalendarTimeIcon,
+        ChartVerticalFilledIcon,
+        OrderIcon,
+        QuestionCircleIcon ,
+      ];
     
-    return {plans,featuresList,handleChoosePlan,handleConfirmDowngrade,activeModal,setActiveModal};
+    return {plans,featuresList,iconList,handleChoosePlan,handleConfirmDowngrade,activeModal,setActiveModal};
 };
