@@ -160,7 +160,7 @@ export function useAppData() {
             selected.variantIds.includes(singleSelectedVariant.id)
         );
         const variantDetails = selectedVariants.map(
-            variant => `${title} - ${variant.title}` // Concatenate product title and variant title
+            variant => variant.title === "Default Title" ? title : `${title} - ${variant.title}` // Concatenate product title and variant title
         );
         if (existingProduct) {
             setBannerMessage(`Variant "${variantDetails}" is already selected.`);
