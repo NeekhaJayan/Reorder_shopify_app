@@ -63,13 +63,10 @@ const shopify = shopifyApp({
             }
 
             console.log('Data successfully sent to FastAPI:', await response.json());
-
+            return response.json();
           } catch (error) {
             console.error('Error sending data to FastAPI:', error.message);
           }
-          return {
-            redirectUrl: 'app/settings' // Ensure it includes the full app URL
-          };
     },
   },
   future: {
