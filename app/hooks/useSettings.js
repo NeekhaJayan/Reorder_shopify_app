@@ -12,7 +12,6 @@ export function useSettings(){
     const rawMessage = searchParams.get("error");
     const [hasError,setHasError] = useState(false);
 
-
     const completedSettings = {
       logoUploaded: Boolean(logo),
       emailSettingsUpdated: Boolean(template_id),
@@ -23,14 +22,12 @@ export function useSettings(){
     const filterMessages = () => {
       const messages = [];
     
-      if (!completedSettings.emailSettingsUpdated) {
-        messages.push("⚠️ Your email settings need an update. Please review and save changes.");
-      }
-    
       if (!completedSettings.logoUploaded) {
         messages.push("📧 Your logo update is pending. Upload a new logo to complete the setup.");
       }
-    
+      if (!completedSettings.emailSettingsUpdated) {
+        messages.push("⚠️ Your email settings need an update. Please review and save changes.");
+      }
       if (plan === "PRO") {
         if (!completedSettings.couponDetailsAdded) {
           messages.push("💰 Your coupon details are missing. Add them here to activate discounts for your customers.");

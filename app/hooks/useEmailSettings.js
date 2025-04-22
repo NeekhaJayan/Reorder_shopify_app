@@ -64,7 +64,7 @@ useEffect(() => {
     }
     if (
       plan === 'PRO' &&
-      (!coupon.trim() || !discountPercent.trim() || !String(bufferTime).trim())
+      (!String(bufferTime).trim())
     ) {
       message = "Please update the details instead of removing them and try again. If the issue persists,";
     }

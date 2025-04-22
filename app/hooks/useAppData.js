@@ -4,7 +4,6 @@ import { useOutletContext } from '@remix-run/react';
 
 export function useAppData() {
     const {reorderDetails,shopID,bufferTime,templateId,logo,coupon,discount}=useLoaderData();
-    console.log(logo);
     const { plan } = useOutletContext();
     const fetcher = useFetcher();
     const [formState, setformState] = useState('');
@@ -27,14 +26,13 @@ export function useAppData() {
       const filterMessages = () => {
         const messages = [];
       
+        if (!completedSettings.logoUploaded) {
+            messages.push("📧 Your logo update is pending. Upload a new logo to complete the setup. ");
+          }
         if (!completedSettings.emailSettingsUpdated) {
           messages.push("⚠️ Your email settings need an update. Please review and save changes. ");
         }
-      
-        if (!completedSettings.logoUploaded) {
-          messages.push("📧 Your logo update is pending. Upload a new logo to complete the setup. ");
-        }
-      
+        
         if (plan === "PRO") {
           if (!completedSettings.couponDetailsAdded) {
             messages.push("💰 Your coupon details are missing. Add them here to activate discounts for your customers. ");
