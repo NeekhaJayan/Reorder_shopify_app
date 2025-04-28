@@ -53,6 +53,7 @@ const PricingPlans = ({ plan } ) => {
             : '❌'}
         </div>
       ))}
+      
     </div>
   ))}
 
@@ -75,8 +76,17 @@ const PricingPlans = ({ plan } ) => {
                   {plan.name === activePlan ? 'Current Plan' : 'Choose Plan'}
                 </Button>
               </div>
+
             ))}
           </div>
+          {activePlan === 'Pro Plan' && (
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+              <Text variant="bodyMd" as="p" fontWeight="medium" tone="subdued">
+                7-day free trial!
+              </Text>
+            </div>
+          )}
+
         </div>
       </Card>
       <Modal
