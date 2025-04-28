@@ -66,19 +66,21 @@ const PricingPlans = ({ plan } ) => {
             {plans.map((plan) => (
               
               <div className="plan-column" key={plan.name}>
-                <Button
-                  primary={plan.name === activePlan} 
-                  outline={plan.name !== activePlan}
-                  disabled={plan.name === activePlan}
-                  onClick={() => handleChoosePlan(plan.name)}
-                >
-                  
-                  {plan.name === activePlan ? 'Current Plan' : 'Choose Plan'}
-                </Button>
+                <div style={{ marginBottom: '5px', textAlign: 'start' }}>
+                  <Button
+                    primary={plan.name === activePlan} 
+                    outline={plan.name !== activePlan}
+                    disabled={plan.name === activePlan}
+                    onClick={() => handleChoosePlan(plan.name)}
+                  >
+                    
+                    {plan.name === activePlan ? 'Current Plan' : 'Choose Plan'}
+                  </Button>
+                </div>
                 {plan.name === 'Pro Plan' && (
-                  <div style={{ marginTop: '8px', textAlign: 'center' }}>
+                  <div style={{ textAlign: 'start' }}>
                     <Text variant="bodySm" as="p" fontWeight="medium" tone="subdued">
-                      7-day free trial!
+                      7-day free trial
                     </Text>
                   </div>
                 )}
