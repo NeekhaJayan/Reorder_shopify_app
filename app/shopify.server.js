@@ -7,7 +7,7 @@ import {
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-10";
 import { shopInstance } from "../app/services/api/ShopService";
-
+import { APP_SETTINGS } from "./constants";
 // import { restResources } from "@shopify/shopify-api/rest/admin/2024-07";
 import prisma from "./db.server";
 export const MONTHLY_PLAN = 'Monthly subscription';
@@ -50,7 +50,7 @@ const shopify = shopifyApp({
       }
       try{
 
-            const response = await fetch('https://reorderappapi.onrender.com/auth/shops/', {
+            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json', // Ensure the correct content type
