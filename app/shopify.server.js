@@ -44,7 +44,7 @@ const shopify = shopifyApp({
       // const shopName = session.shop.split(".")[0];
       const shopDetail=await shopInstance.getShopifyShopDetails(admin);
       const shop_payload_details={
-        shopify_domain: session.shop,
+        shopify_domain: shopDetail.myshopifyDomain,
         shop_name:shopDetail.name,
         email:shopDetail.email
       }
@@ -62,7 +62,7 @@ const shopify = shopifyApp({
               throw new Error(`Error from server: ${response.status} - ${errorDetails.message}`);
             }
 
-            console.log('Data successfully sent to FastAPI:', await response.json());
+            // console.log('Data successfully sent to FastAPI:', await response.json());
             return response.json();
           } catch (error) {
             console.error('Error sending data to FastAPI:', error.message);
