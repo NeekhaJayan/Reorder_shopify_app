@@ -2,8 +2,8 @@
 
 client_id = "ff8383f7adfb90290caa96dd1bfc9994"
 name = "ReOrder Reminder Pro"
-handle = "reorder-reminder1"
-application_url = "https://reorder-shopify-app.onrender.com/"
+handle = "reorder-reminder"
+application_url = "https://reorderreminderpro.onrender.com/"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_fulfillments,read_orders,read_products,write_check
 
 [auth]
 redirect_urls = [
-  "https://reorder-shopify-app.onrender.com/auth/callback",
-  "https://reorder-shopify-app.onrender.com/auth/shopify/callback",
-  "https://reorder-shopify-app.onrender.com/api/auth/callback"
+  "https://reorderreminderpro.onrender.com/auth/callback",
+  "https://reorderreminderpro.onrender.com/auth/shopify/callback",
+  "https://reorderreminderpro.onrender.com/api/auth/callback"
 ]
 
 [webhooks]
