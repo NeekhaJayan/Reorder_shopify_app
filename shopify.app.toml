@@ -46,7 +46,7 @@ api_version = "2024-10"
   uri = "/webhooks/order"
 
   [[webhooks.subscriptions]]
-  topics = [ "products/delete" ]
+  topics = [ "products/update", "products/delete" ]
   uri = "/webhooks/product_delete_update"
 
 [pos]
