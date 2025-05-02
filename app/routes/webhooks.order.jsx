@@ -37,7 +37,7 @@ export const action = async ({ request }) => {
           price: item.price || "Unknown Price"
         }))
       : [],
-    order_date: payload.fulfillments[0].updated_at || "Unknown Date",
+    order_date: payload.fulfillments?.[0]?.updated_at || "Unknown Date",
     order_source: order_source,
   };
   console.log(order_payload_details);
