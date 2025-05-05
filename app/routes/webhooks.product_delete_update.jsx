@@ -39,8 +39,8 @@ export const action = async ({ request }) => {
         const previousAttributes = payload.previous_attributes || {};
         const changedKeys = Object.keys(previousAttributes);
 
-        const isInventoryOnlyUpdate = changedKeys.length > 0 && changedKeys.every(
-          (key) => key.includes("inventory_quantity")
+        const isInventoryOnlyUpdate = changedKeys.every(
+          (key) => key.startsWith("variants") && key.includes("inventory_quantity")
         );
 
         if (isInventoryOnlyUpdate) {
