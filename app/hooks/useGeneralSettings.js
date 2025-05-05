@@ -45,35 +45,43 @@ export  function useGeneralSettings() {
         setTimeout(() => setLoading(false), 2000); // Add artificial delay for demonstration
         
       }, [settingDetails, uploadFile]);
+
+    useEffect(() => {
+      if (fetcher.state === "idle" && fetcher.data) {
+        if (fetcher.data.error) {
+          setBannerMessage(fetcher.data.error || "Failed to fetch orders");
+          setBannerStatus("error");
+        } else {
+          setBannerMessage(fetcher.data.message || "Orders synced successfully!");
+          setBannerStatus("success");
+        }
+        setProgress(100);
+      }
+    }, [fetcher.data, fetcher.state]);
+    
+    
     const handleSync = useCallback(() => {
-        setBannerMessage("Syncing orders...");
-        setBannerStatus("info");
-        const formData = new FormData();
-        formData.append("tab", "general-settings");
-        formData.append("shop",shop_domain)
-        fetcher.submit(formData, {
-          method: "POST",
-        });
-        
-        const interval = setInterval(() => {
-          setProgress((prev) => {
-            if (prev >= 100) {
-              clearInterval(interval); // Clear interval when progress reaches 100%
-              if (fetcher.data?.error) {
-                setBannerMessage(fetcher.data.error || "Failed to fetch orders"); // Show error message
-                setBannerStatus("error");
-            } else {
-                console.log(fetcher.data)
-                setBannerMessage(fetcher.data?.message || "Orders synced successfully!");
-                setBannerStatus("success");
-            }
-              return 100; // Ensure progress doesn't exceed 100
-            }
-            return prev + 10; // Increment progress
-          });
-        }, 500); 
+      setBannerMessage("Syncing orders...");
+      setBannerStatus("info");
+    
+      const formData = new FormData();
+      formData.append("tab", "general-settings");
+      formData.append("shop", shop_domain);
+      fetcher.submit(formData, { method: "POST" });
+    
       setProgress(0);
-      }, [fetcher,shop_domain]);  // Add dependencies to the useCallback hook
+    
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(interval); // Stop just before 100
+            return prev;
+          }
+          return prev + 10;
+        });
+      }, 500);
+    }, [fetcher, shop_domain]);
+      // Add dependencies to the useCallback hook
     const handleDrop = useCallback((_droppedFiles, acceptedFiles, rejectedFiles) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0];
