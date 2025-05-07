@@ -11,7 +11,7 @@ export function usePlanSettings(){
           // Show modal instead of navigating
           setActiveModal(true);
         } else {
-          navigate("/app/upgrade");
+          navigate("https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans");
         }
       };
 
