@@ -33,7 +33,7 @@ export function usePlanSettings(){
           name: 'Pro Plan',
           price: '$14.99/month',
           priceValue: 14.99,
-          url:"/app/upgrade",
+          url:"/app",
           features: ['Unlimited', true, true,'Editable', true,true,'Email & Whatsapp'],
         },
       ];
