@@ -33,7 +33,7 @@ export function usePlanSettings(){
           name: 'Pro Plan',
           price: '$14.99/month',
           priceValue: 14.99,
-          url:"/app",
+          url:"https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans",
           features: ['Unlimited', true, true,'Editable', true,true,'Email & Whatsapp'],
         },
       ];
