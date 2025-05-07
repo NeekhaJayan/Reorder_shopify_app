@@ -12,7 +12,7 @@ export function usePlanSettings(){
           setActiveModal(true);
         } else {
           // navigate("https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans");
-          window.location.href = "https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans";
+          window.open("https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans", "_blank");
         }
       };
 
@@ -34,7 +34,7 @@ export function usePlanSettings(){
           name: 'Pro Plan',
           price: '$14.99/month',
           priceValue: 14.99,
-          url:"/pricing_plans",
+          url:"https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans",
           features: ['Unlimited', true, true,'Editable', true,true,'Email & Whatsapp'],
         },
       ];
