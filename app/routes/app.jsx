@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { Button} from "@shopify/polaris";
 import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
@@ -45,7 +46,10 @@ export default function App() {
           Reorder Reminder 
         </Link>
         <Link to="/app/settings">Settings</Link>
-        <Link to="https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans" target="_top">Pricing</Link>
+        <Button variant="plain" target="_top" url="https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans">
+  Pricing
+</Button>
+
       </NavMenu>
       <Outlet context={{ plan }} />
     </AppProvider>
