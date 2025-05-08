@@ -180,9 +180,9 @@ export default function SettingsPage() {
                 emailSettingsbanner={emailSettingsbanner}
                 setEmailSettingsBanner={setEmailSettingsBanner}/>
             )}
-            {selectedTab === 2 && (
+            {/* {selectedTab === 2 && (
               <PricingPlans plan={plan} />
-                         )}
+                         )} */}
           </div>
         </Tabs>
       </Card>

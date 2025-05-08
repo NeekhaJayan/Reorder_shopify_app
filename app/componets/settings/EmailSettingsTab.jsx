@@ -130,8 +130,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                         <Icon source={AlertTriangleIcon} color="success" />
                                         <Text as="span" fontWeight="bold">
                                         Coupons Available in Pro Plan
-                                        <Button variant="plain" onClick={() => {
-                      navigate("/app/settings?tab=2");}} >Upgrade Now</Button> 
+                                        <Button variant="plain" target="_top" url="https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans">Upgrade Now</Button> 
                                         </Text>
                                       </div>):null}
                                       onChange={(value) => setDiscountPercent(value)}

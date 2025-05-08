@@ -45,7 +45,7 @@ export default function App() {
           Reorder Reminder 
         </Link>
         <Link to="/app/settings">Settings</Link>
-        
+        <Link to="https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans" target="_top">Pricing</Link>
       </NavMenu>
       <Outlet context={{ plan }} />
     </AppProvider>
