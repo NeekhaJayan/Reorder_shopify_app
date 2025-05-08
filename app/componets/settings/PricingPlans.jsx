@@ -71,7 +71,10 @@ const PricingPlans = ({ plan } ) => {
                     primary={plan.name === activePlan} 
                     outline={plan.name !== activePlan}
                     disabled={plan.name === activePlan}
-                    onClick={() => handleChoosePlan(plan.name)}
+                    // onClick={() => handleChoosePlan(plan.name)}
+                    target="_top"
+                    url="https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans"
+
                   >
                     
                     {plan.name === activePlan ? 'Current Plan' : 'Choose Plan'}
