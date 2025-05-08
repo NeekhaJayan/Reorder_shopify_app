@@ -1,5 +1,6 @@
 import { useFetcher, useNavigate} from "@remix-run/react";
 import { useState } from "react";
+import { redirect } from "@remix-run/node";
 import { ProductIcon,NotificationIcon, DiscountIcon,CalendarTimeIcon,ChartVerticalFilledIcon,OrderIcon,QuestionCircleIcon } from "@shopify/polaris-icons";
 
 export function usePlanSettings(){
@@ -11,7 +12,7 @@ export function usePlanSettings(){
           // Show modal instead of navigating
           setActiveModal(true);
         } else {
-          navigate("/app/upgrade");
+          redirect("https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans");
           // window.open("https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans", "_blank");
         }
       };
