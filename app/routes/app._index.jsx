@@ -183,7 +183,7 @@ export default function Index() {
           <Banner tone="success" onDismiss={() => setShowBanner(false)}>
             <p>{message}</p>
             {plan === "FREE" && (
-            <Button variant="plain" target="_top" url="https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans">
+            <Button variant="plain" onClick={() => navigate("/app/settings?tab=2")}>
                 Upgrade to Pro
             </Button>
             )}
@@ -250,7 +250,7 @@ export default function Index() {
                     <Banner  tone="info">
                       <p>
                       You’ve reached the maximum number of products allowed for your current plan.
-                      <Button variant="plain" target="_top" url="https://admin.shopify.com/charges/reorder-reminder-pro/pricing_plans">Upgrade Now</Button>  to add more.
+                      <Button variant="plain" onClick={() => navigate("/app/settings?tab=2")}>Upgrade Now</Button>  to add more.
                       </p>
                     </Banner>
                   </TextContainer>
