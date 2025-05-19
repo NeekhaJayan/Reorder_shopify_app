@@ -18,7 +18,7 @@ export  function useGeneralSettings() {
   const [bannerStatus, setBannerStatus] = useState("");
   const [progress, setProgress] = useState(0);
   const [isSyncDisabled, setIsSyncDisabled] = useState(plan === 'FREE');
-
+  const [currentAction, setCurrentAction] = useState(null);
   
  
     useEffect(() => {
@@ -47,15 +47,18 @@ export  function useGeneralSettings() {
       }, [settingDetails, uploadFile]);
 
     useEffect(() => {
-      if (fetcher.state === "idle" && fetcher.data && fetcher.key === 'syncOrders') {
-        if (fetcher.data.error) {
-          setBannerMessage(fetcher.data.error || "Failed to fetch orders");
-          setBannerStatus("error");
-        } else {
-          setBannerMessage(fetcher.data.message || "Orders synced successfully!");
-          setBannerStatus("success");
+      if (fetcher.state === "idle" && fetcher.data ) {
+        if (currentAction === 'syncOrders') {
+          if (fetcher.data.error) {
+            setBannerMessage(fetcher.data.error || "Failed to fetch orders");
+            setBannerStatus("error");
+          } else {
+            setBannerMessage(fetcher.data.message || "Orders synced successfully!");
+            setBannerStatus("success");
+          }
+          setProgress(100);
         }
-        setProgress(100);
+        setCurrentAction(null);
       }
     }, [fetcher.data, fetcher.state,fetcher.key]);
     
@@ -63,12 +66,12 @@ export  function useGeneralSettings() {
     const handleSync = useCallback(() => {
       setBannerMessage("Syncing orders...");
       setBannerStatus("info");
+      setCurrentAction('syncOrders');
     
       const formData = new FormData();
       formData.append("tab", "general-settings");
       formData.append("shop", shop_domain);
       fetcher.submit(formData, { method: "POST" });
-      fetcher.key = 'syncOrders';
       setProgress(0);
     
       const interval = setInterval(() => {
@@ -116,7 +119,7 @@ export  function useGeneralSettings() {
     
     const handleSubmit = async (event) => {
       event.preventDefault(); 
-      
+      setCurrentAction('saveImage');
       const formData = new FormData();
       formData.append("bannerImage", files[0]);  
       try {
@@ -125,7 +128,6 @@ export  function useGeneralSettings() {
           method: "post",
           encType: "multipart/form-data"
         });
-        fetcher.key = 'saveImage';
         // const AWS_Upload_func =await settingsInstance.uploadImage(shop_domain,formData);
         // setLoading(false);
         // return { success: AWS_Upload_func };
