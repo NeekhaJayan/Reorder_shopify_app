@@ -47,7 +47,7 @@ export  function useGeneralSettings() {
       }, [settingDetails, uploadFile]);
 
     useEffect(() => {
-      if (fetcher.state === "idle" && fetcher.data) {
+      if (fetcher.state === "idle" && fetcher.data && fetcher.key === 'syncOrders') {
         if (fetcher.data.error) {
           setBannerMessage(fetcher.data.error || "Failed to fetch orders");
           setBannerStatus("error");
@@ -57,7 +57,7 @@ export  function useGeneralSettings() {
         }
         setProgress(100);
       }
-    }, [fetcher.data, fetcher.state]);
+    }, [fetcher.data, fetcher.state,fetcher.key]);
     
     
     const handleSync = useCallback(() => {
@@ -68,7 +68,7 @@ export  function useGeneralSettings() {
       formData.append("tab", "general-settings");
       formData.append("shop", shop_domain);
       fetcher.submit(formData, { method: "POST" });
-    
+      fetcher.key = 'syncOrders';
       setProgress(0);
     
       const interval = setInterval(() => {
@@ -125,6 +125,7 @@ export  function useGeneralSettings() {
           method: "post",
           encType: "multipart/form-data"
         });
+        fetcher.key = 'saveImage';
         // const AWS_Upload_func =await settingsInstance.uploadImage(shop_domain,formData);
         // setLoading(false);
         // return { success: AWS_Upload_func };
