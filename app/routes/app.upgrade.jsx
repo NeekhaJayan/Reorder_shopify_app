@@ -10,7 +10,7 @@ export const loader = async ({ request }) => {
     plans: [MONTHLY_PLAN],
     onFailure: async () => billing.request({
       plan: MONTHLY_PLAN,
-      isTest: process.env.SHOPIFY_BILLING_IS_TEST,
+      isTest: process.env.SHOPIFY_BILLING_IS_TEST === "true",
       trialDays: 7,
       returnUrl: `https://admin.shopify.com/store/${myShop}/apps/${process.env.APP_NAME}/app?message=Pro Plan Activated.Premium features are now unlocked!`,
     }),
