@@ -161,7 +161,7 @@ export function useAppData() {
             variant => variant.title === "Default Title" ? title : `${title} - ${variant.title}` // Concatenate product title and variant title
         );
         if (existingProduct) {
-            setBannerMessage(`Variant "${variantDetails}" is already selected.`);
+            setBannerMessage(`${variantDetails} is already selected.`);
             setBannerStatus("critical");
             return;
         }
@@ -186,7 +186,7 @@ export function useAppData() {
             productImage: images[0]?.originalSrc || '',
         });
     
-        setBannerMessage(`Variant "${variantDetails}" selected successfully.`);
+        setBannerMessage(`${variantDetails} - selected successfully.`);
         setBannerStatus("success");
         } else {
             console.error("No product selected.");
