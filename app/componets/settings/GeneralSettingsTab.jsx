@@ -79,12 +79,12 @@ const GeneralSettingsTab = ({ shop_domain,plan,fetcher,files,progress,dropzoneba
                                 </Text>
                                 {progress > 0 && (<ProgressBar progress={progress} />)}
                                 
-                                <div style={{marginTop:"0.5rem"}}>
+                                <div style={{marginTop:"0.5rem" ,display:"flex"}}>
                                 <Button  variant="primary"  disabled={isSyncDisabled} onClick={handleSync}  >Sync Now</Button>                                 
                                 {plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                                                         <Icon source={AlertTriangleIcon} color="success" />
                                                                         <Text as="span" fontWeight="bold">
-                                                                        Available in Pro Plan
+                                                                        Available in Pro Plan  
                                                                         <Button variant="plain" onClick={() => navigate("/app/settings?tab=2")}>Upgrade Now</Button> 
                                                                         </Text>
                                                                       </div>):null}
