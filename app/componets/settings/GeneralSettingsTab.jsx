@@ -9,11 +9,12 @@ import {
   FormLayout,
   ProgressBar,
   Form,
+  Icon,
   Thumbnail,
   DropZone,
   Banner,LegacyStack
 } from "@shopify/polaris";
-
+import { AlertTriangleIcon } from "@shopify/polaris-icons";
 
 const GeneralSettingsTab = ({ shop_domain,plan,fetcher,files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,loading,setDropzonebanner,setBannerMessage,handleSync,handleSubmit,handleDrop,handleRemoveImage} ) => {
 
