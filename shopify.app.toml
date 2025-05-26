@@ -3,7 +3,7 @@
 client_id = "ff8383f7adfb90290caa96dd1bfc9994"
 name = "ReOrder Reminder Pro"
 handle = "reorder-reminder-pro"
-application_url = "https://reorderreminderpro.onrender.com/"
+application_url = "https://rrpapp.decagrowth.com/"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_customers,read_fulfillments,read_orders,read_products,write_checkouts,write_orders,write_products"
+scopes = "read_orders,read_products"
 
 [auth]
 redirect_urls = [
-  "https://reorderreminderpro.onrender.com/auth/callback",
-  "https://reorderreminderpro.onrender.com/auth/shopify/callback",
-  "https://reorderreminderpro.onrender.com/api/auth/callback"
+  "https://rrpapp.decagrowth.com/auth/callback",
+  "https://rrpapp.decagrowth.com/auth/shopify/callback",
+  "https://rrpapp.decagrowth.com/api/auth/callback"
 ]
 
 [webhooks]

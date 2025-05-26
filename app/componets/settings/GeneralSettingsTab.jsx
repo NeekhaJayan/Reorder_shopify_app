@@ -15,7 +15,7 @@ import {
 } from "@shopify/polaris";
 
 
-const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,loading,setDropzonebanner,setBannerMessage,handleSync,handleSubmit,handleDrop,handleRemoveImage} ) => {
+const GeneralSettingsTab = ({ shop_domain,plan,fetcher,files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,loading,setDropzonebanner,setBannerMessage,handleSync,handleSubmit,handleDrop,handleRemoveImage} ) => {
 
   const fileUpload = (<DropZone.FileUpload actionHint="We recommend an image which is 500px wide." />);
   const uploadedFiles =Array.isArray(files) && files.length > 0 ? (
@@ -79,7 +79,14 @@ const GeneralSettingsTab = ({ shop_domain,fetcher,files,progress,dropzonebanner,
                                 {progress > 0 && (<ProgressBar progress={progress} />)}
                                 
                                 <div style={{marginTop:"0.5rem"}}>
-                                <Button variant="primary" disabled={isSyncDisabled} onClick={handleSync}  >Sync Now</Button>                                 
+                                <Button  variant="primary"  disabled={isSyncDisabled} onClick={handleSync}  >Sync Now</Button>                                 
+                                {plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                                        <Icon source={AlertTriangleIcon} color="success" />
+                                                                        <Text as="span" fontWeight="bold">
+                                                                        Available in Pro Plan
+                                                                        <Button variant="plain" onClick={() => navigate("/app/settings?tab=2")}>Upgrade Now</Button> 
+                                                                        </Text>
+                                                                      </div>):null}
                                 </div>
                                 {bannerMessage && (
                                               <Banner

@@ -146,6 +146,7 @@ export default function SettingsPage() {
             {selectedTab === 0 && (
              <GeneralSettingsTab 
                          shop_domain={shop_domain} 
+                         plan={plan}
                          fetcher={fetcher}  
                          files={files} progress={progress} 
                          dropzonebanner={dropzonebanner}
