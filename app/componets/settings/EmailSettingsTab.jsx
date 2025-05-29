@@ -60,7 +60,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                 value={subject}
                                 onChange={(value) => setSubject(value)}
                                 autoComplete="off"
-                                placeholder="Time to Restock Your Product"
+                                placeholder="eg:Time to Restock Your Product"
                               />
                               <Tooltip dismissOnMouseOut content="Set the default subject line for automated emails sent to your customers.">
                                 <div style={{ marginRight: "8px" }}>
@@ -74,7 +74,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                   value={fromName}
                                   onChange={(value) => setFromName(value)}
                                   autoComplete="off"
-                                  placeholder="Your Store Name"
+                                  placeholder="eg:Your Store Name"
                                 />
                                 <Tooltip dismissOnMouseOut content="This is the name that customers will see as the sender of the email (e.g., Your Store Name).">
                                   <div style={{ marginRight: "8px" }}>
@@ -88,7 +88,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                   value={fromEmail}
                                   onChange={(value) => setFromEmail(value)}
                                   autoComplete="email"
-                                  placeholder="Your Store Email"
+                                  placeholder="eg:Your Store Email"
                                 />
                                 <Tooltip dismissOnMouseOut content="This is the email that customers will see as the sender email (e.g., Your Store Name).">
                                   <div style={{ marginRight: "8px" }}>
@@ -110,7 +110,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                       name="coupon"
                                       value={coupon}
                                       disabled={plan!== 'PRO'}
-            
+                                      placeholder="eg:SAVE10"
                                       onChange={(value) => setCoupon(value)}
                                       autoComplete="off"
                                     />
@@ -122,7 +122,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                 </div>
                                 <div style={{display: "flex", alignItems: "end" }}>
                                   <TextField
-                                      label="Coupon Discount Percentage"
+                                      label="Coupon Discount Message"
                                       name="discountPercent"
                                       value={discountPercent}
                                       disabled={plan!== 'PRO'}
@@ -134,9 +134,10 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                         </Text>
                                       </div>):null}
                                       onChange={(value) => setDiscountPercent(value)}
+                                      placeholder="eg:Save 10% on your next order!"
                                       autoComplete="off"
                                     />
-                                  <Tooltip dismissOnMouseOut content="Enter the discount percentage (e.g., 10 for 10%) to be applied to reorder reminders.">
+                                  <Tooltip dismissOnMouseOut content='This message will appear in reminder emails along with the coupon code. You can include discount details like "Save 15%" or "Free shipping on your next order".'>
                                     <div style={{ marginRight: "8px" }}>
                                       <Icon source={InfoIcon} tone="base" />
                                     </div>
