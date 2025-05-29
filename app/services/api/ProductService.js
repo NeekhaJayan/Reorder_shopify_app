@@ -28,9 +28,9 @@ class Product{
         const productId = formData.get("productId").replace("gid://shopify/Product/", "");
         const shopid =formData.get("shopid");
         const productImage=formData.get("productImage")
-        // const variantIds = formData.get("productVariantId").split(",");
+        const variantIds = formData.get("productVariantId").split(",");
         // const productTitles=formData.get("productTitle").split(",");
-        const variantIds = formData.get("productVariantId");
+        // const variantIds = formData.get("productVariantId");
         const productTitles=formData.get("productTitle");
         const reorder_days = parseFloat(formData.get("date"));
         let inputData = variantIds.map((variantId, index) => {
