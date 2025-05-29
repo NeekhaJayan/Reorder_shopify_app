@@ -29,16 +29,16 @@ class Product{
         const shopid =formData.get("shopid");
         const productImage=formData.get("productImage")
         const variantIds = formData.get("productVariantId").split(",");
-        // const productTitles=formData.get("productTitle").split(",");
+        const productTitles=formData.get("productTitle").split(",");
         // const variantIds = formData.get("productVariantId");
-        const productTitles=formData.get("productTitle");
+        // const productTitles=formData.get("productTitle");
         const reorder_days = parseFloat(formData.get("date"));
         let inputData = variantIds.map((variantId, index) => {
         return {
             shop_id: shopid,
             shopify_product_id: productId,
             shopify_variant_id: variantId.replace("gid://shopify/ProductVariant/", ""),
-            title: productTitles,
+            title: productTitles[index],
             image_url:productImage ,  // Assign the correct title for each variant
             reorder_days: reorder_days,
             };
