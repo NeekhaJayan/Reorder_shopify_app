@@ -30,8 +30,6 @@ class Product{
         const productImage=formData.get("productImage")
         const variantIds = formData.get("productVariantId").split(",");
         const productTitles=formData.get("productTitle").split(",");
-        // const variantIds = formData.get("productVariantId");
-        // const productTitles=formData.get("productTitle");
         const reorder_days = parseFloat(formData.get("date"));
         let inputData = variantIds.map((variantId, index) => {
         return {
