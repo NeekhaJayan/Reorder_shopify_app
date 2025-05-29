@@ -266,7 +266,7 @@ export default function Index() {
                 We calculate the reminder date based on the following formula:
               </Text>
               <Text variant="headingSm" as="h6" alignment="center">
-              Order Date + (Ordered Quantity * Estimated Usage Days of the Product) - Buffer Time
+              Order Fulfilled Date + (Ordered Quantity * Estimated Usage Days of the Product) - Buffer Time
               </Text>
             </Card>
             <div style={{ alignSelf:'center' ,color:'gray'}}>Contact Us : ReOrderReminderPro@decagrowth.com</div>
