@@ -38,7 +38,7 @@ class Product{
             shop_id: shopid,
             shopify_product_id: productId,
             shopify_variant_id: variantId.replace("gid://shopify/ProductVariant/", ""),
-            title: productTitles[index],
+            title: productTitles,
             image_url:productImage ,  // Assign the correct title for each variant
             reorder_days: reorder_days,
             };
