@@ -2,7 +2,7 @@ import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Text} from
 import ProductAnalyticsCard from "./ProductAnalyticsCard";
 import { useNavigate } from "@remix-run/react";
 import { useAppData } from "../hooks/useAppData";
-const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
+const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,selectedProductData,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
   const navigate =useNavigate();
   const {plan,bufferTime}=useAppData();
   
@@ -114,11 +114,11 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                                 Upgrade
                             </Button></p></div>:(
         selectedProductData && (<div dangerouslySetInnerHTML={{ __html: ProductAnalyticsCard({
-    productName: product.title,
+    productName: selectedProductData.title,
     scheduleEmailCount: scheduleEmailCount,
     dispatchEmailCount: dispatchEmailCount,
     orderSource: orderSource,
-    reorder_days:product.reorder_days,
+    reorder_days:selectedProductData.reorder_days,
     buffer_Time:bufferTime,
   }) }} />)
                      ) }
