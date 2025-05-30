@@ -114,13 +114,17 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                                 Upgrade
                             </Button></p></div>):(selectedProductId === product.shopify_product_id &&
                             selectedVariantId === product.shopify_variant_id ? (
-                            <ProductAnalyticsCard
-                              productName={product.title}
-                              scheduleEmailCount={scheduleEmailCount}
-                              dispatchEmailCount={dispatchEmailCount}
-                              orderSource={orderSource}
-                              reorder_days={product.reorder_days}
-                              buffer_Time={bufferTime}
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: ProductAnalyticsCard({
+                                 productName: product.title,
+                                scheduleEmailCount: scheduleEmailCount,
+                                dispatchEmailCount: dispatchEmailCount,
+                                orderSource: orderSource,
+                                reorder_days:product.reorder_days,
+                                buffer_Time:bufferTime,
+                                }),
+                              }}
                             />
                           ) : null )}
                         </Modal.Section>
