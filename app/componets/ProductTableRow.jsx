@@ -5,7 +5,14 @@ import { useAppData } from "../hooks/useAppData";
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
   const navigate =useNavigate();
   const {plan,bufferTime}=useAppData();
-  
+  const analyticsHtml = ProductAnalyticsCard({
+    productName: product.title,
+    scheduleEmailCount: scheduleEmailCount,
+    dispatchEmailCount: dispatchEmailCount,
+    orderSource: orderSource,
+    reorder_days:product.reorder_days,
+    buffer_Time:bufferTime,
+  });
   
     return(
         <>
@@ -87,7 +94,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                           </Modal>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>   
-                      <Button onClick={() => {showEmailCount(product.shopify_product_id, product.shopify_variant_id);}}>  <img 
+                      <Button onClick={showEmailCount}>  <img 
                                   src="../bar-chart.png"  
                                   alt="Email Icon"
                                   style={{ width: "20px", height: "20px" }}
@@ -108,26 +115,13 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                       }
                     >
                       <Modal.Section>
-                      {plan === "FREE"?(<div><p>Analytics Available in Pro Plan.
+                      {plan === "FREE"?<div><p>Analytics Available in Pro Plan.
                         Upgrade to Pro to unlock product insights and email stats.
                     👉 <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
-                            </Button></p></div>):(selectedProductId === product.shopify_product_id &&
-                            selectedVariantId === product.shopify_variant_id ? (
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: ProductAnalyticsCard({
-                                 productName: product.title,
-                                scheduleEmailCount: scheduleEmailCount,
-                                dispatchEmailCount: dispatchEmailCount,
-                                orderSource: orderSource,
-                                reorder_days:product.reorder_days,
-                                buffer_Time:bufferTime,
-                                }),
-                              }}
-                            />
-                          ) : null )}
-                        </Modal.Section>
+                            </Button></p></div>:<div dangerouslySetInnerHTML={{ __html: analyticsHtml }} />
+                      }
+                      </Modal.Section>
                         </Modal> 
                     </div>
                 </div>

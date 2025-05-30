@@ -55,7 +55,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     toggleEmailModal={toggleEmailModal} 
                     scheduleEmailCount={scheduleEmailCount} 
                     dispatchEmailCount={dispatchEmailCount} 
-                    showEmailCount={showEmailCount}
+                    showEmailCount={() =>showEmailCount(product.shopify_product_id,product.shopify_variant_id)}
                     orderSource={orderSource}
                     editWarningMessage={editWarningMessage}
                     />

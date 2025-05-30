@@ -348,8 +348,6 @@ export function useAppData() {
     );
     const showEmailCount = async (product_id,variant_id) => {
         try {
-            setSelectedProductId(product_id);      // ✅ store selected product
-            setSelectedVarientId(variant_id);      // ✅ store selected variant
             
             setIsFetchingEmailCount(true);
             fetcher.submit(
