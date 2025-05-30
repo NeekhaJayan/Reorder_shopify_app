@@ -119,8 +119,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                         Upgrade to Pro to unlock product insights and email stats.
                     👉 <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
-                            </Button></p></div>):selectedProductId === product.shopify_product_id &&
-                            selectedVariantId === product.shopify_variant_id ? (
+                            </Button></p></div>):(
                             <div
                               dangerouslySetInnerHTML={{
                                 __html: ProductAnalyticsCard({
@@ -133,7 +132,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                                 }),
                               }}
                             />
-                          ) : null }
+                          ) }
                       </Modal.Section>
                         </Modal> 
                     </div>
