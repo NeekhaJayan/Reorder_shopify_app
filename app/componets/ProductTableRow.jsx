@@ -5,14 +5,7 @@ import { useAppData } from "../hooks/useAppData";
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
   const navigate =useNavigate();
   const {plan,bufferTime}=useAppData();
-  const analyticsHtml = ProductAnalyticsCard({
-    productName: product.title,
-    scheduleEmailCount: scheduleEmailCount,
-    dispatchEmailCount: dispatchEmailCount,
-    orderSource: orderSource,
-    reorder_days:product.reorder_days,
-    buffer_Time:bufferTime,
-  });
+  
   
     return(
         <>
@@ -119,7 +112,14 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                         Upgrade to Pro to unlock product insights and email stats.
                     👉 <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
-                            </Button></p></div>:<div dangerouslySetInnerHTML={{ __html: analyticsHtml }} />
+                            </Button></p></div>:<div dangerouslySetInnerHTML={{ __html: ProductAnalyticsCard({
+    productName: product.title,
+    scheduleEmailCount: scheduleEmailCount,
+    dispatchEmailCount: dispatchEmailCount,
+    orderSource: orderSource,
+    reorder_days:product.reorder_days,
+    buffer_Time:bufferTime,
+  }) }} />
                       }
                       </Modal.Section>
                         </Modal> 
