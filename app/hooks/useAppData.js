@@ -350,7 +350,7 @@ export function useAppData() {
         try {
             setSelectedProductId(product_id);      // ✅ store selected product
             setSelectedVarientId(variant_id);      // ✅ store selected variant
-            setActiveEmailModal(true); 
+            
             setIsFetchingEmailCount(true);
             fetcher.submit(
                 {
