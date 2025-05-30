@@ -93,7 +93,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                                   style={{ width: "20px", height: "20px" }}
                               />
                         </Button>
-                        <Modal 
+                        {activeEmailModal && selectedVariantId === product.shopify_variant_id && (<Modal 
                       size="large" 
                       open={activeEmailModal} 
                       onClose={() => {
@@ -112,17 +112,18 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                         Upgrade to Pro to unlock product insights and email stats.
                     👉 <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
-                            </Button></p></div>:<div dangerouslySetInnerHTML={{ __html: ProductAnalyticsCard({
+                            </Button></p></div>:(
+        selectedProductData && (<div dangerouslySetInnerHTML={{ __html: ProductAnalyticsCard({
     productName: product.title,
     scheduleEmailCount: scheduleEmailCount,
     dispatchEmailCount: dispatchEmailCount,
     orderSource: orderSource,
     reorder_days:product.reorder_days,
     buffer_Time:bufferTime,
-  }) }} />
-                      }
+  }) }} />)
+                     ) }
                       </Modal.Section>
-                        </Modal> 
+                        </Modal> )}
                     </div>
                 </div>
               </IndexTable.Cell>

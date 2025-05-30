@@ -121,6 +121,7 @@ export default function Index() {
     toggleModal,
     selectedProductId,
     selectedVariantId,
+    selectedProductData,
     handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages}=useAppData();
     const { data, state } = fetcher;
 
@@ -239,6 +240,7 @@ export default function Index() {
                             confirmReset={confirmReset}
                             selected_productId={selectedProductId}
                             selected_variantId={selectedVariantId}
+                            selectedProductData={selectedProductData}
                             showEmailCount={showEmailCount}
                             scheduleEmailCount={scheduleEmailCount}
                             dispatchEmailCount={dispatchEmailCount}

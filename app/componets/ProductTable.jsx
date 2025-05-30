@@ -2,7 +2,7 @@ import {IndexTable,Spinner,Text} from "@shopify/polaris";
 import ProductTableRow from "./ProductTableRow";
 import SkeletonLoad from "../componets/SkeletonLoad";
 
-const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,activeEditModal,toggleEditModal,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
+const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,selectedProductData,activeEditModal,toggleEditModal,activeEmailModal,toggleEmailModal,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
 
     return(
         <>
@@ -51,11 +51,12 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     confirmReset={confirmReset}
                     selectedProductId={selected_productId}
                     selectedVariantId={selected_variantId}
+                    selectedProductData={selectedProductData}
                     activeEmailModal={activeEmailModal} 
                     toggleEmailModal={toggleEmailModal} 
                     scheduleEmailCount={scheduleEmailCount} 
                     dispatchEmailCount={dispatchEmailCount} 
-                    showEmailCount={() =>showEmailCount(product.shopify_product_id,product.shopify_variant_id)}
+                    showEmailCount={() =>showEmailCount(product,product.shopify_variant_id)}
                     orderSource={orderSource}
                     editWarningMessage={editWarningMessage}
                     />

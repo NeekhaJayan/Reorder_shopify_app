@@ -211,6 +211,8 @@ export function useAppData() {
     const [orderSource, setOrderSource]= useState(null);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [selectedVariantId, setSelectedVarientId] = useState(null);
+    const [selectedProductData, setSelectedProductData] = useState(null);
+
 
     const toggleEditModal = useCallback(() => {
         setActiveEditModal((prev) => !prev);
@@ -346,9 +348,11 @@ export function useAppData() {
         },
         [fetcher, updatedProducts]
     );
-    const showEmailCount = async (product_id,variant_id) => {
+    const showEmailCount = async (product,variant_id) => {
         try {
-            
+            setSelectedProductData(product);
+            setSelectedProductId(product.shopify_product_id);
+            setSelectedVarientId(variant_id);
             setIsFetchingEmailCount(true);
             fetcher.submit(
                 {
@@ -447,6 +451,7 @@ export function useAppData() {
         toggleModal,
         selectedProductId,
         selectedVariantId,
+        selectedProductData,
         handleChange,handleSubmit,plan
         ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages
       };
