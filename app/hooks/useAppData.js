@@ -348,10 +348,10 @@ export function useAppData() {
         },
         [fetcher, updatedProducts]
     );
-    const showEmailCount = async (product,variant_id) => {
+    const showEmailCount = async (product,product_id,variant_id) => {
         try {
             setSelectedProductData(product);
-            setSelectedProductId(product.shopify_product_id);
+            setSelectedProductId(product_id);
             setSelectedVarientId(variant_id);
             setIsFetchingEmailCount(true);
             fetcher.submit(
