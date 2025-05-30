@@ -123,12 +123,12 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                             <div
                               dangerouslySetInnerHTML={{
                                 __html: ProductAnalyticsCard({
-                                  productName: product.title,
-                                  scheduleEmailCount,
-                                  dispatchEmailCount,
-                                  orderSource,
-                                  reorder_days: product.reorder_days,
-                                  buffer_Time: bufferTime,
+                                 productName: product.title,
+                                scheduleEmailCount: scheduleEmailCount,
+                                dispatchEmailCount: dispatchEmailCount,
+                                orderSource: orderSource,
+                                reorder_days:product.reorder_days,
+                                buffer_Time:bufferTime,
                                 }),
                               }}
                             />
