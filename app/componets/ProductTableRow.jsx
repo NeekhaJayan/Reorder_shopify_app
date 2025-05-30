@@ -115,12 +115,25 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                       }
                     >
                       <Modal.Section>
-                      {plan === "FREE"?<div><p>Analytics Available in Pro Plan.
+                      {plan === "FREE"?(<div><p>Analytics Available in Pro Plan.
                         Upgrade to Pro to unlock product insights and email stats.
                     👉 <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
-                            </Button></p></div>:<div dangerouslySetInnerHTML={{ __html: analyticsHtml }} />
-                      }
+                            </Button></p></div>):selectedProductId === product.shopify_product_id &&
+                            selectedVariantId === product.shopify_variant_id ? (
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: ProductAnalyticsCard({
+                                  productName: product.title,
+                                  scheduleEmailCount,
+                                  dispatchEmailCount,
+                                  orderSource,
+                                  reorder_days: product.reorder_days,
+                                  buffer_Time: bufferTime,
+                                }),
+                              }}
+                            />
+                          ) : null }
                       </Modal.Section>
                         </Modal> 
                     </div>
