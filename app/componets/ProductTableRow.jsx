@@ -87,7 +87,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                           </Modal>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>  
-                      <Tooltip active content="ReOrder Reminder Pro Performance"> 
+                      <Tooltip  content="ReOrder Reminder Pro Performance"> 
                       <Button onClick={showEmailCount}>  <img 
                                   src="../bar-chart.png"  
                                   alt="Email Icon"
