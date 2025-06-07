@@ -88,6 +88,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                           </Modal>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>   
+                      <div style={{display: "flex", alignItems: "end",marginTop:'1rem' }}>
                       <Button onClick={showEmailCount}>  <img 
                                   src="../bar-chart.png"  
                                   alt="Email Icon"
@@ -98,7 +99,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                                                             <div style={{ marginRight: "8px" }}>
                                                               <Icon source={InfoIcon} tone="base" />
                                                             </div>
-                                                          </Tooltip>
+                                                          </Tooltip></div>
                         {activeEmailModal && selectedVariantId === product.shopify_variant_id && (<Modal 
                       size="large" 
                       open={activeEmailModal} 
