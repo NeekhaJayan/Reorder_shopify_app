@@ -122,7 +122,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
     buffer_Time:bufferTime,
   }) }} />)
                      ) }
-                     <Button variant="secondary" onClick={onTestEmailReminder}>
+                     <Button variant="primary" onClick={onTestEmailReminder}>
                                Test Email
                             </Button>
                       </Modal.Section>
