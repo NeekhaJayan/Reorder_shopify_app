@@ -130,7 +130,7 @@ class Product{
         const product_id=formData.get("productId")
         const variant_id=formData.get("variantId")
         const shop_id=formData.get("shopId")
-        const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/test-email-reminder??product_id=${product_id}&variant_id=${variant_id}&shop_id=${shop_id}`, {
+        const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/test-email-reminder?product_id=${product_id}&variant_id=${variant_id}&shop_id=${shop_id}`, {
                         method:"POST",
                         headers: {
                         "Content-Type": "application/json",
