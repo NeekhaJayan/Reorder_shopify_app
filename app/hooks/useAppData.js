@@ -435,7 +435,7 @@ export function useAppData() {
             toggleEmailModal();
         }
         if (fetcher.data?.type === "testEmailSent") {    
-            setEmailStatus("Email sent successfully");
+            setEmailStatus(fetcher.data.message);
         }
     }, [data]);
     
