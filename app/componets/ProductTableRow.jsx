@@ -2,7 +2,7 @@ import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Text} from
 import ProductAnalyticsCard from "./ProductAnalyticsCard";
 import { useNavigate } from "@remix-run/react";
 import { useAppData } from "../hooks/useAppData";
-const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,selectedProductData,activeEmailModal,toggleEmailModal,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
+const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,selectedProductData,activeEmailModal,toggleEmailModal,showEmailCount,onTestEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage}) => {
   const navigate =useNavigate();
   const {plan,bufferTime}=useAppData();
   
@@ -122,7 +122,7 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
     buffer_Time:bufferTime,
   }) }} />)
                      ) }
-                     <Button variant="secondary" onClick={testEmailReminder}>
+                     <Button variant="secondary" onClick={onTestEmailReminder}>
                                Test Email
                             </Button>
                       </Modal.Section>

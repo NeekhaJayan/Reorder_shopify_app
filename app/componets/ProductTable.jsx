@@ -57,7 +57,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     scheduleEmailCount={scheduleEmailCount} 
                     dispatchEmailCount={dispatchEmailCount} 
                     showEmailCount={() =>showEmailCount(product,product.shopify_product_id,product.shopify_variant_id)}
-                    testEmailReminder={() =>testEmailReminder(product.shopify_product_id,product.shopify_variant_id)}
+                    onTestEmailReminder={() =>testEmailReminder(product.shopify_product_id,product.shopify_variant_id)}
                     orderSource={orderSource}
                     editWarningMessage={editWarningMessage}
                     />
