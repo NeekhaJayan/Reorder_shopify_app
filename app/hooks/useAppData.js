@@ -354,6 +354,7 @@ export function useAppData() {
             setSelectedProductId(product_id);
             setSelectedVarientId(variant_id);
             setIsFetchingEmailCount(true);
+            setEmailStatus("");
             fetcher.submit(
                 {
                     shopId: shopID,
