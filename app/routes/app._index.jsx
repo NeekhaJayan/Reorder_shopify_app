@@ -77,10 +77,7 @@ export const action = async ({ request }) => {
       return {  type: "updateProduct",success: "Estimated Usage Days saved successfully!", result };
       
     }
-    else if(method==="POST"){
-      const result = await productInstance.testEmail(formData);
-      return {success: "Email Sent SuccessFully", result };
-    } 
+    
     else{
       const result_data =await productInstance.fetchEmailCount(formData);
       return json({
