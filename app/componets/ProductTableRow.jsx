@@ -1,5 +1,6 @@
-import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Text} from "@shopify/polaris";
+import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Tooltip, Icon} from "@shopify/polaris";
 import ProductAnalyticsCard from "./ProductAnalyticsCard";
+import { InfoIcon} from "@shopify/polaris-icons";
 import { useNavigate } from "@remix-run/react";
 import { useAppData } from "../hooks/useAppData";
 const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, onReorderChange,activeEditModal,toggleEditModal,activeModal,toggleModal,confirmReset,selectedProductId,selectedVariantId,selectedProductData,activeEmailModal,toggleEmailModal,showEmailCount,onTestEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,emailStatus}) => {
@@ -93,6 +94,11 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                                   style={{ width: "20px", height: "20px" }}
                               />
                         </Button>
+                        <Tooltip dismissOnMouseOut content=' Tooltip for anlaytics.'>
+                                                            <div style={{ marginRight: "8px" }}>
+                                                              <Icon source={InfoIcon} tone="base" />
+                                                            </div>
+                                                          </Tooltip>
                         {activeEmailModal && selectedVariantId === product.shopify_variant_id && (<Modal 
                       size="large" 
                       open={activeEmailModal} 
