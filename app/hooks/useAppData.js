@@ -212,7 +212,7 @@ export function useAppData() {
     const [selectedProductId, setSelectedProductId] = useState(null);
     const [selectedVariantId, setSelectedVarientId] = useState(null);
     const [selectedProductData, setSelectedProductData] = useState(null);
-
+    const [emailStatus, setEmailStatus] = useState(""); 
 
     const toggleEditModal = useCallback(() => {
         setActiveEditModal((prev) => !prev);
@@ -433,6 +433,9 @@ export function useAppData() {
             setOrderSource(fetcher.data.Reorder_Email_Source);
             toggleEmailModal();
         }
+        if (fetcher.data?.type === "testEmailSent") {    
+            setEmailStatus("Email sent successfully");
+        }
     }, [data]);
     
     return {
@@ -466,7 +469,7 @@ export function useAppData() {
         selectedVariantId,
         selectedProductData,
         handleChange,handleSubmit,plan
-        ,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages
+        ,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus
       };
 };
 

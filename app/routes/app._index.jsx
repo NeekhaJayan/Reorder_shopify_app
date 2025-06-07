@@ -79,7 +79,10 @@ export const action = async ({ request }) => {
     }
     else if(method==="POST"&& type === 'test_email'){
       const result = await productInstance.testEmail(formData);
-      return {success: "Email Sent SuccessFully", result };
+      return json({
+        type: "testEmailSent",
+        message: result?.message || "Email Sent Successfully",
+      });
     } 
     else{
       const result_data =await productInstance.fetchEmailCount(formData);
@@ -126,7 +129,7 @@ export default function Index() {
     selectedProductId,
     selectedVariantId,
     selectedProductData,
-    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages}=useAppData();
+    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -250,7 +253,8 @@ export default function Index() {
                             scheduleEmailCount={scheduleEmailCount}
                             dispatchEmailCount={dispatchEmailCount}
                             orderSource={orderSource}
-                            editWarningMessage={editWarningMessage}/>
+                            editWarningMessage={editWarningMessage}
+                            emailStatus={emailStatus}/>
               )}
               {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT && (
                   <TextContainer>
