@@ -373,26 +373,16 @@ export function useAppData() {
     };
 
     const testEmailReminder=async(product_id,variant_id)=>{
-        // fetcher.submit(
-        //         {
-        //             shopId: shopID,
-        //             productId: product_id,
-        //             variantId: variant_id,
-        //         },
-        //         { method: "post" }
-        //     );
-        const response = await fetch(`https://reorderappapi.onrender.com/auth/test-email-reminder?product_id=${product_id}&variant_id=${variant_id}&shop_id=${shopID}`, {
-                        method:"POST",
-                        headers: {
-                        "Content-Type": "application/json",
-                        },
-                    });
-                
-        if (!response.ok) {
-            throw new Error("Failed sending email ");
-        }
-        const result = await response.json();
-        return result;
+        fetcher.submit(
+                {
+                    shopId: shopID,
+                    productId: product_id,
+                    variantId: variant_id,
+                    type:"test_email",
+                },
+                { method: "post" }
+            );
+        
     }
     
     useEffect(() => {
