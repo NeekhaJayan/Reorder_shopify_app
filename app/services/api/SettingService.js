@@ -62,6 +62,8 @@ class Settings{
       
       return await response.json();
     }
+
+    
 }
 const settingsInstance = new Settings();
 export {settingsInstance}

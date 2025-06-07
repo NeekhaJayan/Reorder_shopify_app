@@ -371,6 +371,17 @@ export function useAppData() {
             
         }
     };
+
+    const testEmailReminder=async(product_id,variant_id)=>{
+        fetcher.submit(
+                {
+                    shopId: shopID,
+                    productId: product_id,
+                    variantId: variant_id,
+                },
+                { method: "post" }
+            );
+    }
     
     useEffect(() => {
         // Simulate loading when index page loads
@@ -453,7 +464,7 @@ export function useAppData() {
         selectedVariantId,
         selectedProductData,
         handleChange,handleSubmit,plan
-        ,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages
+        ,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages
       };
 };
 

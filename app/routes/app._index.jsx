@@ -76,6 +76,10 @@ export const action = async ({ request }) => {
       const result = await productInstance.saveProductData(formData);
       return {  type: "updateProduct",success: "Estimated Usage Days saved successfully!", result };
       
+    }
+    else if(method==="POST"){
+      const result = await productInstance.testEmail(formData);
+      return {success: "Email Sent SuccessFully", result };
     } 
     else{
       const result_data =await productInstance.fetchEmailCount(formData);
@@ -122,7 +126,7 @@ export default function Index() {
     selectedProductId,
     selectedVariantId,
     selectedProductData,
-    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages}=useAppData();
+    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages}=useAppData();
     const { data, state } = fetcher;
 
     const navigate =useNavigate();
@@ -242,6 +246,7 @@ export default function Index() {
                             selected_variantId={selectedVariantId}
                             selectedProductData={selectedProductData}
                             showEmailCount={showEmailCount}
+                            testEmailReminder={testEmailReminder}
                             scheduleEmailCount={scheduleEmailCount}
                             dispatchEmailCount={dispatchEmailCount}
                             orderSource={orderSource}
