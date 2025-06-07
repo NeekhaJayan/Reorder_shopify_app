@@ -113,23 +113,22 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                     👉 <Button variant="secondary" onClick={() => navigate("/app/settings?tab=2")}>
                                 Upgrade
                             </Button></p></div>:(
-        selectedProductData && (<div dangerouslySetInnerHTML={{ __html: ProductAnalyticsCard({
-    productName: selectedProductData.title,
-    scheduleEmailCount: scheduleEmailCount,
-    dispatchEmailCount: dispatchEmailCount,
-    orderSource: orderSource,
-    reorder_days:selectedProductData.reorder_days,
-    buffer_Time:bufferTime,
-  }) }} />)
-                     ) }
-                     <Button variant="plain" onClick={onTestEmailReminder}>
-                               Click to send a test reorder reminder
-                            </Button>
-                            {emailStatus && (
-        <div style={{ marginTop: "6px", fontSize: "12px", color: emailStatus.startsWith("✅") ? "green" : "red" }}>
-          {emailStatus}
-        </div>
-      )}
+                                selectedProductData && (<div dangerouslySetInnerHTML={{ __html: ProductAnalyticsCard({
+                            productName: selectedProductData.title,
+                            scheduleEmailCount: scheduleEmailCount,
+                            dispatchEmailCount: dispatchEmailCount,
+                            orderSource: orderSource,
+                            reorder_days:selectedProductData.reorder_days,
+                            buffer_Time:bufferTime,
+                          }) }} />)
+                      ) }
+                     <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "8px" }}>
+                     <Button variant="plain" onClick={onTestEmailReminder}>Click to send a test reorder reminder</Button>
+                      {emailStatus && (
+                        <span style={{ marginTop: "6px", fontSize: "12px", color: "green"  }}>
+                          {emailStatus}
+                        </span>
+                      )}</div>
                       </Modal.Section>
                         </Modal> )}
                     </div>
