@@ -1,4 +1,4 @@
-import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Text} from "@shopify/polaris";
+import {IndexTable,ButtonGroup,Button,Modal,TextField,Thumbnail,Badge,Tooltip} from "@shopify/polaris";
 import ProductAnalyticsCard from "./ProductAnalyticsCard";
 import { useNavigate } from "@remix-run/react";
 import { useAppData } from "../hooks/useAppData";
@@ -86,13 +86,14 @@ const ProductTableRow = ({ product, isEditing, onEdit,onReset, onSave,onCancel, 
                             </Modal.Section>
                           </Modal>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>   
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>  
+                      <Tooltip active content="ReOrder Reminder Pro Performance"> 
                       <Button onClick={showEmailCount}>  <img 
                                   src="../bar-chart.png"  
                                   alt="Email Icon"
                                   style={{ width: "20px", height: "20px" }}
                               />
-                        </Button>
+                        </Button></Tooltip>
                         {activeEmailModal && selectedVariantId === product.shopify_variant_id && (<Modal 
                       size="large" 
                       open={activeEmailModal} 
