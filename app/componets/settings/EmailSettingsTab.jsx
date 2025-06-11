@@ -83,7 +83,7 @@ const EmailSettingsTab = ({shop_domain,shop_email,plan,fetcher,imageUrlForPrevie
                                 </Tooltip>
                                 <TextField
                                   type="email"
-                                  label="From Email"
+                                  label="Reply-To Email"
                                   name="fromEmail"
                                   value={fromEmail}
                                   onChange={(value) => setFromEmail(value)}
