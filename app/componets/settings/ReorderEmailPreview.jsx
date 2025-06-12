@@ -207,8 +207,8 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
                                               <tr>
                                                 <td align="center" style="padding:20px; font-family:Arial, sans-serif; color:#333333;">
                                                   <p style="font-size:16px;">Hello ${placeholders.first_name},</p>
-                                                  <p style="font-size:16px;">We noticed it's been <b>30</b> days since you purchased <b>${placeholders.product_name}</b>. You might be running low!</p>
-                                                  <p style="font-size:16px;">Don't wait until you run out! Restock now and keep enjoying your favorite products.</p>
+                                                  <p style="font-size:16px;">Just a quick reminder - based on your last purchase, you might be running low on<b>${placeholders.product_name}</b>.</p>
+                                                  
                                                 </td>
                                               </tr>
 
@@ -219,8 +219,8 @@ const ReorderEmailPreview = ({ image_path,mail_id ,shop}) =>{
                                               </tr>
                                               <tr>
                                                 <td align="center" style="padding:5px 20px; font-family:Arial, sans-serif;">
-                                                  <h3 style="font-size:18px; color:#333333;">${placeholders.product_name}</h3>
-                                                  <p style="font-size:14px;"><b>Quantity:</b> ${placeholders.quantity}</p>
+                                                  
+                                                  <p style="font-size:16px;">To make sure you don't run out, you can easily reorder it here:</p>
                                                 </td>
                                               </tr>
 
