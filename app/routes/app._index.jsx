@@ -37,7 +37,7 @@ export const loader = async ({ request }) => {
   }
 
   if (!shop || !shop.shop_id) {
-    throw new Error("Shop data not found in FastAPI after retries");
+    console.error("Shop data not found in FastAPI after retries");
   }
   console.log(shop.logo);
   const reorderDetails = await productInstance.getAllProductDetails(shop.shop_id);
