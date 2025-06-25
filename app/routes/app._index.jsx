@@ -26,15 +26,16 @@ import '../styles/index.css';
 export const loader = async ({ request }) => {
   try{
       const {admin,session }=await authenticate.admin(request);
-      const shopName = session.shop.split(".")[0];
-      const shop_domain=session.shop
+      // const shopName = session.shop.split(".")[0];
+      // const shop_domain=session.shop
       const shopDetail=await shopInstance.getShopifyShopDetails(admin);
       console.log(shopDetail)
       const shop_payload_details={
-            shopify_domain: shop_domain,
-            shop_name:shopName
-          }
-        
+        shopify_domain: shopDetail.myshopifyDomain,
+        shop_name:shopDetail.name,
+        email:shopDetail.email
+      }
+      console.log(shop_payload_details)  
       let shop = await shopInstance.createShop(shop_payload_details);
       if (!shop || !shop.shop_id) {
         console.error("Shop creation failed or missing shop_id");
