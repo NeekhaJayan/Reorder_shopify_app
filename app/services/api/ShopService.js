@@ -8,9 +8,9 @@ class Shop{
                   "Content-Type": "application/json",
                 },
               });
-              if (!response.ok) {
-                throw new Error(`Failed to fetch shop details: ${response.statusText}`);
-              }
+              // if (!response.ok) {
+              //   throw new Error(`Failed to fetch shop details: ${response.statusText}`);
+              // }
               return await response.json();
 
         }
