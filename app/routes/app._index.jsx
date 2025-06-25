@@ -26,8 +26,8 @@ import '../styles/index.css';
 export const loader = async ({ request }) => {
   try{
       const {admin,session }=await authenticate.admin(request);
-      console.log(admin);
-      console.log(session);
+      // console.log(admin);
+      // console.log(session);
       // const shopName = session.shop.split(".")[0];
       // const shop_domain=session.shop
       const shopDetail=await shopInstance.getShopifyShopDetails(admin);
