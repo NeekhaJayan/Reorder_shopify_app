@@ -25,7 +25,12 @@ export const action = async ({ request }) => {
       console.error('Error sending data to FastAPI:', error.message);
     });
   
-  
+   try {
+    await prisma.session.deleteMany({ where: { shop: shop_domain } });
+    console.log("Session deleted from Prisma for:", shop_domain);
+    } catch (err) {
+    console.error(" Failed to delete session from Prisma:", err.message);
+    }
 
   return new Response();
 };
