@@ -25,12 +25,13 @@ import '../styles/index.css';
 
 export const loader = async ({ request }) => {
   try{
-      const {admin,session }=await authenticate.admin(request);
-      const shopDetail=await shopInstance.getShopifyShopDetails(admin);
+      const {session }=await authenticate.admin(request);
+      const shopName = session.shop.split(".")[0];
+      const shop_domain=session.shop
+      // const shopDetail=await shopInstance.getShopifyShopDetails(admin);
       const shop_payload_details={
-            shopify_domain: shopDetail.myshopifyDomain,
-            shop_name:shopDetail.name,
-            email:shopDetail.email
+            shopify_domain: shop_domain,
+            shop_name:shopName
           }
         
       shop = await shopInstance.createShop(shop_payload_details);
