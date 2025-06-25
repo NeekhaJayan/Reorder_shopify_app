@@ -11,7 +11,7 @@ class Product{
               });
             
               if (!response.ok) {
-                throw new Error("Failed to send product data to FastAPI");
+                console.error("Failed to send product data to FastAPI");
               }
             
               return await response.json();
