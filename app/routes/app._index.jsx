@@ -25,7 +25,7 @@ import '../styles/index.css';
 
 export const loader = async ({ request }) => {
   try{
-      const {admin }=await authenticate.admin(request);
+      const {admin,session }=await authenticate.admin(request);
       const shopDetail=await shopInstance.getShopifyShopDetails(admin);
       const shop_payload_details={
             shopify_domain: shopDetail.myshopifyDomain,
