@@ -36,32 +36,32 @@ const shopify = shopifyApp({
     afterAuth: async ({ admin,session }) => {
       await shopify.registerWebhooks({session});
       // const shopName = session.shop.split(".")[0];
-      const shopDetail=await shopInstance.getShopifyShopDetails(admin);
-      const shop_payload_details={
-        shopify_domain: shopDetail.myshopifyDomain,
-        shop_name:shopDetail.name,
-        email:shopDetail.email
-      }
-      try{
+      // const shopDetail=await shopInstance.getShopifyShopDetails(admin);
+      // const shop_payload_details={
+      //   shopify_domain: shopDetail.myshopifyDomain,
+      //   shop_name:shopDetail.name,
+      //   email:shopDetail.email
+      // }
+      // try{
 
-            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json', // Ensure the correct content type
-              },
-              body: JSON.stringify(shop_payload_details), // Convert object to JSON string
-            })
-            if (!response.ok) {
-              const errorDetails = await response.json();
-              throw new Error(`Error from server: ${response.status} - ${errorDetails.message}`);
-            }
+      //       const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/`, {
+      //         method: 'POST',
+      //         headers: {
+      //           'Content-Type': 'application/json', // Ensure the correct content type
+      //         },
+      //         body: JSON.stringify(shop_payload_details), // Convert object to JSON string
+      //       })
+      //       if (!response.ok) {
+      //         const errorDetails = await response.json();
+      //         throw new Error(`Error from server: ${response.status} - ${errorDetails.message}`);
+      //       }
 
-            // console.log('Data successfully sent to FastAPI:', await response.json());
-            const res=await response.json();
-            return res;
-          } catch (error) {
-            console.error('Error sending data to FastAPI:', error.message);
-          }
+      //       // console.log('Data successfully sent to FastAPI:', await response.json());
+      //       const res=await response.json();
+      //       return res;
+      //     } catch (error) {
+      //       console.error('Error sending data to FastAPI:', error.message);
+      //     }
     },
   },
   future: {
