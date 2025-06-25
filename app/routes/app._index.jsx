@@ -34,7 +34,7 @@ export const loader = async ({ request }) => {
             shop_name:shopName
           }
         
-      shop = await shopInstance.createShop(shop_payload_details);
+      let shop = await shopInstance.createShop(shop_payload_details);
       if (!shop || !shop.shop_id) {
         console.error("Shop creation failed or missing shop_id");
       }
