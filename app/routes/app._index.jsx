@@ -24,25 +24,24 @@ import { APP_SETTINGS } from "../constants";
 import '../styles/index.css';
 
 export const loader = async ({ request }) => {
-  const {session }=await authenticate.admin(request);
-  const shop_domain=session.shop
-  let shop;
-  let retries = 4;
-  let delay = 3000;
-  for (let attempt = 1; attempt <= retries; attempt++) {
-     shop = await shopInstance.getShopDetails(shop_domain);
-    if (shop && shop.shop_id) break; // Exit loop if shop ID exists
-    console.log(`Retrying shop fetch: Attempt ${attempt}`);
-    await new Promise((resolve) => setTimeout(resolve, delay));
-  }
-
-  if (!shop || !shop.shop_id) {
-    console.error("Shop data not found in FastAPI after retries");
-  }
-  console.log(shop.logo);
-  const reorderDetails = await productInstance.getAllProductDetails(shop.shop_id);
-  return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id ,logo:shop.logo,coupon:shop.coupon,discount:shop.discount}); 
- 
+  try{
+      const {admin }=await authenticate.admin(request);
+      const shopDetail=await shopInstance.getShopifyShopDetails(admin);
+      const shop_payload_details={
+            shopify_domain: shopDetail.myshopifyDomain,
+            shop_name:shopDetail.name,
+            email:shopDetail.email
+          }
+        
+      shop = await shopInstance.createShop(shop_payload_details);
+      if (!shop || !shop.shop_id) {
+        console.error("Shop creation failed or missing shop_id");
+      }
+      const reorderDetails = await productInstance.getAllProductDetails(shop.shop_id);
+      return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id ,logo:shop.logo,coupon:shop.coupon,discount:shop.discount}); 
+      } catch (error) {
+        console.error("Loader error:", error.message || error);
+      }
 };
 
 export const action = async ({ request }) => {

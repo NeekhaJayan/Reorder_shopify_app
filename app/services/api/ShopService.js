@@ -42,27 +42,48 @@ class Shop{
     }    
   }
 
-    async getShopifyShopDetails(admin){
-        const response_shop = await admin.graphql(
-            `#graphql
-              query {
-                shop {
-                name
-                createdAt
-                domains {
-                  url
-                }
-                email
-                myshopifyDomain
+  async getShopifyShopDetails(admin){
+      const response_shop = await admin.graphql(
+          `#graphql
+            query {
+              shop {
+              name
+              createdAt
+              domains {
+                url
               }
-            }`,
-            );
+              email
+              myshopifyDomain
+            }
+          }`,
+          );
+        
+          // Destructure the response
+          const shop_body = await response_shop.json();
           
-            // Destructure the response
-            const shop_body = await response_shop.json();
-            
-            const shop_data = shop_body;
-            return shop_data.data.shop
+          const shop_data = shop_body;
+          return shop_data.data.shop
+  }
+  async createShop(shop_payload_details){
+        try{
+            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/shops/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', // Ensure the correct content type
+            },
+            body: JSON.stringify(shop_payload_details), // Convert object to JSON string
+            });
+            const data = await response.json();
+            if (!response.ok) {
+              console.error(`FastAPI error ${response.status}: ${data.message}`);
+              return null;
+            }
+              return data;
+          }
+          catch (error) {
+            console.error("Error fetching shop details:", error.message);
+            return null; // Return `null` or handle errors gracefully
+          }    
     }
     
    
