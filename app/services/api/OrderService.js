@@ -79,6 +79,11 @@ class OrderServices{
                         variant {
                           id
                         }
+                        originalUnitPriceSet {
+                          shopMoney {
+                            amount
+                          }
+                        }
                         product {
                           id
                         }
@@ -112,6 +117,7 @@ class OrderServices{
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin);
             const orders = jsonResponse?.data?.orders?.edges || [];
+            console.log(orders);
             const count = orders.length;
             const payload = this.transformGraphQLResponse(jsonResponse,shop);
             console.log(count);
