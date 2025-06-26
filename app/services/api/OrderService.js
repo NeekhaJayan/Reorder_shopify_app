@@ -20,7 +20,7 @@ class OrderServices{
               varient_id: parseInt(item?.variant?.id?.split("/").pop() || 0),
               quantity: item?.quantity,
               status: "fulfilled", // Assuming fulfillment status is "fulfilled"
-              price: "0.00" 
+              price: parseInt(item?.originalUnitPriceSet?.shopMoney?.amount||"0.00") 
               // Adjust based on actual data if available
             }));
         
@@ -117,7 +117,7 @@ class OrderServices{
       try{
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin);
             const orders = jsonResponse?.data?.orders?.edges || [];
-            console.log(orders);
+            console.log(jsonResponse);
             const count = orders.length;
             const payload = this.transformGraphQLResponse(jsonResponse,shop);
             console.log(count);
