@@ -55,9 +55,9 @@ class OrderServices{
 
         // specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
         const firstOrdersCount = 10;
-        const filterQuery = `created_at:>=${isoDate} AND fulfillment_status:fulfilled`;
+        const filterQuery = `created_at:<=${isoDate} AND fulfillment_status:fulfilled`;
         const query = `#graphql
-          query getFilteredOrders($first: Int!, $filterQuery: String!) {
+          query getFilteredOrders($first: Int!, $filterQuery: String!,reverse: true) {
             orders(first: $first, query: $filterQuery) {
               edges {
                 node {
