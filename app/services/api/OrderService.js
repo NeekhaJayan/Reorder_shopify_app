@@ -58,7 +58,7 @@ class OrderServices{
         const filterQuery = `created_at:<=${isoDate} AND fulfillment_status:fulfilled`;
         const query = `#graphql
           query getFilteredOrders($first: Int!, $filterQuery: String!) {
-            orders(first: $first, query: $filterQuery,reverse: true) {
+            orders(first: $first, query: $filterQuery,sortKey: CREATED_AT,reverse: true) {
               edges {
                 node {
                   id
