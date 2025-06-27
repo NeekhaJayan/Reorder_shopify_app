@@ -17,7 +17,7 @@ class OrderServices{
         
             const lineItemsTransformed = lineItems.edges.map(({ node: item }) => ({
               product_id: parseInt(item?.product?.id?.split("/").pop() || 0),
-              varient_id: parseInt(item?.variant?.id?.split("/").pop() || 0),
+              variant_id: parseInt(item?.variant?.id?.split("/").pop() || 0),
               quantity: item?.quantity,
               status: "fulfilled", // Assuming fulfillment status is "fulfilled"
               price: item?.originalUnitPriceSet?.shopMoney?.amount||"0.00"
