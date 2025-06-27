@@ -35,7 +35,8 @@ export const loader = async ({ request }) => {
       const shop_payload_details={
         shopify_domain: shopDetail.myshopifyDomain,
         shop_name:shopDetail.name,
-        email:shopDetail.email
+        email:shopDetail.email,
+        host:shopDetail.primaryDomain.host
       }
       console.log(shop_payload_details)  
       let shop = await shopInstance.createShop(shop_payload_details);

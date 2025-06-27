@@ -49,8 +49,10 @@ class Shop{
               shop {
               name
               createdAt
-              domains {
+              primaryDomain {
                 url
+                host
+                sslEnabled
               }
               email
               myshopifyDomain
