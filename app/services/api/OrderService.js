@@ -114,7 +114,8 @@ class OrderServices{
     }
 
     async SyncOrderDetails(shop,created_at,admin){
-      try{
+      try{ 
+            console.log(created_at);
             const jsonResponse=await this.getPrevOrderDetails(created_at,admin);
             const orders = jsonResponse?.data?.orders?.edges || [];
             console.log(jsonResponse);
