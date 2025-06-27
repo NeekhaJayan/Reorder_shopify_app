@@ -3,7 +3,7 @@ import { useFetcher,useLoaderData } from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
 
 export  function useGeneralSettings() {
-  const { shop_domain, settingDetails } = useLoaderData();
+  const { shop_domain, settingDetails,createdAt} = useLoaderData();
   const { plan } = useOutletContext();
   const fetcher = useFetcher();
   const [files, setFiles] = useState([]);
@@ -71,6 +71,7 @@ export  function useGeneralSettings() {
       const formData = new FormData();
       formData.append("tab", "general-settings");
       formData.append("shop", shop_domain);
+      formData.append("createdAt",createdAt);
       fetcher.submit(formData, { method: "POST" });
       setProgress(0);
     

@@ -27,7 +27,7 @@ export const loader = async ({ request }) => {
   const shop_email=shop.email;
   const template_id=shop.template_id
   const settingDetails =await settingsInstance.getSettingData(shop_domain);
-  return {shop_domain,settingDetails,shop_email,template_id,logo:shop.logo,coupon:shop.coupon,bufferTime:shop.buffer_time};  
+  return {shop_domain,settingDetails,shop_email,template_id,logo:shop.logo,coupon:shop.coupon,bufferTime:shop.buffer_time,createdAt:shop.createdAt};  
 };
 
 
@@ -55,10 +55,10 @@ export const action = async ({ request }) => {
     if (Settings.tab === "general-settings") {
       try {
         
-        if (!shopDetail?.createdAt) {
-          throw new Error("shopDetail.createdAt is missing or undefined");
+        if (!Settings.createdAt) {
+          console.error("shopDetail.createdAt is missing or undefined");
         }
-        const created_at=shopDetail.createdAt ? new Date(shopDetail.createdAt) : new Date();
+        const created_at=Settings.createdAt ? new Date(Settings.createdAt) : new Date();
         const jsonResponse = await orderInstance.SyncOrderDetails(Settings.shop,created_at,admin)   
         if (!jsonResponse || jsonResponse.error) {
           throw new Error(jsonResponse?.message || "Failed to sync orders");
