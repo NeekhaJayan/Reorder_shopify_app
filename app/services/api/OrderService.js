@@ -20,7 +20,7 @@ class OrderServices{
               varient_id: parseInt(item?.variant?.id?.split("/").pop() || 0),
               quantity: item?.quantity,
               status: "fulfilled", // Assuming fulfillment status is "fulfilled"
-              price: parseInt(item?.originalUnitPriceSet?.shopMoney?.amount||"0.00") 
+              price: item?.originalUnitPriceSet?.shopMoney?.amount||"0.00"
               // Adjust based on actual data if available
             }));
         
