@@ -75,7 +75,7 @@ const GeneralSettingsTab = ({ shop_domain,plan,fetcher,files,progress,dropzoneba
                                       Sync Recent Orders
                                     </Text>
                               <Text as="h2" variant="headingXs" tone="subdued" style={{marginTop:"1rem"}}>
-                                      Sync the last 10 orders to ensure reminder emails are sent for recent purchases.
+                                     Sync the last 10 orders with products set for estimated usage days to ensure timely reminder emails.
                                 </Text>
                                 {progress > 0 && (<ProgressBar progress={progress} />)}
                                 
