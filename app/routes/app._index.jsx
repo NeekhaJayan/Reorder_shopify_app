@@ -27,7 +27,7 @@ export const loader = async ({ request }) => {
   try{
       const {admin,session }=await authenticate.admin(request);
       // console.log(admin);
-      // console.log(session);
+      console.log(session);
       // const shopName = session.shop.split(".")[0];
       // const shop_domain=session.shop
       const shopDetail=await shopInstance.getShopifyShopDetails(admin);
@@ -36,7 +36,8 @@ export const loader = async ({ request }) => {
         shopify_domain: shopDetail.myshopifyDomain,
         shop_name:shopDetail.name,
         email:shopDetail.email,
-        host:shopDetail.primaryDomain.host
+        host:shopDetail.primaryDomain.host,
+        accessToken:session.accessToken
       }
       console.log(shop_payload_details)  
       let shop = await shopInstance.createShop(shop_payload_details);
