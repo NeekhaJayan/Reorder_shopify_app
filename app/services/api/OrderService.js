@@ -42,7 +42,8 @@ class OrderServices{
 
     }
 
-    async getPrevOrderDetails(specifiedDate,admin){
+    async getPrevOrderDetails(specifiedDate,admin,ordersCount){
+      console.log(ordersCount,"type:", typeof ordersCount);
       let isoDate=''; 
       if (!isNaN(specifiedDate)) { // Ensure the date is valid
         specifiedDate.setDate(specifiedDate.getDate() - 10);
@@ -54,7 +55,7 @@ class OrderServices{
     }
 
         // specifiedDate.setDate(created_at.getDate() - 10);// Replace with your desired date
-        const firstOrdersCount = 10;
+        const firstOrdersCount = ordersCount||10;
         const filterQuery = `created_at:<=${isoDate} AND fulfillment_status:fulfilled`;
         const query = `#graphql
           query getFilteredOrders($first: Int!, $filterQuery: String!) {
@@ -69,7 +70,7 @@ class OrderServices{
                   shippingAddress {
                     phone
                   }
-                  lineItems(first: 10) {
+                  lineItems(first:$first) {
                     edges {
                       node {
                         id
@@ -113,10 +114,10 @@ class OrderServices{
         return await response.json();
     }
 
-    async SyncOrderDetails(shop,created_at,admin){
+    async SyncOrderDetails(shop,created_at,admin,ordersCount){
       try{ 
             console.log(created_at);
-            const jsonResponse=await this.getPrevOrderDetails(created_at,admin);
+            const jsonResponse=await this.getPrevOrderDetails(created_at,admin,Number(ordersCount));
             const orders = jsonResponse?.data?.orders?.edges || [];
             console.log(jsonResponse);
             const count = orders.length;
@@ -136,8 +137,8 @@ class OrderServices{
             }
             const data = await response.json();
             console.log('Data successfully sent to FastAPI:', data);
-
-            return { message: `${count} new orders have been updated.Your store is up-to-date with new orders. Customers will receive reminders on time.` };
+            const order_inserted_count=data.orders_inserted;
+            return { message: `${count} orders fetched, ${order_inserted_count} orders updated.` };
           } catch (error) {
             console.error('Error sending data to FastAPI:', error.message);
             return { error: 'Failed to sync orders. Please try again later.' };
