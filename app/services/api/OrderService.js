@@ -70,7 +70,7 @@ class OrderServices{
                   shippingAddress {
                     phone
                   }
-                  lineItems(first:$first) {
+                  lineItems(first: $first) {
                     edges {
                       node {
                         id
