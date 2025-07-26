@@ -27,7 +27,7 @@ export const loader = async ({ request }) => {
   const shop_email=shop.email;
   const template_id=shop.template_id
   const settingDetails =await settingsInstance.getSettingData(shop_domain);
-  return {shop_domain,settingDetails,shop_email,template_id,logo:shop.logo,coupon:shop.coupon,bufferTime:shop.buffer_time,createdAt:shop.createdAt};  
+  return {shop_domain,settingDetails,shop_email,template_id,logo:shop.logo,coupon:shop.coupon,bufferTime:shop.buffer_time,createdAt:shop.createdAt,product_count:shop.product_count,order_sync_count:shop.order_sync_count};  
 };
 
 
@@ -62,7 +62,7 @@ export const action = async ({ request }) => {
         const jsonResponse = await orderInstance.SyncOrderDetails(Settings.shop,created_at,admin)   
         if (!jsonResponse || jsonResponse.error) {
           throw new Error(jsonResponse?.message || "Failed to sync orders");
-      }
+        }
 
       console.log("Order Sync Response:", jsonResponse.message);
           return { message: jsonResponse.message }; 
@@ -96,7 +96,8 @@ export const action = async ({ request }) => {
 
 export default function SettingsPage() {
   const { shop_domain,shop_email} = useLoaderData();
-  const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
+  // const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,imageUrlForPreview, setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading } = useGeneralSettings();
+  const {loading,imageUrlForPreview} = useGeneralSettings();
   const { subject, setSubject, fromName, setFromName, fromEmail, setFromEmail, coupon, setCoupon, discountPercent, setDiscountPercent,bufferTime, setBufferTime ,emailSettingsbanner,setEmailSettingsBanner} = useEmailSettings();
   const {selectedTab,tabKey,tabs,handleTabChange,fetcher,showBanner,setShowBanner,message}=useSettings();
   const { plan } = useOutletContext();
@@ -148,17 +149,7 @@ export default function SettingsPage() {
                          shop_domain={shop_domain} 
                          plan={plan}
                          fetcher={fetcher}  
-                         files={files} progress={progress} 
-                         dropzonebanner={dropzonebanner}
-                         bannerMessage={bannerMessage}
-                         isSyncDisabled={isSyncDisabled} 
-                         loading={loading}
-                         setDropzonebanner={setDropzonebanner}
-                         setBannerMessage={setBannerMessage}
-                          handleSync={handleSync} 
-                          handleSubmit={handleSubmit}
-                          handleDrop={handleDrop}
-                          handleRemoveImage={handleRemoveImage}/>
+                         />
             )}
             {selectedTab === 1 && (
               <EmailSettingsTab  shop_domain={shop_domain} 

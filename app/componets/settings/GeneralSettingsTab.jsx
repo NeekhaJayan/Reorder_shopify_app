@@ -11,14 +11,18 @@ import {
   Form,
   Icon,
   Thumbnail,
-  DropZone,
+  DropZone,Modal,TextContainer,
   Banner,LegacyStack
 } from "@shopify/polaris";
 import { AlertTriangleIcon } from "@shopify/polaris-icons";
+import {useGeneralSettings} from "../../hooks/useGeneralSettings";
+import { useNavigate } from "@remix-run/react";
 
-const GeneralSettingsTab = ({ shop_domain,plan,fetcher,files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,loading,setDropzonebanner,setBannerMessage,handleSync,handleSubmit,handleDrop,handleRemoveImage} ) => {
+const GeneralSettingsTab = ({ shop_domain,plan,fetcher} ) => {
 
+  const { files,progress,dropzonebanner,bannerMessage,bannerStatus,isSyncDisabled,setBannerMessage,setDropzonebanner, handleSync ,handleSubmit,handleDrop,handleRemoveImage,loading,showSyncModal,setShowSyncModal,hasConfiguredProducts ,order_sync_count} = useGeneralSettings();
   const fileUpload = (<DropZone.FileUpload actionHint="We recommend an image which is 500px wide." />);
+  const navigate =useNavigate();
   const uploadedFiles =Array.isArray(files) && files.length > 0 ? (
       <LegacyStack vertical>
         {files.map((file, index) => (
@@ -75,12 +79,12 @@ const GeneralSettingsTab = ({ shop_domain,plan,fetcher,files,progress,dropzoneba
                                       Sync Recent Orders
                                     </Text>
                               <Text as="h2" variant="headingXs" tone="subdued" style={{marginTop:"1rem"}}>
-                                     Sync the last 10 orders with products set for estimated usage days to ensure timely reminder emails.
+                                     Sync the last {order_sync_count} orders with products set for estimated usage days to ensure timely reminder emails.
                                 </Text>
                                 {progress > 0 && (<ProgressBar progress={progress} />)}
                                 
                                 <div style={{marginTop:"0.5rem" ,display:"flex"}}>
-                                <Button  variant="primary"  disabled={isSyncDisabled} onClick={handleSync}  >Sync Now</Button>                                 
+                                <Button  variant="primary"  disabled={isSyncDisabled} onClick={setShowSyncModal}  >Sync Now</Button>                                 
                                 {plan!== 'PRO'?(<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                                                         <Icon source={AlertTriangleIcon} color="success" />
                                                                         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -89,13 +93,62 @@ const GeneralSettingsTab = ({ shop_domain,plan,fetcher,files,progress,dropzoneba
                                                                           <Button variant="plain" onClick={() => navigate("/app/settings?tab=2")}>Upgrade Now</Button> 
                                                                         </div>  
                                                                       </div>):null}
+                                        <Modal
+                                            open={showSyncModal}
+                                            onClose={() => setShowSyncModal(false)}
+                                            
+                                            primaryAction={
+                                              hasConfiguredProducts === 0
+                                                ? null
+                                                : {
+                                                    content: "Continue",
+                                                    onAction: () => {
+                                                      setShowSyncModal(false);
+                                                      handleSync();
+                                                    },
+                                                  }
+                                            }
+                                            secondaryActions={[
+                                              {
+                                                content: "Add",
+                                                onAction: () => {
+                                                  setShowSyncModal(false);
+                                                  navigate("/app"); // or wherever the setup page is
+                                                },
+                                              },
+                                            ]}
+                                          >
+                                            <Modal.Section>
+                                              <TextContainer>
+                                                {hasConfiguredProducts === 0 ? (
+                                                  <p>
+                                                    Your store doesn’t have any products configured with <strong>Estimated Usage Days</strong>. <br />
+                                                    Please set them up before starting order sync.
+                                                  </p>
+                                                ) : (
+                                                  <p>
+                                                    Make sure all relevant products have their <strong>Estimated Usage Days</strong> configured. 
+                                                    Order sync relies on this data to calculate reminder schedules.
+                                                  </p>
+                                                )}
+                                              </TextContainer>
+                                            </Modal.Section>
+                                          </Modal>
                                 </div>
                                 {bannerMessage && (
                                               <Banner
-                                                title={bannerMessage}
-                                                tone={bannerStatus} // 'success', 'critical', or 'warning'
-                                                onDismiss={() => setBannerMessage("")} // Dismiss the banner
-                                              />
+                                          tone={bannerStatus} // 'success' for green, 'critical' for red, etc.
+                                          onDismiss={() => setBannerMessage("")}
+                                        >
+                                          <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                                            <Text as="span" fontWeight="bold" tone="success">
+                                              {bannerMessage}
+                                            </Text>
+                                            <Text as="span" tone="subdued">
+                                              Some orders were skipped because the purchased products don't have Estimated Usage Days configured.
+                                            </Text>
+                                          </div>
+                                        </Banner>
                                             )}
                             </Box>
                             

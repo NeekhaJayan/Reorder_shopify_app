@@ -3,7 +3,7 @@ import { useFetcher,useLoaderData } from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
 
 export  function useGeneralSettings() {
-  const { shop_domain, settingDetails,createdAt} = useLoaderData();
+  const { shop_domain, settingDetails,createdAt,product_count,order_sync_count} = useLoaderData();
   const { plan } = useOutletContext();
   const fetcher = useFetcher();
   const [files, setFiles] = useState([]);
@@ -19,6 +19,8 @@ export  function useGeneralSettings() {
   const [progress, setProgress] = useState(0);
   const [isSyncDisabled, setIsSyncDisabled] = useState(plan === 'FREE');
   const [currentAction, setCurrentAction] = useState(null);
+  const [showSyncModal, setShowSyncModal] = useState(false);
+  const hasConfiguredProducts = Number(product_count);
   
  
     useEffect(() => {
@@ -72,6 +74,7 @@ export  function useGeneralSettings() {
       formData.append("tab", "general-settings");
       formData.append("shop", shop_domain);
       formData.append("createdAt",createdAt);
+      formData.append("order_sync_count",order_sync_count);
       fetcher.submit(formData, { method: "POST" });
       setProgress(0);
     
@@ -139,7 +142,7 @@ export  function useGeneralSettings() {
     };
   
 
-  return { files,progress,bannerMessage,dropzonebanner,bannerStatus,isSyncDisabled,imageUrlForPreview, setDropzonebanner,setBannerMessage, loading,fetcher, handleSync ,handleSubmit,handleDrop,handleRemoveImage};
+  return { files,progress,bannerMessage,dropzonebanner,bannerStatus,isSyncDisabled,imageUrlForPreview, setDropzonebanner,setBannerMessage, loading,fetcher, handleSync ,handleSubmit,handleDrop,handleRemoveImage,showSyncModal,setShowSyncModal,hasConfiguredProducts,order_sync_count};
 };
 
 
