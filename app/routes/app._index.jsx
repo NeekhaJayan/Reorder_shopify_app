@@ -289,7 +289,7 @@ export default function Index() {
             <div style={{ alignSelf:'center' ,color:'gray'}}>Contact Us : ReOrderReminderPro@decagrowth.com</div>
              {plan === "PRO" &&(<div className="whatsapp-button">
           <a
-            href="https://wa.me/6282086660?text=Hello!%20I'm%20interested%20in%20your%20services"
+            href="https://wa.me/916282086660?text=Hello!%20I'm%20interested%20in%20your%20services"
             
             target="_blank"
             rel="noopener noreferrer"
