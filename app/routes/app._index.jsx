@@ -13,6 +13,7 @@ import {
 
 import { authenticate } from "../shopify.server";
 import { useNavigate } from "@remix-run/react";
+import { useState, useEffect} from "react";
 import ProductTable  from "../componets/ProductTable";
 import ProductForm from "../componets/ProductForm";
 import EmptyProductState from "../componets/EmptyProductState";
