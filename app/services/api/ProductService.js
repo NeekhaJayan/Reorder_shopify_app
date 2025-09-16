@@ -1,9 +1,9 @@
 import { APP_SETTINGS } from "../../constants";
 class Product{
-    async getAllProductDetails(shop_id)
+    async getAllProductDetails(shop_id,page=1, pageSize=10)
     {
         try{
-            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/products/${shop_id}`, {
+            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/products/${shop_id}?page=${page}&page_size=${pageSize}`, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
@@ -22,7 +22,7 @@ class Product{
           }   
         
     }
-
+    
     async saveProductData(formData)
     {
         const productId = formData.get("productId").replace("gid://shopify/Product/", "");

@@ -44,8 +44,11 @@ export const loader = async ({ request }) => {
       if (!shop || !shop.shop_id) {
         console.error("Shop creation failed or missing shop_id");
       }
-      const reorderDetails = await productInstance.getAllProductDetails(shop.shop_id);
-      return json({ reorderDetails: reorderDetails,shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id ,logo:shop.logo,coupon:shop.coupon,discount:shop.discount}); 
+      const shop_products=await productInstance.getAllProductDetails(shop.shop_id,1,10);
+      return json({ reorderDetails: shop_products?.products||[],shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id ,logo:shop.logo,coupon:shop.coupon,discount:shop.discount,totalProducts: shop_products?.total || 0,
+  page: shop_products?.page || 1,
+  pageSize: shop_products?.page_size || 10,
+  hasMore: shop_products?.has_more || false,}); 
       } catch (error) {
         console.error("Loader error:", error.message || error);
       }
@@ -135,11 +138,24 @@ export default function Index() {
     selectedProductId,
     selectedVariantId,
     selectedProductData,
-    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus}=useAppData();
+    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus,setUpdatedProducts}=useAppData();
     const { data, state } = fetcher;
-
     const navigate =useNavigate();
 
+    const [page, setPage] = useState(1);
+    const [pageSize] = useState(10);
+    const [hasMore, setHasMore] = useState(false);
+    
+    useEffect(() => {
+    const fetchProducts = async () => {
+      const res = await productInstance.getAllProductDetails(shopID, page, pageSize);
+      if (res) {
+        setUpdatedProducts(res.products);
+        setHasMore(res.has_more);
+      }
+    };
+    fetchProducts();
+  }, [page, pageSize, shopID]);
 
   return (
     <>
@@ -260,7 +276,13 @@ export default function Index() {
                             dispatchEmailCount={dispatchEmailCount}
                             orderSource={orderSource}
                             editWarningMessage={editWarningMessage}
-                            emailStatus={emailStatus}/>
+                            emailStatus={emailStatus}
+                            pagination={{
+          hasNext: hasMore,
+          onNext: () => setPage(page + 1),
+          hasPrevious: page > 1,
+          onPrevious: () => setPage(page - 1),
+        }}/>
               )}
               {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT && (
                   <TextContainer>

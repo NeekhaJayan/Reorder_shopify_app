@@ -16,6 +16,8 @@ export function useAppData() {
     const message = rawMessage ? decodeURIComponent(rawMessage) : null;
     const [showBanner, setShowBanner] = useState(!!message);
     
+  
+    
     const completedSettings = {
         logoUploaded: Boolean(logo),
         emailSettingsUpdated: Boolean(templateId),
@@ -470,7 +472,7 @@ export function useAppData() {
         selectedVariantId,
         selectedProductData,
         handleChange,handleSubmit,plan
-        ,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus
+        ,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus,setUpdatedProducts
       };
 };
 
