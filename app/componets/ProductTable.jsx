@@ -14,6 +14,7 @@ const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,res
     setQueryValue("");
     onSearch(""); // reset search
   }, [onSearch]);
+  const onHandleCancel = () => {};
   console.log("productTable:",productData);
     return(
         <>
@@ -32,6 +33,11 @@ const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,res
             setMode={setMode}
             filters={[]} 
             appliedFilters={[]}
+            cancelAction={{
+          onAction: onHandleCancel,
+          disabled: false,
+          loading: false,
+        }}
           />
             <IndexTable
                 resourceName={{
