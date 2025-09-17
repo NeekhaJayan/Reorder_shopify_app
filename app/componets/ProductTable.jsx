@@ -3,7 +3,7 @@ import { useState, useCallback} from "react";
 import ProductTableRow from "./ProductTableRow";
 import SkeletonLoad from "../componets/SkeletonLoad";
 
-const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,selectedProductData,activeEditModal,toggleEditModal,activeEmailModal,toggleEmailModal,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,emailStatus,pagination,onSearch,}) => {
+const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,selectedProductData,activeEditModal,toggleEditModal,activeEmailModal,toggleEmailModal,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,emailStatus,pagination,onSearch,}) => {
    const [queryValue, setQueryValue] = useState("");
    const { mode, setMode } = useSetIndexFiltersMode();
    const handleFiltersQueryChange = useCallback((value) => {
@@ -35,7 +35,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     singular: "Product",
                     plural: "Products",
                 }}
-                itemCount={productData.length}
+                itemCount={productData.length|| 0}
                 headings={[
                     { title: "Product Image" },
                     { title: "Product Name" },
