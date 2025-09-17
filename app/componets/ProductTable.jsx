@@ -14,7 +14,7 @@ const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,res
     setQueryValue("");
     onSearch(""); // reset search
   }, [onSearch]);
-  console.log(productData);
+  console.log("productTable:",productData);
     return(
         <>
             {spinner ? (
@@ -30,6 +30,8 @@ const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,res
             canCreateNewView={false}
             mode={mode}     
             setMode={setMode}
+            filters={[]} 
+            appliedFilters={[]}
           />
             <IndexTable
                 resourceName={{

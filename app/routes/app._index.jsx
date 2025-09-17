@@ -141,7 +141,7 @@ export default function Index() {
     handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus,setUpdatedProducts,pagination,onSearch}=useAppData();
     const { data, state } = fetcher;
     const navigate =useNavigate();
-    console.log(updatedProducts);
+    console.log("updatedProducts in index:",updatedProducts);
     
   return (
     <>
