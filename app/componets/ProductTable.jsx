@@ -14,6 +14,7 @@ const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,res
     setQueryValue("");
     onSearch(""); // reset search
   }, [onSearch]);
+  console.log(productData);
     return(
         <>
             {spinner ? (
@@ -56,7 +57,7 @@ const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,res
                 selectable={false}
                 pagination={pagination}
                 >
-                {productData.map((product) => (
+                {(productData || []).map((product) => (
                     <ProductTableRow
                     key={product.shopify_variant_id}
                     product={product}

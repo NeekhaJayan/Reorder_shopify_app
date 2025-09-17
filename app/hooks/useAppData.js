@@ -463,6 +463,7 @@ export function useAppData() {
             setEmailStatus(fetcher.data.message);
         }
     }, [data]);
+    console.log(updatedProducts);
     
     return {
         fetcher,
