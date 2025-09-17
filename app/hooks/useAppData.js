@@ -501,6 +501,6 @@ export function useAppData() {
           onNext: () => setPage(page + 1),
           hasPrevious: page > 1,
           onPrevious: () => setPage(page - 1),},
-        onSearch:{handleSearch}      };
+        onSearch:handleSearch      };
 };
 
