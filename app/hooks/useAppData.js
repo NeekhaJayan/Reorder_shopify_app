@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback,useLayoutEffect } from "react";
 import { useFetcher, useLoaderData ,useSearchParams} from "@remix-run/react";
 import { useOutletContext } from '@remix-run/react';
+import { productInstance } from "../services/api/ProductService";
 
 export function useAppData() {
     const {reorderDetails,shopID,bufferTime,templateId,logo,coupon,discount}=useLoaderData();
