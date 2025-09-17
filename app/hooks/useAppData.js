@@ -76,8 +76,8 @@ export function useAppData() {
         const fetchProducts = async () => {
           const res = await productInstance.getAllProductDetails(shopID, page, pageSize,searchTerm);
           if (res) {
-            setUpdatedProducts(res.products);
-            setHasMore(res.has_more);
+            setUpdatedProducts(res.products||[]);
+            setHasMore(res.has_more || false);
           }
         };
         fetchProducts();
