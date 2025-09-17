@@ -146,17 +146,18 @@ export default function Index() {
     const [page, setPage] = useState(1);
     const [pageSize] = useState(10);
     const [hasMore, setHasMore] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
     
     useEffect(() => {
     const fetchProducts = async () => {
-      const res = await productInstance.getAllProductDetails(shopID, page, pageSize);
+      const res = await productInstance.getAllProductDetails(shopID, page, pageSize,searchTerm);
       if (res) {
         setUpdatedProducts(res.products);
         setHasMore(res.has_more);
       }
     };
     fetchProducts();
-  }, [page, pageSize, shopID]);
+  }, [page, pageSize, shopID,searchTerm]);
 
   return (
     <>
@@ -282,8 +283,12 @@ export default function Index() {
           hasNext: hasMore,
           onNext: () => setPage(page + 1),
           hasPrevious: page > 1,
-          onPrevious: () => setPage(page - 1),
-        }}/>
+          onPrevious: () => setPage(page - 1),}}
+                            onSearch={(value) => {
+        setPage(1);         // reset to first page on new search
+        setSearchTerm(value);
+      }}
+          />
               )}
               {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT && (
                   <TextContainer>

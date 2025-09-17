@@ -1,14 +1,31 @@
-import {IndexTable,Spinner,Text} from "@shopify/polaris";
+import {IndexTable,Spinner,Text,IndexFilters} from "@shopify/polaris";
 import ProductTableRow from "./ProductTableRow";
 import SkeletonLoad from "../componets/SkeletonLoad";
 
-const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,selectedProductData,activeEditModal,toggleEditModal,activeEmailModal,toggleEmailModal,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,emailStatus,pagination}) => {
-
+const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,selectedProductData,activeEditModal,toggleEditModal,activeEmailModal,toggleEmailModal,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,emailStatus,pagination,onSearch,}) => {
+   const [queryValue, setQueryValue] = useState("");
+   const handleFiltersQueryChange = useCallback((value) => {
+    setQueryValue(value);
+    onSearch(value); // ✅ call parent to refetch
+  }, [onSearch]);
+  const handleFiltersClear = useCallback(() => {
+    setQueryValue("");
+    onSearch(""); // reset search
+  }, [onSearch]);
     return(
         <>
             {spinner ? (
                 <SkeletonLoad /> // Show skeleton loader while data is being processed
             ): (
+                <>
+                <IndexFilters
+            queryValue={queryValue}
+            queryPlaceholder="Search products"
+            onQueryChange={handleFiltersQueryChange}
+            onQueryClear={handleFiltersClear}
+            tabs={[]}
+            canCreateNewView={false}
+          />
             <IndexTable
                 resourceName={{
                     singular: "Product",
@@ -65,6 +82,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     />
                 ))}
             </IndexTable>
+            </>
             )}
         </>
   );

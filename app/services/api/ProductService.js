@@ -1,9 +1,15 @@
 import { APP_SETTINGS } from "../../constants";
 class Product{
-    async getAllProductDetails(shop_id,page=1, pageSize=10)
+    async getAllProductDetails(shop_id,page=1, pageSize=10, search = "")
     {
+        let URL;
         try{
-            const response = await fetch(`${APP_SETTINGS.API_ENDPOINT}/auth/products/${shop_id}?page=${page}&page_size=${pageSize}`, {
+            URL=`${APP_SETTINGS.API_ENDPOINT}/auth/products/${shop_id}?page=${page}&page_size=${pageSize}`
+            if(search){
+                URL=`${APP_SETTINGS.API_ENDPOINT}/auth/products/${shop_id}?page=${page}&page_size=${pageSize}&search=${search}`
+            }
+            
+            const response = await fetch(URL, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
