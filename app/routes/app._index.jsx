@@ -234,7 +234,7 @@ export default function Index() {
             </Text>
             <div style={{ marginLeft:'5rem',marginRight:'5rem'}}>
               <Card padding="0" >
-              {updatedProducts.length === 0 ? (
+              {!updatedProducts || updatedProducts.length === 0 ? (
                 <EmptyProductState />
               ) : (
                 
