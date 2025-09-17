@@ -1,4 +1,4 @@
-import {IndexTable,Spinner,Text,IndexFilters} from "@shopify/polaris";
+import {IndexTable,Spinner,Text,IndexFilters,Card} from "@shopify/polaris";
 import { useState, useCallback} from "react";
 import ProductTableRow from "./ProductTableRow";
 import SkeletonLoad from "../componets/SkeletonLoad";
@@ -18,13 +18,13 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
             {spinner ? (
                 <SkeletonLoad /> // Show skeleton loader while data is being processed
             ): (
-                <>
+            <Card>
                 <IndexFilters
             queryValue={queryValue}
             queryPlaceholder="Search products"
             onQueryChange={handleFiltersQueryChange}
             onQueryClear={handleFiltersClear}
-            tabs={[]}
+            tabs={[{ id: "all", content: "All", accessibilityLabel: "All products", panelID: "all-products" }]}
             canCreateNewView={false}
           />
             <IndexTable
@@ -83,7 +83,7 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
                     />
                 ))}
             </IndexTable>
-            </>
+            </Card>
             )}
         </>
   );
