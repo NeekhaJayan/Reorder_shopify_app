@@ -35,7 +35,7 @@ const ProductTable = ({ productData=[],spinner,editingProduct,editReorderDay,res
                     singular: "Product",
                     plural: "Products",
                 }}
-                itemCount={productData.length|| 0}
+                itemCount={productData?.length|| 0}
                 headings={[
                     { title: "Product Image" },
                     { title: "Product Name" },
