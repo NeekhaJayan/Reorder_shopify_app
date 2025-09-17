@@ -65,7 +65,7 @@ export function useAppData() {
     const { data, state } = fetcher;
     const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
     const [resetProduct,setResetProduct]=useState(null);
-    const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
+    const [updatedProducts, setUpdatedProducts] = useState(reorderDetails || []);
     const [page, setPage] = useState(1);
     const [pageSize] = useState(10);
     const [hasMore, setHasMore] = useState(false);
