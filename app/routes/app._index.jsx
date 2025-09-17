@@ -13,7 +13,6 @@ import {
 
 import { authenticate } from "../shopify.server";
 import { useNavigate } from "@remix-run/react";
-import { useState, useEffect} from "react";
 import ProductTable  from "../componets/ProductTable";
 import ProductForm from "../componets/ProductForm";
 import EmptyProductState from "../componets/EmptyProductState";
@@ -139,26 +138,11 @@ export default function Index() {
     selectedProductId,
     selectedVariantId,
     selectedProductData,
-    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus,setUpdatedProducts}=useAppData();
+    handleChange,handleSubmit,plan,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus,setUpdatedProducts,pagination,onSearch}=useAppData();
     const { data, state } = fetcher;
     const navigate =useNavigate();
 
-    const [page, setPage] = useState(1);
-    const [pageSize] = useState(10);
-    const [hasMore, setHasMore] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
     
-    useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await productInstance.getAllProductDetails(shopID, page, pageSize,searchTerm);
-      if (res) {
-        setUpdatedProducts(res.products);
-        setHasMore(res.has_more);
-      }
-    };
-    fetchProducts();
-  }, [page, pageSize, shopID,searchTerm]);
-
   return (
     <>
     {loading? (<SkeletonLoad/>):(
@@ -279,15 +263,8 @@ export default function Index() {
                             orderSource={orderSource}
                             editWarningMessage={editWarningMessage}
                             emailStatus={emailStatus}
-                            pagination={{
-          hasNext: hasMore,
-          onNext: () => setPage(page + 1),
-          hasPrevious: page > 1,
-          onPrevious: () => setPage(page - 1),}}
-                            onSearch={(value) => {
-        setPage(1);         // reset to first page on new search
-        setSearchTerm(value);
-      }}
+                            pagination={pagination}
+                            onSearch={onSearch}
           />
               )}
               {plan === "FREE" && updatedProducts.length >= APP_SETTINGS.FREE_PRODUCT_LIMIT && (

@@ -65,6 +65,28 @@ export function useAppData() {
     const [editingProduct, setEditingProduct] = useState(null); // Track the product being edited
     const [resetProduct,setResetProduct]=useState(null);
     const [updatedProducts, setUpdatedProducts] = useState(reorderDetails);
+    const [page, setPage] = useState(1);
+    const [pageSize] = useState(10);
+    const [hasMore, setHasMore] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    
+        
+        useEffect(() => {
+        const fetchProducts = async () => {
+          const res = await productInstance.getAllProductDetails(shopID, page, pageSize,searchTerm);
+          if (res) {
+            setUpdatedProducts(res.products);
+            setHasMore(res.has_more);
+          }
+        };
+        fetchProducts();
+      }, [page, pageSize, shopID,searchTerm]);
+
+    const handleSearch = (value) => {
+    setPage(1); // Reset to the first page on a new search
+    setSearchTerm(value);
+  };
+    
 
     useEffect(() => {
         const filteredMessages = filterMessages();
@@ -472,7 +494,12 @@ export function useAppData() {
         selectedVariantId,
         selectedProductData,
         handleChange,handleSubmit,plan
-        ,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus,setUpdatedProducts
-      };
+        ,showBanner,message,setShowBanner,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,showSettingsBanner,setShowSettingsBanner,settingsWarningMessages,emailStatus,setUpdatedProducts,
+        pagination:{
+          hasNext: hasMore,
+          onNext: () => setPage(page + 1),
+          hasPrevious: page > 1,
+          onPrevious: () => setPage(page - 1),},
+        onSearch:{handleSearch}      };
 };
 

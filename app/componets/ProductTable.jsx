@@ -1,10 +1,11 @@
-import {IndexTable,Spinner,Text,IndexFilters,Card} from "@shopify/polaris";
+import {IndexTable,Spinner,Text,IndexFilters,useSetIndexFiltersMode,Card} from "@shopify/polaris";
 import { useState, useCallback} from "react";
 import ProductTableRow from "./ProductTableRow";
 import SkeletonLoad from "../componets/SkeletonLoad";
 
 const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetReorderfield,saveReorderDay,cancelReorderDays,handleReorderChange,activeModal,toggleModal,confirmReset,selected_productId,selected_variantId,selectedProductData,activeEditModal,toggleEditModal,activeEmailModal,toggleEmailModal,showEmailCount,testEmailReminder,scheduleEmailCount,dispatchEmailCount,orderSource,editWarningMessage,emailStatus,pagination,onSearch,}) => {
    const [queryValue, setQueryValue] = useState("");
+   const { mode, setMode } = useSetIndexFiltersMode();
    const handleFiltersQueryChange = useCallback((value) => {
     setQueryValue(value);
     onSearch(value); // ✅ call parent to refetch
@@ -26,6 +27,8 @@ const ProductTable = ({ productData,spinner,editingProduct,editReorderDay,resetR
             onQueryClear={handleFiltersClear}
             tabs={[{ id: "all", content: "All", accessibilityLabel: "All products", panelID: "all-products" }]}
             canCreateNewView={false}
+            mode={mode}     
+            setMode={setMode}
           />
             <IndexTable
                 resourceName={{
