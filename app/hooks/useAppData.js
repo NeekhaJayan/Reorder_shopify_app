@@ -67,7 +67,7 @@ export function useAppData() {
     const [resetProduct,setResetProduct]=useState(null);
     const [updatedProducts, setUpdatedProducts] = useState(reorderDetails || []);
     const [page, setPage] = useState(1);
-    const [pageSize] = useState(10);
+    const [pageSize] = useState(50);
     const [hasMore, setHasMore] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     

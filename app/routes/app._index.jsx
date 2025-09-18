@@ -44,7 +44,7 @@ export const loader = async ({ request }) => {
       if (!shop || !shop.shop_id) {
         console.error("Shop creation failed or missing shop_id");
       }
-      const shop_products=await productInstance.getAllProductDetails(shop.shop_id,1,10);
+      const shop_products=await productInstance.getAllProductDetails(shop.shop_id,1,50);
       return json({ reorderDetails: shop_products?.products||[],shopID:shop.shop_id,bufferTime:shop.buffer_time,templateId:shop.template_id ,logo:shop.logo,coupon:shop.coupon,discount:shop.discount,totalProducts: shop_products?.total || 0,
   page: shop_products?.page || 1,
   pageSize: shop_products?.page_size || 10,
